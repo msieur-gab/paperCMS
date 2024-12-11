@@ -175,8 +175,7 @@ class App {
     
             const fetchPath = this.router.addMdExtension(path);
             const response = await fetch(`./content/${fetchPath}`);
-            // const cleanPath = this.router.cleanPath(path);
-            // const response = await fetch(`./content/${cleanPath}`);
+          
             
             if (!response.ok) throw new Error('Failed to fetch project content');
             
