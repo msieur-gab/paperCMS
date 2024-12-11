@@ -1,8 +1,7 @@
 ---
 title: Hako Kakushi Tsugi
 description: A hidden joint technique in traditional Japanese woodworking
-date:
-    published: true
+published: true
 author:
     name: John Doe
     avatar: /media/authors/john.jpg
