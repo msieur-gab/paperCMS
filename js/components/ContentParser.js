@@ -35,73 +35,47 @@ export class ContentParser {
         const result = {};
         let currentContext = { object: result, indent: -2 };
         let contextStack = [currentContext];
-        let lastKey = null;
-        let lastIndent = -2;
-        let inArray = false;
-        let arrayIndent = -1;
 
         for (const line of lines) {
             if (!line.trim()) continue;
 
             const indent = line.search(/\S/);
-            const restOfLine = line.trim();
+            const [key, ...valueParts] = line.trim().split(':');
+            let value = valueParts.join(':').trim();
 
-            // Handle array items
-            if (restOfLine.startsWith('-')) {
-                const value = restOfLine.slice(1).trim();
-                
-                // If this is the start of a new array
-                if (!inArray) {
-                    inArray = true;
-                    arrayIndent = indent;
-                    currentContext.object[lastKey] = [];
-                }
-
-                if (value.includes(':')) {
-                    // Array of objects
-                    const [key, objValue] = value.split(':').map(s => s.trim());
-                    const newObj = {};
-                    if (objValue) {
-                        newObj[key] = objValue;
-                    }
-                    currentContext.object[lastKey].push(newObj);
-                } else {
-                    // Simple array value
-                    currentContext.object[lastKey].push(value);
-                }
+            // Handle special case for published: true
+            if (key === 'published' && value === 'true') {
+                result.date = {
+                    published: new Date().toISOString().split('T')[0],
+                    updated: new Date().toISOString().split('T')[0]
+                };
                 continue;
             }
 
-            // Reset array state if we're out of the array block
-            if (indent <= arrayIndent) {
-                inArray = false;
-                arrayIndent = -1;
+            // Pop back to appropriate level based on indentation
+            while (contextStack.length > 1 && indent <= contextStack[contextStack.length - 1].indent) {
+                contextStack.pop();
+                currentContext = contextStack[contextStack.length - 1];
             }
 
-            // Handle key-value pairs
-            if (restOfLine.includes(':')) {
-                const [key, value] = restOfLine.split(':').map(s => s.trim());
-                lastKey = key;
-
-                // Pop back to appropriate level based on indentation
-                while (contextStack.length > 1 && indent <= contextStack[contextStack.length - 1].indent) {
-                    contextStack.pop();
-                    currentContext = contextStack[contextStack.length - 1];
-                }
-
-                if (value) {
-                    // Simple key-value pair
-                    currentContext.object[key] = value;
-                } else {
-                    // New nested object
-                    const newObj = {};
-                    currentContext.object[key] = newObj;
-                    currentContext = { object: newObj, indent };
-                    contextStack.push(currentContext);
-                }
-
-                lastIndent = indent;
+            if (value) {
+                // Simple key-value pair
+                currentContext.object[key] = value;
+            } else {
+                // New nested object
+                const newObj = {};
+                currentContext.object[key] = newObj;
+                currentContext = { object: newObj, indent };
+                contextStack.push(currentContext);
             }
+        }
+
+        // Ensure date object exists
+        if (!result.date) {
+            result.date = {
+                published: new Date().toISOString().split('T')[0],
+                updated: new Date().toISOString().split('T')[0]
+            };
         }
 
         return result;
