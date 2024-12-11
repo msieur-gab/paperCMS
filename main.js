@@ -232,6 +232,7 @@ class App {
             this.state.isLoading = false;
         }
     }
+    
     closeProject() {
         if (!this.state.isProjectOpen) return;
 
