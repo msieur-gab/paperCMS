@@ -2,8 +2,8 @@
 title: Kanawa tsugi
 description: An exploration of Kanawa-tsugi, a traditional Japanese woodworking technique
 date:
-    published: 2024-11-25
-    updated: 2024-11-25
+    published: 2014-04-18 11:30:00 +0800
+    updated: 2014-04-18 11:30:00 +0800
 author:
     name: John Doe
     avatar: /media/authors/john.jpg
