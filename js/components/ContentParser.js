@@ -167,7 +167,7 @@ export class ContentParser {
         if (!match) return '';
 
         const [_, alt, src, title] = match;
-        const url = src.startsWith('media/') ? `${this.baseUrl}/content/${src}` : src;
+        const url = src.startsWith('media/') ? `./content/${src}` : src;
         const config = this.parseImageConfig(title);
 
         return `
