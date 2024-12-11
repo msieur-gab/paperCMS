@@ -21,7 +21,7 @@ export class ProjectList {
     }
 
     async loadPublications() {
-        const response = await fetch('/public/api/publications.json');
+        const response = await fetch('./public/api/publications.json');
         const data = await response.json();
         this.publications = data.publications;
         
