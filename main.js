@@ -173,8 +173,10 @@ class App {
                 this.projectDetailsContent.innerHTML = '<div class="loading">Loading...</div>';
             }
     
-            const fetchPath = this.router.addMdExtension(path);
-            const response = await fetch(`./content/${fetchPath}`);
+            // const fetchPath = this.router.addMdExtension(path);
+            // const response = await fetch(`./content/${fetchPath}`);
+            const cleanPath = this.router.cleanPath(path);
+            const response = await fetch(`./content/${cleanPath}`);
             
             if (!response.ok) throw new Error('Failed to fetch project content');
             
@@ -192,7 +194,7 @@ class App {
             }
             
             // Pass the clean path to updateProjectInNav
-            const cleanPath = this.router.cleanPath(path);
+            // const cleanPath = this.router.cleanPath(path);
             this.updateProjectInNav(metadata.title, cleanPath);
             
             this.state.isProjectOpen = true;
