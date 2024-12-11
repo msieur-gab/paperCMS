@@ -1,8 +1,7 @@
 ---
 title: Daimochi Tsugi
 description: The mighty mortise joint in Japanese woodworking tradition
-date:
-    published: true
+published: true
 author:
     name: John Doe
     avatar: /media/authors/john.jpg
