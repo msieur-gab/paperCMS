@@ -1,8 +1,7 @@
 ---
 title: Embracing slow design with a very long title
 description: A hidden joint technique in traditional Japanese woodworking
-date:
-    published: true
+published: true
 author:
     name: Gabriel Baude
     avatar: /media/authors/john.jpg
