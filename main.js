@@ -162,7 +162,7 @@ class App {
         });
     }
 
-    async openProject(path) {
+    async openProject(path, isPopState = false) {
         if (this.state.isLoading) return;
         
         this.state.isLoading = true;
@@ -173,58 +173,43 @@ class App {
                 this.projectDetailsContent.innerHTML = '<div class="loading">Loading...</div>';
             }
     
-            const cleanPath = this.router.cleanPath(path);
-            console.log('Fetching content from:', `./content/${cleanPath}`);
+            const fetchPath = this.router.addMdExtension(path);
+            const response = await fetch(`./content/${fetchPath}`);
+     
             
-            const response = await fetch(`./content/${cleanPath}`);
-            
-            if (!response.ok) {
-                console.error('Response status:', response.status);
-                console.error('Response headers:', [...response.headers.entries()]);
-                throw new Error('Failed to fetch project content');
-            }
+            if (!response.ok) throw new Error('Failed to fetch project content');
             
             const content = await response.text();
-            console.log('Received content (first 500 chars):', content.substring(0, 500));
-            
-            // Check if content starts with frontmatter delimiter
-            if (!content.trim().startsWith('---')) {
-                console.error('Content does not start with frontmatter delimiter');
-                console.error('First few characters (as hex):', 
-                    Array.from(content.substring(0, 20))
-                        .map(c => c.charCodeAt(0).toString(16))
-                        .join(' '));
+            const { metadata, html } = await this.contentParser.parse(content);
+    
+            // Update project title in header
+            const projectTitle = document.querySelector('.project-header .project-title');
+            if (projectTitle) {
+                projectTitle.textContent = metadata.title || '';
+            }
+            // Update content
+            if (this.projectDetailsContent) {
+                this.projectDetailsContent.innerHTML = html;
             }
             
-            try {
-                const { metadata, html } = await this.contentParser.parse(content);
-                
-                if (this.projectDetailsContent) {
-                    this.projectDetailsContent.innerHTML = html;
-                }
-                
-                this.updateProjectInNav(metadata.title, cleanPath);
-                
-                this.state.isProjectOpen = true;
-                this.navigateToSection('project-details', isPopState);
-                
-                if (!isPopState) {
-                    this.router.updateProjectURL(cleanPath);
-                }
-        
-                if (window.innerWidth >= 768) {
-                    const mediaElements = document.querySelectorAll('.media-block');
-                    if (mediaElements.length > 0) {
-                        this.mediaManager.updateMedia({ element: mediaElements[0] });
-                        this.intersectionManager.observe(mediaElements);
-                    }
-                }
-            } catch (parserError) {
-                console.error('Parser error:', parserError);
-                console.error('Full content:', content);
-                throw parserError;
-            }
+            // Pass the clean path to updateProjectInNav
+            const cleanPath = this.router.cleanPath(path);
+            this.updateProjectInNav(metadata.title, cleanPath);
             
+            this.state.isProjectOpen = true;
+            this.navigateToSection('project-details', isPopState);
+            
+            if (!isPopState) {
+                this.router.updateProjectURL(cleanPath);
+            }
+    
+            if (window.innerWidth >= 768) {
+                const mediaElements = document.querySelectorAll('.media-block');
+                if (mediaElements.length > 0) {
+                    this.mediaManager.updateMedia({ element: mediaElements[0] });
+                    this.intersectionManager.observe(mediaElements);
+                }
+            }
         } catch (error) {
             console.error('Error loading project:', error);
             this.showErrorMessage('Failed to load project');
@@ -232,7 +217,7 @@ class App {
             this.state.isLoading = false;
         }
     }
-    
+
     closeProject() {
         if (!this.state.isProjectOpen) return;
 

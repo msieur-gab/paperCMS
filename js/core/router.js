@@ -65,9 +65,9 @@ export class Router {
         return path.replace(/\.md$/, '');
     }
 
-    // addMdExtension(path) {
-    //     return path.endsWith('.md') ? path : `${path}.md`;
-    // }
+    addMdExtension(path) {
+        return path.endsWith('.md') ? path : `${path}.md`;
+    }
 
     destroy() {
         window.removeEventListener('popstate', this.handlePopState);
