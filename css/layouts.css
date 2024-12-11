@@ -13,7 +13,7 @@ main::-webkit-scrollbar {
     display: none;
 }
 section{
-    min-height: 80vh;
+    min-height: 100vh;
     align-content: center;
 }
 /* Sections */
@@ -29,7 +29,7 @@ section{
 
 .section-content {
     height: 100%;
-    padding: 2rem;
+    padding: 0 2rem;
     overflow-y: auto;
 }
 
@@ -101,7 +101,7 @@ section{
     }
 
     .section-content {
-        padding: 1rem;
+        padding: 0 2rem;
     }
 
     .projects-grid {

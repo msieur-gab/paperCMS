@@ -76,23 +76,24 @@
     flex-wrap: wrap;
 }
 
-.category-btn {
+.category-btn, .close-project, button {
     padding: 0.5rem 1rem;
-    border: 1px solid var(--color-border);
+    border: none;
+    /* border: 1px solid var(--color-border); */
     border-radius: 2rem;
     background: white;
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
-.category-btn:hover {
+.category-btn:hover, .close-project:hover {
     background: var(--color-background);
 }
 
 .category-btn.active {
     background: #000;
     color: #fff;
-    border-color: #000;
+    /* border-color: #000; */
 }
 
 /* Composants média */
@@ -204,6 +205,7 @@ blockquote::after {
     position: sticky;
     top: 0;
     z-index: 10;
+    height: 80px;
     background: var(--color-background);
     padding: 1rem;
     display: flex;
@@ -212,7 +214,7 @@ blockquote::after {
     border-bottom: 1px solid var(--color-border);
 }
 
-.project-header::after {
+/* .project-header::after {
     content: '';
     position: absolute;
     left: 0;
@@ -221,7 +223,7 @@ blockquote::after {
     height: 20px;
     background: linear-gradient(to bottom, var(--color-background), transparent);
     pointer-events: none;
-}
+} */
 
 .project-header .project-title {
     margin: 0;
@@ -229,7 +231,7 @@ blockquote::after {
     font-size: var(--h2-size);
 }
 
-.close-project {
+/* .close-project {
     background: none;
     border: none;
     font-size: 2rem;
@@ -244,7 +246,7 @@ blockquote::after {
 .close-project:hover {
     opacity: 1;
     color: var(--color-text);
-}
+} */
 
 /* Ajustements responsive */
 @media (max-width: 767px) {
@@ -258,6 +260,6 @@ blockquote::after {
 
     .close-project {
         font-size: 1.5rem;
-        padding: 0.25rem;
+        /* padding: 0.25rem; */
     }
 }
