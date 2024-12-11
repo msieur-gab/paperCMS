@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'DK Plakkaat';
+    src: url('DKPlakkaat.woff2') format('woff2'),
+        url('DKPlakkaat.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+

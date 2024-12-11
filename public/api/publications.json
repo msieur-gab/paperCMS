@@ -1,0 +1,264 @@
+{
+    "publications": [
+        {
+            "slug": "kanawa",
+            "path": "kanawa.md",
+            "title": "Kanawa tsugi",
+            "description": "An exploration of Kanawa-tsugi, a traditional Japanese woodworking technique",
+            "date": {
+                "published": "2024-11-25",
+                "updated": "2024-11-25"
+            },
+            "author": {
+                "name": "John Doe",
+                "avatar": "\/media\/authors\/john.jpg"
+            },
+            "category": "woodworking",
+            "subcategories": [],
+            "tags": [],
+            "related": [],
+            "project": {
+                "status": "completed",
+                "timeline": {
+                    "start": "2024-01",
+                    "end": "2024-11",
+                    "client": "Personal Project"
+                }
+            }
+        },
+        {
+            "slug": "daimochi",
+            "path": "daimochi.md",
+            "title": "Daimochi Tsugi",
+            "description": "The mighty mortise joint in Japanese woodworking tradition",
+            "date": {
+                "published": "2024-11-25",
+                "updated": "2024-11-25"
+            },
+            "author": {
+                "name": "John Doe",
+                "avatar": "\/media\/authors\/john.jpg"
+            },
+            "category": "woodworking",
+            "subcategories": [],
+            "tags": [],
+            "related": [],
+            "project": {
+                "status": "completed",
+                "timeline": {
+                    "start": "2024-01",
+                    "end": "2024-11",
+                    "client": "Personal Project"
+                }
+            }
+        },
+        {
+            "slug": "hako-kakushi",
+            "path": "hako-kakushi.md",
+            "title": "Hako Kakushi Tsugi",
+            "description": "A hidden joint technique in traditional Japanese woodworking",
+            "date": {
+                "published": "2024-11-25",
+                "updated": "2024-11-25"
+            },
+            "author": {
+                "name": "John Doe",
+                "avatar": "\/media\/authors\/john.jpg"
+            },
+            "category": "woodworking",
+            "subcategories": [],
+            "tags": [],
+            "related": [],
+            "project": {
+                "status": "completed",
+                "timeline": {
+                    "start": "2024-01",
+                    "end": "2024-11",
+                    "client": "Personal Project"
+                }
+            }
+        },
+        {
+            "slug": "daimochi copy",
+            "path": "daimochi copy.md",
+            "title": "Daimochi Tsugi",
+            "description": "The mighty mortise joint in Japanese woodworking tradition",
+            "date": {
+                "published": "2024-11-25",
+                "updated": "2024-11-25"
+            },
+            "author": {
+                "name": "John Doe",
+                "avatar": "\/media\/authors\/john.jpg"
+            },
+            "category": "design",
+            "subcategories": [],
+            "tags": [],
+            "related": [],
+            "project": {
+                "status": "completed",
+                "timeline": {
+                    "start": "2024-01",
+                    "end": "2024-11",
+                    "client": "Personal Project"
+                }
+            }
+        },
+        {
+            "slug": "dao_pt2",
+            "path": "dao_pt2.md",
+            "title": "Embracing slow design with a very long title",
+            "description": "A hidden joint technique in traditional Japanese woodworking",
+            "date": {
+                "published": "2024-11-25",
+                "updated": "2024-11-25"
+            },
+            "author": {
+                "name": "Gabriel Baude",
+                "avatar": "\/media\/authors\/john.jpg"
+            },
+            "category": "dao",
+            "subcategories": [],
+            "tags": [],
+            "related": [],
+            "project": {
+                "status": "completed",
+                "timeline": {
+                    "start": "2024-01",
+                    "end": "2024-11",
+                    "client": "Personal Project"
+                }
+            }
+        },
+        {
+            "slug": "daimochi copy 2",
+            "path": "daimochi copy 2.md",
+            "title": "Daimochi Tsugi",
+            "description": "The mighty mortise joint in Japanese woodworking tradition",
+            "date": {
+                "published": "2024-11-25",
+                "updated": "2024-11-25"
+            },
+            "author": {
+                "name": "John Doe",
+                "avatar": "\/media\/authors\/john.jpg"
+            },
+            "category": "design",
+            "subcategories": [],
+            "tags": [],
+            "related": [],
+            "project": {
+                "status": "completed",
+                "timeline": {
+                    "start": "2024-01",
+                    "end": "2024-11",
+                    "client": "Personal Project"
+                }
+            }
+        },
+        {
+            "slug": "kanawa copy",
+            "path": "kanawa copy.md",
+            "title": "Kanawa tsugi",
+            "description": "An exploration of Kanawa-tsugi, a traditional Japanese woodworking techniqueAn exploration of Kanawa-tsugi, a traditional Japanese woodworking techniqueAn exploration of Kanawa-tsugi, a traditional Japanese woodworking technique",
+            "date": {
+                "published": "2024-11-25",
+                "updated": "2024-11-25"
+            },
+            "author": {
+                "name": "John Doe",
+                "avatar": "\/media\/authors\/john.jpg"
+            },
+            "category": "woodworking",
+            "subcategories": [],
+            "tags": [],
+            "related": [],
+            "project": {
+                "status": "completed",
+                "timeline": {
+                    "start": "2024-01",
+                    "end": "2024-11",
+                    "client": "Personal Project"
+                }
+            }
+        },
+        {
+            "slug": "hako-kakushi copy",
+            "path": "hako-kakushi copy.md",
+            "title": "Hako Kakushi Tsugi",
+            "description": "A hidden joint technique in traditional Japanese woodworking",
+            "date": {
+                "published": "2024-11-25",
+                "updated": "2024-11-25"
+            },
+            "author": {
+                "name": "John Doe",
+                "avatar": "\/media\/authors\/john.jpg"
+            },
+            "category": "woodworking",
+            "subcategories": [],
+            "tags": [],
+            "related": [],
+            "project": {
+                "status": "completed",
+                "timeline": {
+                    "start": "2024-01",
+                    "end": "2024-11",
+                    "client": "Personal Project"
+                }
+            }
+        },
+        {
+            "slug": "dao_pt2 copy",
+            "path": "dao_pt2 copy.md",
+            "title": "Embracing slow design",
+            "description": "A hidden joint technique in traditional Japanese woodworking",
+            "date": {
+                "published": "2024-11-25",
+                "updated": "2024-11-25"
+            },
+            "author": {
+                "name": "Gabriel Baude",
+                "avatar": "\/media\/authors\/john.jpg"
+            },
+            "category": "dao",
+            "subcategories": [],
+            "tags": [],
+            "related": [],
+            "project": {
+                "status": "completed",
+                "timeline": {
+                    "start": "2024-01",
+                    "end": "2024-11",
+                    "client": "Personal Project"
+                }
+            }
+        },
+        {
+            "slug": "daimochi copy 3",
+            "path": "daimochi copy 3.md",
+            "title": "Daimochi Tsugi",
+            "description": "The mighty mortise joint in Japanese woodworking tradition",
+            "date": {
+                "published": "2024-11-25",
+                "updated": "2024-11-25"
+            },
+            "author": {
+                "name": "John Doe",
+                "avatar": "\/media\/authors\/john.jpg"
+            },
+            "category": "woodworking",
+            "subcategories": [],
+            "tags": [],
+            "related": [],
+            "project": {
+                "status": "completed",
+                "timeline": {
+                    "start": "2024-01",
+                    "end": "2024-11",
+                    "client": "Personal Project"
+                }
+            }
+        }
+    ]
+}

@@ -1,0 +1,47 @@
+/* Imports des polices */
+@import url('https://fonts.googleapis.com/css2?family=Orienta&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif&display=swap');
+
+/* Police personnalisée */
+@font-face {
+    font-family: 'DK Plakkaat';
+    src: url('asset/DKPlakkaat.woff2') format('woff2'),
+         url('asset/DKPlakkaat.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Variables globales */
+:root {
+    /* Couleurs */
+    --color-text: #333;
+    --color-text-light: #666;
+    --color-background: #e2e2e2;
+    --color-background-aside: #e2e2e2;
+    --color-border: #eee;
+    
+    /* Mise en page */
+    --title-height: 4rem;
+    --section-header-height: 1rem;
+    --side-width: 50%;
+    
+    /* Typographie */
+    --font-headlines: 'Orienta', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    /* --font-body: 'Noto Serif', 'EB Garamond', serif; */
+    --font-body: Roboto, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --scale-ratio: 1.5;
+    
+    /* Tailles des titres */
+    --h1-size: 4rem;
+    --h2-size: calc(var(--h1-size) / var(--scale-ratio));
+    --h3-size: calc(var(--h2-size) / var(--scale-ratio));
+    --h4-size: calc(var(--h3-size) / var(--scale-ratio));
+    --h5-size: calc(var(--h4-size) / var(--scale-ratio));
+    --h6-size: calc(var(--h5-size) / var(--scale-ratio));
+    
+    /* Effets */
+    --highlight-bg: url(//s2.svgbox.net/pen-brushes.svg?ic=brush-8&color=fefcbf);
+    --redacted-fx: url(//s2.svgbox.net/pen-brushes.svg?ic=brush-9&color=243539);
+}
