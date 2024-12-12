@@ -1,5 +1,5 @@
 ---
-title: Embracing slow design with a very long title
+title: Embracing slow design
 description: A hidden joint technique in traditional Japanese woodworking
 published: true
 author:

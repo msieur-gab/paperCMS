@@ -8,6 +8,7 @@ import { MediaManager } from './js/components/MediaManager.js';
 import { IntersectionManager } from './js/components/IntersectionManager.js';
 import { ResponsiveLayout } from './js/components/ResponsiveLayout.js';
 import { Router } from './js/core/router.js';
+import { ThemeManager } from './js/components/ThemeManager.js';
 
 class App {
     constructor() {
@@ -62,6 +63,9 @@ class App {
     async initializeComponents() {
         // Initialize layout manager
         this.layout = new ResponsiveLayout(this.eventBus);
+        // Initialize theme manager 
+        this.themeManager = new ThemeManager(this.eventBus);
+    
 
         // Initialize media management
         this.mediaManager = new MediaManager(this.mediaContainer);
@@ -337,6 +341,9 @@ class App {
         }
         if (this.router) {
             this.router.destroy();
+        }
+        if (this.themeManager) {
+            this.themeManager.destroy();
         }
         
         if (this.scrollTimeout) clearTimeout(this.scrollTimeout);
