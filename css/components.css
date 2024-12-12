@@ -9,8 +9,8 @@
     display: flex;
     gap: .5rem;
     padding: 0.5rem;
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(30px);
+    background: var(--nav-background);
+    backdrop-filter: blur(3px);
     border-radius: 2rem;
     flex-wrap: nowrap;
     overflow-x: auto;
@@ -23,7 +23,7 @@
     text-decoration: none;
     padding: 0.75rem 1.5rem;
     border-radius: 1.5rem;
-    color: #000;
+    color: var(--color-text);
     opacity: 0.6;
     transition: all 0.3s ease;
     transition: all 0.3s ease;
@@ -36,8 +36,8 @@
 
 .main-nav a.active {
     opacity: 1;
-    background: #000;
-    color: #fff;
+    background: var(--nav-accent);
+    color: var(--color-text-contraste);
 }
 
 @media (max-width: 767px) {
@@ -81,9 +81,10 @@
     border: none;
     /* border: 1px solid var(--color-border); */
     border-radius: 2rem;
-    background: white;
+    background: var(--nav-background);
     cursor: pointer;
     transition: all 0.3s ease;
+    color: var(--color-text);
 }
 
 .category-btn:hover, .close-project:hover {
@@ -91,8 +92,8 @@
 }
 
 .category-btn.active {
-    background: #000;
-    color: #fff;
+    background:var(--nav-accent);
+    color: var(--color-text-contraste);
     /* border-color: #000; */
 }
 
@@ -299,33 +300,45 @@ blockquote::after {
     height: 24px;
 }
 
-/* Individual icons */
-.theme-toggle-icon svg {
+.theme-toggle::before,
+.theme-toggle::after {
+    content: '';
     position: absolute;
-    inset: 0;
-    transition: transform 300ms ease,
-                opacity 300ms ease;
+    top: 50%;
+    left: 50%;
+    width: 24px;
+    height: 24px;
+    background-color: var(--icon-fill); /* Color of the icon */
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+    transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-/* Sun icon */
-.theme-toggle-icon .sun-icon {
-    opacity: 1;
-    transform: rotate(0deg);
+.theme-toggle::before {
+    transform: translate(-50%, -50%);
+    -webkit-mask-image: var(--icon-sun);
+    mask-image: var(--icon-sun);
 }
 
-/* Moon icon */
-.theme-toggle-icon .moon-icon {
+.theme-toggle::after {
+    transform: translate(-50%, -50%) rotate(-90deg);
+    -webkit-mask-image: var(--icon-moon);
+    mask-image: var(--icon-moon);
     opacity: 0;
-    transform: rotate(-90deg);
 }
 
-/* Icon states in dark theme */
-[data-theme="dark"] .theme-toggle-icon .sun-icon {
+
+/* Dark theme icon states */
+html[data-theme="dark"] .theme-toggle::before {
     opacity: 0;
-    transform: rotate(90deg);
+    transform: translate(-50%, -50%) rotate(90deg);
 }
 
-[data-theme="dark"] .theme-toggle-icon .moon-icon {
+html[data-theme="dark"] .theme-toggle::after {
     opacity: 1;
-    transform: rotate(0deg);
+    transform: translate(-50%, -50%) rotate(0);
 }
