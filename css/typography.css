@@ -172,7 +172,7 @@ sub {
 }
 /* Effets de texte spéciaux */
 mark {
-    color: var(--color-text-contraste);
+    color: var(--color-text-marked);
     margin: -2px -6px;
     padding: 2px 10px 6px 10px;
     background-size: 100% 100%;

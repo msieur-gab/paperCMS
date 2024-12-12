@@ -3,12 +3,14 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    
 }
 
 /* Structure de base */
 html {
     scroll-behavior: smooth;
     height: 100%;
+    
 }
 
 body {
@@ -18,8 +20,12 @@ body {
     height: 100vh;
     background-color: var(--color-background);
     color: var(--color-text);
+   
+    
+}
+body, h1, nav{
     transition: background-color var(--theme-transition-duration),
-    color var(--theme-transition-duration);
+    color var(--theme-transition-duration); 
 }
 
 

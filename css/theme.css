@@ -20,6 +20,7 @@
     color-scheme: light;
     --icon-fill:#333;
     --color-text: #333;
+    --color-text-marked: #242529;
     --color-text-contraste: #d5d6da;
     --color-text-light: #666;
     --color-background: #e2e2e2;
@@ -42,7 +43,9 @@ html[data-theme=dark] {
     color-scheme: dark;
     --icon-fill:#ced4da;
     --color-text: #ebebeb;
+    --color-text-marked: #242529;
     --color-text-contraste: #bbbbbb;
+
     --color-text-light: #ced4da;
     --color-background: #242529;
     --color-background-aside: #2d3238;
@@ -55,4 +58,18 @@ html[data-theme=dark] {
 
     --highlight-bg: url(//s2.svgbox.net/pen-brushes.svg?ic=brush-8&color=ffbdc9);
     --redacted-fx:url(//s2.svgbox.net/pen-brushes.svg?ic=brush-9&color=ebebeb);
+}
+
+figure img {
+    transition: filter var(--theme-transition-duration);
+}
+
+/* Dark theme image adjustments */
+html[data-theme="dark"] figure img {
+    filter: grayscale(100%) brightness(.8);
+}
+/* Dark theme SVG adjustments */
+html[data-theme="dark"] figure img[src$=".svg"] {
+    /* Invert colors and adjust brightness for dark theme */
+    filter: invert(1) brightness(0.9);
 }
