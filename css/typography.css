@@ -1,0 +1,174 @@
+/* Typography Base Styles */
+:root {
+    /* Desktop Font Size Variables */
+    --base-font-size: 16px;
+    --scale-ratio: 1.5;
+    
+    /* Desktop Font Sizes */
+    --h1-size: clamp(2rem, 5vw, 4rem);
+    --h2-size: clamp(1.5rem, 4vw, 3rem);
+    --h3-size: clamp(1.25rem, 3vw, 2.5rem);
+    --h4-size: clamp(1.5rem, 2.5vw, 2rem);
+    --h5-size: clamp(1.25rem, 2vw, 1.5rem);
+    --h6-size: clamp(1rem, 1.5vw, 1.25rem);
+    --body-size: clamp(.8rem, 1.5vw, 1rem);
+    --small-size: 0.875rem;
+    
+    /* Line Heights */
+    --heading-line-height: 1.2;
+    --body-line-height: 1.6;
+    
+    /* Spacing */
+    --heading-spacing-base: 1.5rem;
+}
+
+/* Small Screen Typography Adjustments */
+@media (max-width: 768px) {
+    :root {
+        /* --base-font-size: 19px; */
+        --scale-ratio: 1.2;
+        --heading-spacing-base: 1rem;
+    }
+}
+
+/* Base Typography */
+body, a {
+    font-family: var(--font-body);
+    font-size: var(--body-size);
+    line-height: var(--body-line-height);
+}
+
+button{
+    font-size: calc(var(--body-size) * .9);
+}
+
+figcaption{
+    font-size: calc(var(--body-size) * .8);
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-headlines);
+    line-height: var(--heading-line-height);
+    margin-bottom: var(--heading-spacing-base);
+    font-weight: 700;
+}
+
+h1 { 
+    font-size: var(--h1-size);
+    margin-bottom: calc(var(--heading-spacing-base) * 1.5);
+}
+
+h2 { 
+    font-size: var(--h2-size);
+    margin-bottom: calc(var(--heading-spacing-base) * 1.25);
+}
+
+h3 { 
+    font-size: var(--h3-size);
+    margin-bottom: var(--heading-spacing-base);
+}
+
+h4 { 
+    font-size: var(--h4-size);
+    margin-bottom: calc(var(--heading-spacing-base) * 0.75);
+}
+
+h5 { 
+    font-size: var(--h5-size);
+    margin-bottom: calc(var(--heading-spacing-base) * 0.5);
+}
+
+h6 { 
+    font-size: var(--h6-size);
+    margin-bottom: calc(var(--heading-spacing-base) * 0.5);
+}
+
+/* Paragraphs */
+p {
+    margin-bottom: 1.5rem;
+    max-width: 70ch;
+}
+
+/* Lists */
+ul, ol {
+    margin: 0 0 1.5rem 1.5rem;
+}
+
+li {
+    margin-bottom: 0.5rem;
+}
+
+/* Inline Text Elements */
+small {
+    font-size: var(--small-size);
+}
+
+strong, b {
+    font-weight: 700;
+}
+
+em, i {
+    font-style: italic;
+}
+
+/* Code and Preformatted Text */
+code, pre {
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.9em;
+}
+
+pre {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    overflow-x: auto;
+}
+
+/* Blockquotes */
+blockquote {
+    font-size: 1.2em;
+    line-height: 1.4;
+    margin: 1.5rem 0;
+    padding: 1rem;
+    border-left: 4px solid currentColor;
+}
+
+/* Superscript and Subscript */
+sup, sub {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+}
+
+sup {
+    top: -0.5em;
+}
+
+sub {
+    bottom: -0.25em;
+}
+
+/* Text Decoration Classes */
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.text-justify {
+    text-align: justify;
+}
+
+.text-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.text-uppercase {
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}

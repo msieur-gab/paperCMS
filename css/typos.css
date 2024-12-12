@@ -1,0 +1,101 @@
+
+/* Typographie de base */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-headlines);
+    line-height: var(--heading-line-height);
+}
+
+/* Titres sticky */
+h1, h2 {
+    position: sticky;
+    background: var(--color-background);
+    z-index: 10;
+}
+
+h1 { 
+    font-size: var(--h1-size); 
+    top: 0;
+    padding: 1rem 0;
+    margin-bottom: calc(var(--heading-spacing-base) * 1.5);
+}
+
+h2 { 
+    font-size: var(--h2-size); 
+    top:0px;
+    /* top: calc(var(--h1-size) + 2rem); */
+    padding: 0.5rem 0;
+    margin-bottom: calc(var(--heading-spacing-base) * 2.5);
+}
+
+h3 { 
+    font-size: var(--h3-size);
+    margin-top: calc(var(--heading-spacing-base) * 1.5);
+    margin-bottom: calc(var(--heading-spacing-base) * 0.75);
+}
+
+h4 { font-size: var(--h4-size); }
+h5 { font-size: var(--h5-size); }
+h6 { font-size: var(--h6-size); }
+
+/* Effet de dégradé pour les titres sticky */
+/* h1::after,
+h2::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -20px;
+    height: 20px;
+    background: linear-gradient(to bottom, var(--color-background), transparent);
+    pointer-events: none;
+} */
+
+/* Paragraphes et texte */
+p {
+    margin-bottom: 1.5rem;
+    max-width: 80ch;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* Effets de texte spéciaux */
+mark {
+    position: relative;
+    white-space: pre;
+    background-color: transparent !important;
+}
+
+mark:after {
+    background: var(--highlight-bg);
+    border-radius: 0.1em;
+    content: " ";
+    width: 100%;
+    height: 1.3em;
+    left: 0;
+    position: absolute;
+    z-index: -2;
+    margin: -2px -6px;
+    padding: 2px 6px;
+    transform: skewY(-16deg) rotate(16deg);
+}
+
+del {
+    position: relative;
+    white-space: pre;
+}
+
+del:after {
+    background: var(--redacted-fx);
+    border-radius: 0.1em;
+    content: " ";
+    width: 100%;
+    height: 1.3em;
+    left: 0;
+    position: absolute;
+    margin: -2px -6px;
+    padding: 2px 6px;
+    transform: skewY(-16deg) rotate(16deg);
+}
