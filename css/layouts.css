@@ -13,6 +13,8 @@ main::-webkit-scrollbar {
     display: none;
 }
 section{
+    margin-top: 10vh;
+    margin-bottom: 10vh;
     min-height: 100vh;
     align-content: center;
 }
