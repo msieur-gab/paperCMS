@@ -50,7 +50,7 @@
 
 /* Cartes projet */
 .project-card {
-    background: white;
+    background: var(--color-background);
     border-radius: 8px;
     padding: 1.5rem;
     cursor: pointer;
@@ -206,7 +206,7 @@ blockquote::after {
     top: 0;
     z-index: 10;
     height: 80px;
-    background: var(--color-background);
+    /* background: var(--color-background); */
     padding: 1rem;
     display: flex;
     justify-content: space-between;
@@ -262,4 +262,70 @@ blockquote::after {
         font-size: 1.5rem;
         /* padding: 0.25rem; */
     }
+}
+
+/* theme manager */
+/* In components.css */
+/* Theme toggle button styles */
+.theme-toggle {
+    position: fixed;
+    z-index: 999;
+    top: 1rem;
+    right: 1rem;
+    width: 48px;
+    height: 48px;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 50%;
+    background: var(--color-background);
+    color: var(--color-text-primary);
+    cursor: pointer;
+    box-shadow: 0 2px 8px var(--color-shadow);
+    transition: transform 300ms ease,
+                background-color var(--theme-transition-duration),
+                color var(--theme-transition-duration),
+                box-shadow 300ms ease;
+}
+
+.theme-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px var(--color-shadow);
+}
+
+/* Icon container */
+.theme-toggle-icon {
+    position: relative;
+    width: 24px;
+    height: 24px;
+}
+
+/* Individual icons */
+.theme-toggle-icon svg {
+    position: absolute;
+    inset: 0;
+    transition: transform 300ms ease,
+                opacity 300ms ease;
+}
+
+/* Sun icon */
+.theme-toggle-icon .sun-icon {
+    opacity: 1;
+    transform: rotate(0deg);
+}
+
+/* Moon icon */
+.theme-toggle-icon .moon-icon {
+    opacity: 0;
+    transform: rotate(-90deg);
+}
+
+/* Icon states in dark theme */
+[data-theme="dark"] .theme-toggle-icon .sun-icon {
+    opacity: 0;
+    transform: rotate(90deg);
+}
+
+[data-theme="dark"] .theme-toggle-icon .moon-icon {
+    opacity: 1;
+    transform: rotate(0deg);
 }

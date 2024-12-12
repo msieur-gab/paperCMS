@@ -83,7 +83,7 @@ section{
         height: 100vh;
         position: sticky;
         top: 0;
-        background: var(--color-background-aside);
+        /* background: var(--color-background-aside); */
     }
 
     .project-content {

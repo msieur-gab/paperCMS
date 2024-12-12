@@ -8,6 +8,7 @@ import { MediaManager } from './js/components/MediaManager.js';
 import { IntersectionManager } from './js/components/IntersectionManager.js';
 import { ResponsiveLayout } from './js/components/ResponsiveLayout.js';
 import { Router } from './js/core/router.js';
+import { ThemeManager } from './js/components/ThemeManager.js';
 
 class App {
     constructor() {
@@ -81,6 +82,16 @@ class App {
         };
         this.portfolio = new Portfolio(portfolioConfig);
 
+        // Initialize theme manager
+    this.themeManager = new ThemeManager(this.eventBus);
+    
+    // If you have a theme toggle button in your HTML
+    const themeToggle = document.querySelector('.theme-toggle');
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            this.themeManager.toggleTheme();
+        });
+    }
         // Initialize project list
         const projectsGrid = document.querySelector('.projects-grid');
         if (projectsGrid) {
@@ -337,6 +348,9 @@ class App {
         }
         if (this.router) {
             this.router.destroy();
+        }
+        if (this.themeManager) {
+            this.themeManager.destroy();
         }
         
         if (this.scrollTimeout) clearTimeout(this.scrollTimeout);

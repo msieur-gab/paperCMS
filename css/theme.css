@@ -1,0 +1,35 @@
+/* settings.css */
+:root {
+    --theme-transition-duration: 500ms;
+    /* Theme tokens - Light Mode (default) */
+    --color-text: #333;
+    --color-text-contraste: #242529;
+    --color-text-light: #666;
+    --color-background: #e2e2e2;
+    --color-background-aside: #e2e2e2;
+    --color-border: #eee;
+    --color-interactive: #228be6;
+    --color-shadow: rgba(0,0,0,0.1);
+    
+    /* Typography - These stay consistent across themes */
+    --font-headlines: 'Orienta', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-body: 'Noto Serif', 'EB Garamond', serif;
+    
+    /* Effects - Theme aware */
+    --highlight-bg: url(//s2.svgbox.net/pen-brushes.svg?ic=brush-8&color=fefcbf);
+    --redacted-fx: url(//s2.svgbox.net/pen-brushes.svg?ic=brush-9&color=243539);
+}
+
+/* Dark theme colors */
+[data-theme="dark"] {
+    --color-text: #ebebeb;
+    --color-text-contraste: #242529;
+    --color-text-light: #ced4da;
+    --color-background: #242529;
+    --color-background-aside: #2d3238;
+    --color-border: #495057;
+    --color-interactive: #74c0fc;
+    --color-shadow: rgba(0,0,0,0.3);
+    --highlight-bg: url(//s2.svgbox.net/pen-brushes.svg?ic=brush-8&color=ffbdc9);
+    --redacted-fx:url(//s2.svgbox.net/pen-brushes.svg?ic=brush-9&color=ebebeb);
+}

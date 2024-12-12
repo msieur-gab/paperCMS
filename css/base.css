@@ -18,6 +18,8 @@ body {
     height: 100vh;
     background-color: var(--color-background);
     color: var(--color-text);
+    transition: background-color var(--theme-transition-duration),
+    color var(--theme-transition-duration);
 }
 
 
@@ -161,7 +163,7 @@ main.resizing {
         height: 100vh;
         position: sticky;
         top: 0;
-        background: var(--color-background-aside);
+        /* background: var(--color-background-aside); */
     }
 
     .project-content {
