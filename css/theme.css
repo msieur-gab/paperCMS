@@ -1,7 +1,14 @@
 /* settings.css */
 :root {
+     /* Typography - These stay consistent across themes */
+     --font-headlines: 'Orienta', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+     --font-body: 'Noto Serif', 'EB Garamond', serif;
+
     --theme-transition-duration: 500ms;
-    /* Theme tokens - Light Mode (default) */
+}
+    /* Light theme (default + explicit) */
+:root:not([data-theme]), html[data-theme=light] {
+    color-scheme: light;
     --color-text: #333;
     --color-text-contraste: #242529;
     --color-text-light: #666;
@@ -11,17 +18,16 @@
     --color-interactive: #228be6;
     --color-shadow: rgba(0,0,0,0.1);
     
-    /* Typography - These stay consistent across themes */
-    --font-headlines: 'Orienta', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --font-body: 'Noto Serif', 'EB Garamond', serif;
+   
     
     /* Effects - Theme aware */
     --highlight-bg: url(//s2.svgbox.net/pen-brushes.svg?ic=brush-8&color=fefcbf);
     --redacted-fx: url(//s2.svgbox.net/pen-brushes.svg?ic=brush-9&color=243539);
 }
 
-/* Dark theme colors */
-[data-theme="dark"] {
+/* Dark theme */
+html[data-theme=dark] {
+    color-scheme: dark;
     --color-text: #ebebeb;
     --color-text-contraste: #242529;
     --color-text-light: #ced4da;

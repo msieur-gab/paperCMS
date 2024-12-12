@@ -63,6 +63,9 @@ class App {
     async initializeComponents() {
         // Initialize layout manager
         this.layout = new ResponsiveLayout(this.eventBus);
+        // Initialize theme manager 
+        this.themeManager = new ThemeManager(this.eventBus);
+    
 
         // Initialize media management
         this.mediaManager = new MediaManager(this.mediaContainer);
@@ -82,16 +85,6 @@ class App {
         };
         this.portfolio = new Portfolio(portfolioConfig);
 
-        // Initialize theme manager
-    this.themeManager = new ThemeManager(this.eventBus);
-    
-    // If you have a theme toggle button in your HTML
-    const themeToggle = document.querySelector('.theme-toggle');
-    if (themeToggle) {
-        themeToggle.addEventListener('click', () => {
-            this.themeManager.toggleTheme();
-        });
-    }
         // Initialize project list
         const projectsGrid = document.querySelector('.projects-grid');
         if (projectsGrid) {
