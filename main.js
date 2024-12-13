@@ -8,6 +8,7 @@ import { IntersectionManager } from './js/components/IntersectionManager.js';
 import { ResponsiveLayout } from './js/components/ResponsiveLayout.js';
 import { Router } from './js/core/router.js';
 import { ThemeManager } from './js/components/ThemeManager.js';
+import { SearchComponent } from './js/components/SearchComponent.js';
 
 class App {
     constructor() {
