@@ -419,7 +419,7 @@ html[data-theme="dark"] .theme-toggle::after {
     border: none;
     background: none;
     font-size: 0.95rem;
-    color: #333;
+    color: var(--color-text);
 }
 
 .search-input:focus {

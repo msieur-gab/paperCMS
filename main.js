@@ -162,31 +162,35 @@ class App {
     }
 
     setupScrollHandling() {
+        let ticking = false;
+        
         this.mainElement.addEventListener('scroll', () => {
-            if (this.scrollTimeout) clearTimeout(this.scrollTimeout);
-            
-            this.scrollTimeout = setTimeout(() => {
-                if (!this.mainElement.classList.contains('resizing')) {
-                    const scrollLeft = this.mainElement.scrollLeft;
-                    const width = this.mainElement.clientWidth;
-                    const sectionIndex = Math.round(scrollLeft / width);
-                    const section = this.state.sections[sectionIndex];
-                    
-                    // Prevent scrolling to project-details if no project is loaded
-                    if (section === 'project-details' && !this.state.isProjectOpen) {
-                        const workIndex = this.state.sections.indexOf('work');
-                        this.mainElement.scrollTo({
-                            left: workIndex * this.mainElement.clientWidth,
-                            behavior: 'smooth'
-                        });
-                        return;
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    if (!this.mainElement.classList.contains('resizing')) {
+                        const scrollLeft = this.mainElement.scrollLeft;
+                        const width = this.mainElement.clientWidth;
+                        const sectionIndex = Math.round(scrollLeft / width);
+                        const section = this.state.sections[sectionIndex];
+                        
+                        // Prevent scrolling to project-details if no project is loaded
+                        if (section === 'project-details' && !this.state.isProjectOpen) {
+                            const workIndex = this.state.sections.indexOf('work');
+                            this.mainElement.scrollTo({
+                                left: workIndex * this.mainElement.clientWidth,
+                                behavior: 'smooth'
+                            });
+                            return;
+                        }
+                        
+                        if (section && section !== this.state.currentSection) {
+                            this.updateSection(section);
+                        }
                     }
-                    
-                    if (section && section !== this.state.currentSection) {
-                        this.updateSection(section);
-                    }
-                }
-            }, 100);
+                    ticking = false;
+                });
+                ticking = true;
+            }
         });
     }
 
