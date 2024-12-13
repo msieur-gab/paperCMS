@@ -1,5 +1,4 @@
-// main.js - Complete Single Page Application Implementation with Router
-
+// main.js
 import { ProjectList } from './js/components/ProjectList.js';
 import { EventBus } from './js/core/events.js';
 import { Portfolio } from './js/components/Portfolio.js';
@@ -45,14 +44,14 @@ class App {
 
     async initialize() {
         try {
-            // Initialize core components
             await this.initializeComponents();
-            
-            // Handle initial URL routing
             await this.router.handleInitialURL();
-            
-            // Set up event listeners
             this.setupEventListeners();
+            
+            // Ensure initial state is correct
+            if (!this.state.isProjectOpen) {
+                this.mainElement.classList.add('no-project');
+            }
             
         } catch (error) {
             console.error('Failed to initialize application:', error);
@@ -63,9 +62,9 @@ class App {
     async initializeComponents() {
         // Initialize layout manager
         this.layout = new ResponsiveLayout(this.eventBus);
+        
         // Initialize theme manager 
         this.themeManager = new ThemeManager(this.eventBus);
-    
 
         // Initialize media management
         this.mediaManager = new MediaManager(this.mediaContainer);
@@ -97,16 +96,33 @@ class App {
     }
 
     setupEventListeners() {
+        this.setupNavigationHandlers();
+        this.setupProjectHandlers();
+        this.setupLayoutHandlers();
+        this.setupScrollHandling();
+        this.setupMediaHandlers();
+    }
+
+    setupNavigationHandlers() {
         // Navigation click handling
         this.mainNav.addEventListener('click', (e) => {
             const link = e.target.closest('a[section]');
             if (link) {
                 e.preventDefault();
                 const section = link.getAttribute('section');
+                
+                // Prevent navigation to project-details if no project is open
+                if (section === 'project-details' && !this.state.isProjectOpen) {
+                    console.warn('Cannot navigate to project details - no project is open');
+                    return;
+                }
+                
                 this.navigateToSection(section);
             }
         });
+    }
 
+    setupProjectHandlers() {
         // Project close button
         document.addEventListener('click', (e) => {
             const closeButton = e.target.closest('.close-project');
@@ -115,7 +131,9 @@ class App {
                 this.closeProject();
             }
         });
+    }
 
+    setupLayoutHandlers() {
         // Responsive layout handling
         window.addEventListener('resize', () => {
             if (this.resizeTimeout) clearTimeout(this.resizeTimeout);
@@ -136,7 +154,13 @@ class App {
             }, 150);
         });
 
-        // Scroll handling for section detection
+        // Layout change handling
+        this.eventBus.on('layoutChange', ({ isMobile }) => {
+            this.handleLayoutChange(isMobile);
+        });
+    }
+
+    setupScrollHandling() {
         this.mainElement.addEventListener('scroll', () => {
             if (this.scrollTimeout) clearTimeout(this.scrollTimeout);
             
@@ -147,22 +171,29 @@ class App {
                     const sectionIndex = Math.round(scrollLeft / width);
                     const section = this.state.sections[sectionIndex];
                     
+                    // Prevent scrolling to project-details if no project is loaded
+                    if (section === 'project-details' && !this.state.isProjectOpen) {
+                        const workIndex = this.state.sections.indexOf('work');
+                        this.mainElement.scrollTo({
+                            left: workIndex * this.mainElement.clientWidth,
+                            behavior: 'smooth'
+                        });
+                        return;
+                    }
+                    
                     if (section && section !== this.state.currentSection) {
                         this.updateSection(section);
                     }
                 }
             }, 100);
         });
+    }
 
+    setupMediaHandlers() {
         // Media intersection handling
         this.eventBus.on('mediaIntersection', (mediaElement) => {
             if (!this.state.isProjectOpen || window.innerWidth < 768) return;
             this.mediaManager.updateMedia({ element: mediaElement });
-        });
-
-        // Layout change handling
-        this.eventBus.on('layoutChange', ({ isMobile }) => {
-            this.handleLayoutChange(isMobile);
         });
     }
 
@@ -170,16 +201,16 @@ class App {
         if (this.state.isLoading) return;
         
         this.state.isLoading = true;
-        this.mainElement.classList.remove('no-project');
         
         try {
+            this.mainElement.classList.remove('no-project');
+            
             if (this.projectDetailsContent) {
                 this.projectDetailsContent.innerHTML = '<div class="loading">Loading...</div>';
             }
     
             const fetchPath = this.router.addMdExtension(path);
             const response = await fetch(`./content/${fetchPath}`);
-          
             
             if (!response.ok) throw new Error('Failed to fetch project content');
             
@@ -191,12 +222,11 @@ class App {
             if (projectTitle) {
                 projectTitle.textContent = metadata.title || '';
             }
-            // Update content
+
             if (this.projectDetailsContent) {
                 this.projectDetailsContent.innerHTML = html;
             }
             
-            // Pass the clean path to updateProjectInNav
             const cleanPath = this.router.cleanPath(path);
             this.updateProjectInNav(metadata.title, cleanPath);
             
@@ -217,6 +247,8 @@ class App {
         } catch (error) {
             console.error('Error loading project:', error);
             this.showErrorMessage('Failed to load project');
+            this.mainElement.classList.add('no-project');
+            this.state.isProjectOpen = false;
         } finally {
             this.state.isLoading = false;
         }
@@ -250,6 +282,12 @@ class App {
     }
 
     navigateToSection(section, isPopState = false) {
+        // Prevent navigation to project-details if no project is open
+        if (section === 'project-details' && !this.state.isProjectOpen) {
+            console.warn('Attempted to navigate to project details with no project loaded');
+            return;
+        }
+        
         if (!this.state.sections.includes(section)) return;
         
         const sectionIndex = this.state.sections.indexOf(section);
@@ -269,7 +307,6 @@ class App {
         
         if (!isPopState) {
             if (section === 'project-details' && this.state.isProjectOpen) {
-                // Get the current project path from the nav item's data attribute
                 const projectNav = this.mainNav.querySelector('a[section="project-details"]');
                 const currentPath = projectNav?.getAttribute('data-path');
                 if (currentPath) {
@@ -299,7 +336,7 @@ class App {
         }
         
         projectNav.textContent = title;
-        projectNav.setAttribute('data-path', path); // Store the path for URL updates
+        projectNav.setAttribute('data-path', path);
     }
 
     handleLayoutChange(isMobile) {

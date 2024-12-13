@@ -29,7 +29,7 @@ project:
 
 ![Interface principale de l'application](media/workshop.jpg "cover")
 
-Kanawa-tsugi is a traditional Japanese woodworking technique that has been practiced for centuries. It is a form of joinery that involves connecting two pieces of wood together using precise cuts and interlocking joints. This article will delve into the art of ==Kanawa-tsugi==, exploring its history, cultural significance, technical aspects, aesthetics, learning process, and its future in both traditional and ~~modern applications~~.
+Kanawa-tsugi is a traditional Japanese woodworking technique that has been practiced for centuries. It is a form of joinery that involves connecting two pieces of wood together using precise cuts and interlocking joints. ==This article will delve into the art of Kanawa-tsugi==, exploring its history, cultural significance, technical aspects, aesthetics, learning process, ~~and its future in both traditional and modern applications~~.
 
 ## Understanding the Art of Kanawa-tsugi
 
