@@ -6,6 +6,28 @@
     
 }
 
+button,
+a {
+    /* Remove tap highlight */
+    -webkit-tap-highlight-color: transparent;
+    
+    /* Remove callout */
+    -webkit-touch-callout: none;
+    
+    /* Prevent text/image selection */
+    user-select: none;
+    -webkit-user-select: none;
+    
+    /* Prevent touch zooming on some devices */
+    touch-action: manipulation;
+}
+
+/* Optional: Remove focus outline if you're providing another focus indicator */
+button:focus,
+a:focus {
+    outline: none;
+}
+
 /* Structure de base */
 html {
     scroll-behavior: smooth;
