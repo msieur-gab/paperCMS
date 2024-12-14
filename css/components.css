@@ -559,8 +559,8 @@ html[data-theme="dark"] .theme-toggle::after {
 
 .project-card h1{
     font-size: var(--h1-num-size);
-    letter-spacing: -10px;
     margin-top: -1rem;
+    letter-spacing: clamp(-.3rem, -.5rem, -6rem);
 }
 .project-card sup{
     font-size: 2rem;

@@ -76,13 +76,7 @@ export class ProjectList {
                 const limitedTags = pub.tags.slice(0, 3); // Only take first 3 tags
                 return `
                     <article class="project-card" data-path="${cleanPath}">
-                        ${pub.thumbnail ? `
-                            <img 
-                                src="${pub.thumbnail}" 
-                                alt="${pub.title}"
-                                class="project-thumbnail"
-                            >
-                        ` : ''}
+                        
                         ${pub.series ? `
                             <h1 class="series-number">${pub.series.number}</h1>
                         ` : ''}
@@ -95,6 +89,13 @@ export class ProjectList {
                                     </li>
                                 `).join('')}
                             </ul>
+                        ` : ''}
+                        ${pub.thumbnail ? `
+                            <img 
+                                src="${pub.thumbnail}" 
+                                alt="${pub.title}"
+                                class="project-thumbnail"
+                            >
                         ` : ''}
                         <p class="project-description">${pub.description}</p>
                         <footer class="project-meta">
