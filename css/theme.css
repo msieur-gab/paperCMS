@@ -76,11 +76,11 @@ figure img {
 }
 
 /* Dark theme image adjustments */
-html[data-theme="dark"] figure img {
+html[data-theme="dark"]  img {
     filter: grayscale(100%) brightness(.8);
 }
 /* Dark theme SVG adjustments */
-html[data-theme="dark"] figure img[src$=".svg"] {
+html[data-theme="dark"]  img[src$=".svg"] {
     /* Invert colors and adjust brightness for dark theme */
     filter: invert(1) brightness(0.9);
 }
