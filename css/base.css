@@ -10,15 +10,19 @@ button,
 a {
     /* Remove tap highlight */
     -webkit-tap-highlight-color: transparent;
+    tap-highlight-color: transparent;
     
-    /* Remove callout */
+    /* Remove touch callout/context menu (iOS Safari) */
     -webkit-touch-callout: none;
+    touch-callout: none;
     
-    /* Prevent text/image selection */
-    user-select: none;
+    /* Prevent text selection */
     -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
     
-    /* Prevent touch zooming on some devices */
+    /* Control touch manipulation behavior */
     touch-action: manipulation;
 }
 
