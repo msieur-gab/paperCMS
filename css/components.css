@@ -571,8 +571,8 @@ html[data-theme="dark"] .theme-toggle::after {
 
 .project-card h2{
     font-size: 1.5rem;
-    margin-top: -1rem;
-    padding-bottom : .5rem;
+    margin-top: -.5rem;
+    padding-bottom : 1rem;
     border-bottom: 6px solid var(--color-text);
 }
 
@@ -580,7 +580,7 @@ html[data-theme="dark"] .theme-toggle::after {
 .project-tags {
     list-style: none;
     padding: 0;
-    margin: 1rem 0;
+    margin: 1rem 0 .5rem;
     display: flex;
     flex-wrap: nowrap; /* Change to nowrap to enable horizontal scrolling */
     gap: 0.5rem;
@@ -608,12 +608,12 @@ html[data-theme="dark"] .theme-toggle::after {
     margin-right: 0.125rem;
 }
 .project-card footer{
-    margin-top: 2rem;
+    /* margin-top: 2rem; */
     padding-top:.5rem;
     border-top: 1px solid var(--color-text);
 }
 .project-card p{
-    margin-top: 1.5rem;
+    margin-top: .5rem;
 }
 
 .project-card img {
