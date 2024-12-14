@@ -6,7 +6,7 @@
     
 }
 
-button,
+button,article,
 a {
     /* Remove tap highlight */
     -webkit-tap-highlight-color: transparent;
