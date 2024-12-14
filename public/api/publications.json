@@ -20,7 +20,7 @@
                 "name": "John Doe",
                 "avatar": "/media/authors/john.jpg"
             },
-            "category": "woodworking",
+            "category": "reflexion",
             "subcategories": [
                 "design",
                 "japanese-craft"
@@ -64,7 +64,7 @@
                 "name": "John Doe",
                 "avatar": "/media/authors/john.jpg"
             },
-            "category": "woodworking",
+            "category": "reflexion",
             "subcategories": [
                 "design",
                 "japanese-craft"
@@ -109,7 +109,7 @@
                 "name": "John Doe",
                 "avatar": "/media/authors/john.jpg"
             },
-            "category": "protoype",
+            "category": "exploration",
             "subcategories": [
                 "design",
                 "japanese-craft"
@@ -154,7 +154,7 @@
                 "name": "Gabriel Baude",
                 "avatar": "/media/authors/gabriel.jpg"
             },
-            "category": "methods",
+            "category": "application",
             "subcategories": [
                 "philosophy",
                 "methodology"
@@ -198,7 +198,7 @@
                 "name": "Gabriel Baude",
                 "avatar": "/media/authors/gabriel.jpg"
             },
-            "category": "ai-design",
+            "category": "exploration",
             "subcategories": [
                 "ethics",
                 "methodology"
@@ -242,7 +242,7 @@
                 "name": "Gabriel Baude",
                 "avatar": "/media/authors/gabriel.jpg"
             },
-            "category": "ai-design",
+            "category": "exploration",
             "subcategories": [
                 "ux",
                 "patterns"
@@ -286,7 +286,7 @@
                 "name": "Gabriel Baude",
                 "avatar": "/media/authors/gabriel.jpg"
             },
-            "category": "ai-design",
+            "category": "application",
             "subcategories": [
                 "creativity",
                 "collaboration"
