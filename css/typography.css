@@ -5,7 +5,7 @@
     --scale-ratio: 1.5;
 
     /* Desktop Font Sizes */
-    --h1-num-size: clamp(6rem, 8vw, 9rem);
+    --h1-num-size: clamp(6rem, 10vw, 9rem);
     --h1-size: clamp(2rem, 5vw, 4rem);
     --h2-size: clamp(1.5rem, 4vw, 3rem);
     --h3-size: clamp(1.25rem, 3vw, 2.5rem);
