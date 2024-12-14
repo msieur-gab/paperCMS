@@ -48,18 +48,34 @@
 
 
 /* Cartes projet */
+
+/* Project Cards */
 .project-card {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    margin-bottom: 2rem;
+    width: 100%;
     background: var(--color-background);
-    border-radius: 8px;
-    padding: 1.5rem;
     cursor: pointer;
+    /* border-radius: 8px; */
+    padding: 1.5rem;
+    /* box-shadow: 0 2px 4px rgba(0,0,0,0.1); */
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
+
+/* .project-card { */
+    /* background: var(--color-background); */
+    /* border-radius: 8px; */
+    /* padding: 1.5rem; */
+    /* cursor: pointer; */
+    /* transition: transform 0.3s ease, box-shadow 0.3s ease; */
+    /* box-shadow: 0 2px 4px rgba(0,0,0,0.1); */
+/* } */
 
 .project-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    /* border: 1px solid var(--nav-background); */
+    /* box-shadow: 0 4px 12px rgba(0,0,0,0.15); */
 }
 
 /* Filtres catégories */

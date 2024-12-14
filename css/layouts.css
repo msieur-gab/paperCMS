@@ -77,25 +77,10 @@ section{
     columns: 6 16rem;  /* 4 columns, each minimum 20rem wide */
     column-gap: 2rem;
     column-fill: balance;
-    padding: 2rem;
-}
-/* Project Cards */
-.project-card {
-    break-inside: avoid;
-    page-break-inside: avoid;
-    margin-bottom: 2rem;
-    width: 100%;
-    background: white;
-    border-radius: 8px;
-    padding: 1.5rem;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    /* padding: 2rem; */
 }
 
-.project-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
+
 
 /* Card Content */
 .project-title {
