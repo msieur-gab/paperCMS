@@ -484,3 +484,74 @@ html[data-theme="dark"] .theme-toggle::after {
 
 }
 
+/* Project Cards Base Styles */
+/* .project-card {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.5rem;
+} */
+
+.project-card h1,
+.project-card h2 {
+    position: static !important;  /* Override sticky behavior */
+    top: auto;                   /* Remove any top positioning */
+    padding: 0;                  /* Remove default padding */
+    margin: 0;                   /* Remove default margin */
+    background: none;            /* Remove any background */
+}
+
+.project-card h1{
+    font-size: 10rem;
+}
+
+/* Tags List Styles */
+.project-tags {
+    list-style: none;
+    padding: 0;
+    margin: 2rem 0;
+    display: flex;
+    flex-wrap: nowrap; /* Change to nowrap to enable horizontal scrolling */
+    gap: 0.5rem;
+    overflow: hidden; /* Hide overflow */
+    max-width: 100%; /* Ensure container doesn't overflow */
+}
+
+.project-tag {
+    font-size: 0.7rem;
+    color: var(--color-text);
+    background-color: var(--nav-background);
+    padding: 0.25rem 0.5rem;
+    border-radius: 1rem;
+    white-space: nowrap; /* Prevent tag text from wrapping */
+    flex-shrink: 0; /* Prevent tags from shrinking */
+
+}
+
+.project-tag:hover {
+    background-color: var(--color-tag-bg-hover, #eaeaea);
+}
+
+.tag-hash {
+    color: var(--color-tag-hash, #999);
+    margin-right: 0.125rem;
+}
+.project-card footer{
+    margin-top: 5rem;
+}
+.project-card p{
+    margin-top: 3rem;
+}
+
+.project-card img {
+    width: calc(100% + 8rem);
+    /* margin: -1.5rem -1.5rem 0; */
+    max-height: 16rem;
+    object-fit: cover;
+}

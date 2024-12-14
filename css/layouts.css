@@ -72,8 +72,9 @@ section{
 } */
 
 .projects-grid {
+    margin: 10 auto;
     width: 100%;
-    columns: 6 14rem;  /* 4 columns, each minimum 20rem wide */
+    columns: 6 16rem;  /* 4 columns, each minimum 20rem wide */
     column-gap: 2rem;
     column-fill: balance;
     padding: 2rem;
@@ -116,7 +117,7 @@ section{
 }
 
 .project-tag {
-    background: var(--color-background);
+    background: var(--nac-background);
     padding: 0.25rem 0.75rem;
     border-radius: 9999px;
     font-size: 0.875rem;

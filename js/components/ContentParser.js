@@ -278,7 +278,8 @@ class TextRedactor {
     }
 
     redactText(text) {
-        return text.replace(/./g, this.redactionChar);
+        // Preserve spaces, punctuation, and line breaks
+        return text.replace(/[^\s\n.,!?;:]/g, this.redactionChar);
     }
 
     createRedactedElement(text) {

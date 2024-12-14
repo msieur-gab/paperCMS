@@ -27,6 +27,7 @@
     --color-text-marked: #242529;
     --color-text-contraste: #d5d6da;
     --color-text-light: #666;
+    --color-text-darker: #333;
     --color-background: #e2e2e2;
     --color-background-aside: #e2e2e2;
     --color-border: #eee;
@@ -51,6 +52,7 @@ html[data-theme=dark] {
     --color-text: #ebebeb;
     --color-text-marked: #242529;
     --color-text-contraste: #bbbbbb;
+    --color-text-darker: #333;
 
     --color-text-light: #ced4da;
     --color-background: #242529;

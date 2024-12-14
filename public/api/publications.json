@@ -4,52 +4,88 @@
             "slug": "kanawa",
             "path": "kanawa.md",
             "title": "Kanawa tsugi",
-            "description": "An exploration of Kanawa-tsugi, a traditional Japanese woodworking technique",
+            "description": "This article will delve into the art of Kanawa-tsugi, exploring its history, cultural significance, technical aspects, aesthetics, learning process, and its future in both traditional and modern applications",
+            "series": {
+                "number": 12,
+                "name": "Japanese Joinery Fundamentals",
+                "image": "/media/series/joinery-fundamentals.jpg",
+                "description": "A comprehensive guide to traditional Japanese woodworking joints"
+            },
             "date": {
                 "published": "2024-11-25",
                 "updated": "2024-11-25"
             },
             "author": {
                 "name": "John Doe",
-                "avatar": "\/media\/authors\/john.jpg"
+                "avatar": "/media/authors/john.jpg"
             },
             "category": "woodworking",
-            "subcategories": [],
-            "tags": [],
-            "related": [],
+            "subcategories": [
+                "design",
+                "japanese-craft"
+            ],
+            "tags": [
+                "joinery",
+                "traditional",
+                "craftsmanship",
+                "wood",
+                "structural"
+            ],
+            "related": [
+                "content/daimochi.md",
+                "content/hako-kakushi.md"
+            ],
             "project": {
                 "status": "completed",
                 "timeline": {
                     "start": "2024-01",
-                    "end": "2024-11",
-                    "client": "Personal Project"
-                }
+                    "end": "2024-11"
+                },
+                "client": "Personal Project"
             }
         },
         {
             "slug": "daimochi",
             "path": "daimochi.md",
             "title": "Daimochi Tsugi",
-            "description": "The mighty mortise joint in Japanese woodworking tradition",
+            "description": "The mighty mortise joint in Japanese woodworking tradition. The technical aspects will be thoroughly investigated, from the precise geometric calculations and specialized tools required, to the profound understanding of wood properties that masters develop over years of practice. We'll analyze its remarkable aesthetics, particularly how it exemplifies the Japanese principles of beauty through functionality and hidden complexity, while also documenting the meticulous learning process that apprentice craftspeople must undertake to master this joint. Finally, we'll examine its resilient legacy and continuing relevance, exploring how this traditional technique is being adapted for contemporary architecture, modern furniture design, and sustainable building practices, while also considering the challenges and opportunities in preserving this craft for future generations.",
+            "series": {
+                "number": 23,
+                "name": "Japanese Joinery Fundamentals",
+                "image": "/media/series/joinery-fundamentals.jpg",
+                "description": "A comprehensive guide to traditional Japanese woodworking joints"
+            },
             "date": {
                 "published": "2024-11-25",
                 "updated": "2024-11-25"
             },
             "author": {
                 "name": "John Doe",
-                "avatar": "\/media\/authors\/john.jpg"
+                "avatar": "/media/authors/john.jpg"
             },
             "category": "woodworking",
-            "subcategories": [],
-            "tags": [],
-            "related": [],
+            "subcategories": [
+                "design",
+                "japanese-craft"
+            ],
+            "tags": [
+                "joinery",
+                "mortise",
+                "structural",
+                "wood",
+                "traditional"
+            ],
+            "related": [
+                "content/kanawa.md",
+                "content/hako-kakushi.md"
+            ],
             "project": {
                 "status": "completed",
                 "timeline": {
                     "start": "2024-01",
-                    "end": "2024-11",
-                    "client": "Personal Project"
-                }
+                    "end": "2024-11"
+                },
+                "client": "Personal Project"
             }
         },
         {
@@ -57,52 +93,236 @@
             "path": "hako-kakushi.md",
             "title": "Hako Kakushi Tsugi",
             "description": "A hidden joint technique in traditional Japanese woodworking",
+            "series": {
+                "number":14,
+                "name": "Japanese Joinery Fundamentals",
+                "image": "/media/series/joinery-fundamentals.jpg",
+                "description": "A comprehensive guide to traditional Japanese woodworking joints"
+            },
+            
             "date": {
                 "published": "2024-11-25",
                 "updated": "2024-11-25"
             },
             "author": {
                 "name": "John Doe",
-                "avatar": "\/media\/authors\/john.jpg"
+                "avatar": "/media/authors/john.jpg"
             },
-            "category": "woodworking",
-            "subcategories": [],
-            "tags": [],
-            "related": [],
+            "category": "protoype",
+            "subcategories": [
+                "design",
+                "japanese-craft"
+            ],
+            "tags": [
+                "joinery",
+                "hidden-joints",
+                "aesthetic",
+                "wood",
+                "traditional"
+            ],
+            "related": [
+                "content/kanawa.md",
+                "content/daimochi.md"
+            ],
             "project": {
                 "status": "completed",
                 "timeline": {
                     "start": "2024-01",
-                    "end": "2024-11",
-                    "client": "Personal Project"
-                }
+                    "end": "2024-11"
+                },
+                "client": "Personal Project"
             }
         },
         {
             "slug": "dao_pt2",
             "path": "dao_pt2.md",
-            "title": "Embracing slow design with a very long title",
-            "description": "A hidden joint technique in traditional Japanese woodworking",
+            "title": "Embracing slow design",
+            "description": "A dive in the conceptual meaning of emptiness in ancient culture. Clarifying missconception to inform proper innovation aout of emptiness",
+            "series": {
+                "number": 26,
+                "name": "The DAO of Design",
+                "image": "./content/media/dao1.jpg",
+                "description": "Exploring mindful and sustainable approaches to modern design"
+            },
+            "thumbnail": "./content/media/dao1.jpg",
             "date": {
                 "published": "2024-11-25",
                 "updated": "2024-11-25"
             },
             "author": {
                 "name": "Gabriel Baude",
-                "avatar": "\/media\/authors\/john.jpg"
+                "avatar": "/media/authors/gabriel.jpg"
             },
-            "category": "dao",
-            "subcategories": [],
-            "tags": [],
-            "related": [],
+            "category": "methods",
+            "subcategories": [
+                "philosophy",
+                "methodology"
+            ],
+            "tags": [
+                "slow-design",
+                "mindfulness",
+                "sustainability",
+                "process",
+                "methodology"
+            ],
+            "related": [
+                "content/dao_pt1.md",
+                "content/dao_pt3.md"
+            ],
             "project": {
                 "status": "completed",
                 "timeline": {
                     "start": "2024-01",
-                    "end": "2024-11",
-                    "client": "Personal Project"
-                }
+                    "end": "2024-11"
+                },
+                "client": "Personal Project"
+            }
+        },
+        {
+            "slug": "ai-design-ethics",
+            "path": "ai-design-ethics.md",
+            "title": "The Ethics of AI in Design",
+            "description": "An in-depth exploration of ethical considerations in AI-driven design, examining the delicate balance between automation and human agency, the responsibilities of designers in shaping AI systems, and the importance of inclusive, transparent design processes that respect both user autonomy and societal values. This article investigates crucial questions about bias, accountability, and the evolving role of designers in an AI-augmented future.",
+            "series": {
+                "number": 16,
+                "name": "AI in Design Practice",
+                "image": "/media/series/ai-design.jpg",
+                "description": "A critical examination of AI's role in modern design practices"
+            },
+            "date": {
+                "published": "2024-12-01",
+                "updated": "2024-12-01"
+            },
+            "author": {
+                "name": "Gabriel Baude",
+                "avatar": "/media/authors/gabriel.jpg"
+            },
+            "category": "ai-design",
+            "subcategories": [
+                "ethics",
+                "methodology"
+            ],
+            "tags": [
+                "ai",
+                "ethics",
+                "responsible-design",
+                "future",
+                "technology"
+            ],
+            "related": [
+                "content/ai-ux-patterns.md",
+                "content/ai-creativity.md"
+            ],
+            "project": {
+                "status": "completed",
+                "timeline": {
+                    "start": "2024-11",
+                    "end": "2024-12"
+                },
+                "client": "Research Project"
+            }
+        },
+        {
+            "slug": "ai-ux-patterns",
+            "path": "ai-ux-patterns.md",
+            "title": "Emerging UX Patterns in AI Interfaces",
+            "description": "Analyzing new interaction paradigms and design patterns emerging in AI-powered interfaces",
+            "series": {
+                "number": 21,
+                "name": "AI in Design Practice",
+                "image": "/media/series/ai-design.jpg",
+                "description": "A critical examination of AI's role in modern design practices"
+            },
+            "date": {
+                "published": "2024-12-05",
+                "updated": "2024-12-05"
+            },
+            "author": {
+                "name": "Gabriel Baude",
+                "avatar": "/media/authors/gabriel.jpg"
+            },
+            "category": "ai-design",
+            "subcategories": [
+                "ux",
+                "patterns"
+            ],
+            "tags": [
+                "ai",
+                "ux-design",
+                "patterns",
+                "interfaces",
+                "interaction"
+            ],
+            "related": [
+                "content/ai-design-ethics.md",
+                "content/ai-creativity.md"
+            ],
+            "project": {
+                "status": "completed",
+                "timeline": {
+                    "start": "2024-11",
+                    "end": "2024-12"
+                },
+                "client": "Research Project"
+            }
+        },
+        {
+            "slug": "ai-creativity",
+            "path": "ai-creativity.md",
+            "title": "AI as a Creative Partner",
+            "description": "Understanding the collaborative potential between human designers and AI systems",
+            "series": {
+                "number": 13,
+                "name": "AI in Design Practice",
+                "image": "/media/series/ai-design.jpg",
+                "description": "A critical examination of AI's role in modern design practices"
+            },
+            "date": {
+                "published": "2024-12-10",
+                "updated": "2024-12-10"
+            },
+            "author": {
+                "name": "Gabriel Baude",
+                "avatar": "/media/authors/gabriel.jpg"
+            },
+            "category": "ai-design",
+            "subcategories": [
+                "creativity",
+                "collaboration"
+            ],
+            "tags": [
+                "ai",
+                "creativity",
+                "collaboration",
+                "tools",
+                "future-of-work"
+            ],
+            "related": [
+                "content/ai-design-ethics.md",
+                "content/ai-ux-patterns.md"
+            ],
+            "project": {
+                "status": "completed",
+                "timeline": {
+                    "start": "2024-11",
+                    "end": "2024-12"
+                },
+                "client": "Research Project"
             }
         }
-    ]
+    ],
+    "series": {
+        "Japanese Joinery Fundamentals": {
+            "name": "Japanese Joinery Fundamentals",
+            "description": "A comprehensive guide to traditional Japanese woodworking joints",
+            "image": "/media/series/joinery-fundamentals.jpg",
+            "publications": ["kanawa", "daimochi", "hako-kakushi"]
+        },
+        "The DAO of Design": {
+            "name": "The DAO of Design",
+            "description": "Exploring mindful and sustainable approaches to modern design",
+            "image": "/media/series/dao-design.jpg",
+            "publications": ["dao_pt1", "dao_pt2", "dao_pt3"]
+        }
+    }
 }
