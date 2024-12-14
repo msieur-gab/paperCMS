@@ -3,8 +3,9 @@
     /* Desktop Font Size Variables */
     --base-font-size: 16px;
     --scale-ratio: 1.5;
-    
+
     /* Desktop Font Sizes */
+    --h1-num-size: clamp(6rem, 8vw, 9rem);
     --h1-size: clamp(2rem, 5vw, 4rem);
     --h2-size: clamp(1.5rem, 4vw, 3rem);
     --h3-size: clamp(1.25rem, 3vw, 2.5rem);
@@ -13,11 +14,11 @@
     --h6-size: clamp(1rem, 1.5vw, 1.25rem);
     --body-size: clamp(1rem, 1.5vw, 1rem);
     --small-size: 0.875rem;
-    
+
     /* Line Heights */
     --heading-line-height: 1.2;
     --body-line-height: 1.6;
-    
+
     /* Spacing */
     --heading-spacing-base: 1.5rem;
 }
@@ -32,22 +33,28 @@
 }
 
 /* Base Typography */
-body, a {
+body,
+a {
     font-family: var(--font-body);
     font-size: var(--body-size);
     line-height: var(--body-line-height);
 }
 
-button{
+button {
     font-size: calc(var(--body-size) * .9);
 }
 
-figcaption{
+figcaption {
     font-size: calc(var(--body-size) * .8);
 }
 
 /* Headings */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     font-family: var(--font-headlines);
     line-height: var(--heading-line-height);
     margin-bottom: var(--heading-spacing-base);
@@ -55,53 +62,53 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Titres sticky */
- h1 {
+h1 {
     position: sticky;
     background: var(--color-background);
     z-index: 10;
 }
 
-h1 { 
-    font-size: var(--h1-size); 
+h1 {
+    font-size: var(--h1-size);
     top: 0;
     padding: 1rem 0;
     margin-bottom: calc(var(--heading-spacing-base) * 1.5);
 }
 
-h2 { 
-    font-size: var(--h2-size); 
-    top:0;
+h2 {
+    font-size: var(--h2-size);
+    top: 0;
     /* top: calc(var(--h1-size) + 2rem); */
     padding: 0.5rem 0;
     margin-bottom: calc(var(--heading-spacing-base) * 2.5);
 }
 
-h1 { 
+h1 {
     font-size: var(--h1-size);
     margin-bottom: calc(var(--heading-spacing-base) * 1.5);
 }
 
-h2 { 
+h2 {
     font-size: var(--h2-size);
     margin-bottom: calc(var(--heading-spacing-base) * 1.25);
 }
 
-h3 { 
+h3 {
     font-size: var(--h3-size);
     margin-bottom: var(--heading-spacing-base);
 }
 
-h4 { 
+h4 {
     font-size: var(--h4-size);
     margin-bottom: calc(var(--heading-spacing-base) * 0.75);
 }
 
-h5 { 
+h5 {
     font-size: var(--h5-size);
     margin-bottom: calc(var(--heading-spacing-base) * 0.5);
 }
 
-h6 { 
+h6 {
     font-size: var(--h6-size);
     margin-bottom: calc(var(--heading-spacing-base) * 0.5);
 }
@@ -113,7 +120,8 @@ p {
 }
 
 /* Lists */
-ul, ol {
+ul,
+ol {
     margin: 0 0 1.5rem 1.5rem;
 }
 
@@ -126,16 +134,19 @@ small {
     font-size: var(--small-size);
 }
 
-strong, b {
+strong,
+b {
     font-weight: 700;
 }
 
-em, i {
+em,
+i {
     font-style: italic;
 }
 
 /* Code and Preformatted Text */
-code, pre {
+code,
+pre {
     font-family: 'Fira Code', 'Consolas', monospace;
     font-size: 0.9em;
 }
@@ -156,7 +167,8 @@ blockquote {
 }
 
 /* Superscript and Subscript */
-sup, sub {
+sup,
+sub {
     font-size: 75%;
     line-height: 0;
     position: relative;
@@ -170,23 +182,27 @@ sup {
 sub {
     bottom: -0.25em;
 }
+
 /* Effets de texte spéciaux */
 
-mark{background-color: transparent ;}
-mark{
+mark {
+    background-color: transparent;
+}
+
+mark {
     display: inline;
     -webkit-mask-image: var(--marked-fx);
     mask-image: var(--marked-fx);
-    -webkit-mask-size: 100% 100% ;
-    mask-size: 100% 100% ;
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
     background-color: var(--color-marked-fx);
     box-decoration-break: clone;
     -webkit-box-decoration-break: clone;
     padding: .2rem .5rem;
     /* margin: .1rem; */
-  }
+}
 
-  del {
+del {
     display: inline;
     -webkit-mask-image: var(--deleted-fx);
     mask-image: var(--deleted-fx);
