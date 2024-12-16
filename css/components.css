@@ -58,7 +58,7 @@
     background: var(--color-background);
     cursor: pointer;
     /* border-radius: 8px; */
-    padding: 1.5rem;
+    padding: .5rem;
     /* box-shadow: 0 2px 4px rgba(0,0,0,0.1); */
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }

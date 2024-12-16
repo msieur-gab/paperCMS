@@ -72,9 +72,9 @@ section{
 } */
 
 .projects-grid {
-    margin: 10 auto;
+    margin: 10px auto;
     width: 100%;
-    columns: 6 16rem;  /* 4 columns, each minimum 20rem wide */
+    columns: 5 20rem;  /* 4 columns, each minimum 20rem wide */
     column-gap: 2rem;
     column-fill: balance;
     /* padding: 2rem; */
