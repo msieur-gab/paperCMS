@@ -11,8 +11,12 @@
 
      /* --icon-moon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z'%3E%3C/path%3E%3C/svg%3E"); */
  
-     --icon-moon:url(../asset/icon/moon.svg);
-     --icon-sun:url(../asset/icon/sun.svg);
+    --icon-moon:url(../asset/icon/moon.svg);
+    --icon-sun:url(../asset/icon/sun.svg);
+
+    --deleted-fx: url(../asset/icon/pen-brushes-9.svg);
+    --marked-fx: url(../asset/icon/pen-brushes-8.svg);
+
     --theme-transition-duration: 500ms;
 }
     /* Light theme (default + explicit) */
@@ -23,6 +27,7 @@
     --color-text-marked: #242529;
     --color-text-contraste: #d5d6da;
     --color-text-light: #666;
+    --color-text-darker: #333;
     --color-background: #e2e2e2;
     --color-background-aside: #e2e2e2;
     --color-border: #eee;
@@ -34,8 +39,10 @@
    
     
     /* Effects - Theme aware */
-    --highlight-bg: url(//s2.svgbox.net/pen-brushes.svg?ic=brush-8&color=fefcbf);
-    --redacted-fx: url(//s2.svgbox.net/pen-brushes.svg?ic=brush-9&color=243539);
+    --color-marked-fx:#fefcbf ;
+    --color-deleted-fx: #243539 ;
+    /* --highlight-bg: url(//s2.svgbox.net/pen-brushes.svg?ic=brush-8&color=fefcbf); */
+    /* --redacted-fx: url(//s2.svgbox.net/pen-brushes.svg?ic=brush-9&color=243539); */
 }
 
 /* Dark theme */
@@ -45,6 +52,7 @@ html[data-theme=dark] {
     --color-text: #ebebeb;
     --color-text-marked: #242529;
     --color-text-contraste: #bbbbbb;
+    --color-text-darker: #333;
 
     --color-text-light: #ced4da;
     --color-background: #242529;
@@ -56,8 +64,11 @@ html[data-theme=dark] {
     --nav-accent:rgba(63, 63, 63, 0.9);
     --nav-background:rgba(15, 15, 15, 0.7);
 
-    --highlight-bg: url(//s2.svgbox.net/pen-brushes.svg?ic=brush-8&color=ffbdc9);
-    --redacted-fx:url(//s2.svgbox.net/pen-brushes.svg?ic=brush-9&color=ebebeb);
+    --color-marked-fx:#ffbdc9 ;
+    --color-deleted-fx: #ebebeb ;
+
+    /* --highlight-bg: url(//s2.svgbox.net/pen-brushes.svg?ic=brush-8&color=ffbdc9); */
+    /* --redacted-fx:url(//s2.svgbox.net/pen-brushes.svg?ic=brush-9&color=ebebeb); */
 }
 
 figure img {
@@ -65,11 +76,11 @@ figure img {
 }
 
 /* Dark theme image adjustments */
-html[data-theme="dark"] figure img {
+html[data-theme="dark"]  img {
     filter: grayscale(100%) brightness(.8);
 }
 /* Dark theme SVG adjustments */
-html[data-theme="dark"] figure img[src$=".svg"] {
+html[data-theme="dark"]  img[src$=".svg"] {
     /* Invert colors and adjust brightness for dark theme */
     filter: invert(1) brightness(0.9);
 }

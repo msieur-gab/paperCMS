@@ -64,12 +64,25 @@ section{
     margin-right: -1rem;
 }
 
-.projects-grid {
+/* .projects-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 2rem;
     padding-bottom: 2rem;
+} */
+
+.projects-grid {
+    margin: 10px auto;
+    width: 100%;
+    columns: 5 20rem;  /* 4 columns, each minimum 20rem wide */
+    column-gap: 2rem;
+    column-fill: balance;
+    /* padding: 2rem; */
 }
+
+
+
+
 
 /* Media Queries */
 @media (min-width: 768px) {

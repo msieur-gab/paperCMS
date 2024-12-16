@@ -30,6 +30,8 @@ export class ContentParser {
         };
     }
 
+    
+
     parseFrontmatter(yaml) {
         const lines = yaml.trim().split('\n');
         const result = {};
@@ -191,7 +193,9 @@ export class ContentParser {
     }
 
     parseInline(text) {
+        const redactor = new TextRedactor();
         return text
+        
             // Liens
             .replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, text, url) => {
                 const isRelative = url.startsWith('/') || url.startsWith('./') || url.startsWith('../');
@@ -207,7 +211,9 @@ export class ContentParser {
             // Surlignage
             .replace(/==(.*?)==/g, '<mark>$1</mark>')
             // Texte barré/supprimé
-            .replace(/~~(.*?)~~/g, '<del>$1</del>')
+            .replace(/~~(.*?)~~/g, (_, text) => {
+                return redactor.createRedactedElement(text);
+            })
             // Notes de bas de page
             .replace(/\[\^(\d+)\]/g, (_, id) => {
                 return `<sup><a href="#fn${id}" id="ref${id}" class="footnote-link">[${id}]</a></sup>`;
@@ -263,5 +269,21 @@ export class ContentParser {
         });
         html += '</div>';
         return html;
+    }
+}
+
+class TextRedactor {
+    constructor() {
+        this.redactionChar = 'X';
+    }
+
+    redactText(text) {
+        // Preserve spaces, punctuation, and line breaks
+        return text.replace(/[^\s\n.,!?;:]/g, this.redactionChar);
+    }
+
+    createRedactedElement(text) {
+        const redactedText = this.redactText(text);
+        return `<del aria-label="Redacted text">${redactedText}</del>`;
     }
 }

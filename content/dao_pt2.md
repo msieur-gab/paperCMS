@@ -24,7 +24,6 @@ project:
         end: 2024-11
     client: Personal Project
 ---
-
 # Slow Design
 
 In the relentless pursuit of innovation and growth, modern businesses often find themselves caught in a perpetual cycle of change and adaptation. The pressure to continuously disrupt, iterate and transform can feel all-consuming, leaving little room for pause or reflection. This frantic tempo can lead to hasty decisions, unforeseen errors and even unprecedented negative ripple effects that undermine long-term sustainability.

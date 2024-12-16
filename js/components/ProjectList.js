@@ -1,3 +1,5 @@
+import { SearchComponent } from './SearchComponent.js';
+
 export class ProjectList {
     constructor(mainElement, onProjectSelect) {
         this.mainElement = mainElement;
@@ -5,12 +7,15 @@ export class ProjectList {
         this.publications = [];
         this.categories = [];
         this.selectedCategory = 'all';
+        this.searchQuery = '';
         this.filterNav = document.querySelector('.category-filter');
+        this.searchContainer = document.querySelector('.search-container');
     }
 
     async initialize() {
         try {
             await this.loadPublications();
+            this.initializeSearch();
             this.renderFilters();
             this.renderProjects();
             this.attachEventListeners();
@@ -18,6 +23,21 @@ export class ProjectList {
             console.error('Error initializing project list:', error);
             this.renderError();
         }
+    }
+
+    initializeSearch() {
+        if (!this.searchContainer) {
+            console.warn('Search container not found in DOM');
+            return;
+        }
+
+        new SearchComponent({
+            container: this.searchContainer,
+            onSearch: (query) => {
+                this.searchQuery = query;
+                this.renderProjects();
+            }
+        });
     }
 
     async loadPublications() {
@@ -31,32 +51,65 @@ export class ProjectList {
     }
 
     renderProjects() {
-        const filteredPublications = this.publications.filter(pub => 
+        let filteredPublications = this.publications.filter(pub => 
             this.selectedCategory === 'all' || pub.category === this.selectedCategory
         );
 
-        this.mainElement.innerHTML = filteredPublications.map(pub => {
-            // Remove .md extension for clean URLs
-            const cleanPath = pub.path.replace(/\.md$/, '');
-            
-            return `
-                <div class="project-card" data-path="${cleanPath}">
-                    <h3 class="project-title">${pub.title}</h3>
-                    <p class="project-description">${pub.description}</p>
-                    <div class="project-tags">
-                        ${pub.tags.map(tag => `
-                            <span class="project-tag">${tag}</span>
-                        `).join('')}
-                    </div>
-                    <div class="project-meta">
-                        <span class="project-category">${pub.category}</span>
-                        <time class="project-date">
-                            ${new Date(pub.date.published).toLocaleDateString()}
-                        </time>
-                    </div>
-                </div>
-            `;
-        }).join('');
+        // Apply search filter if query exists
+        if (this.searchQuery) {
+            filteredPublications = filteredPublications.filter(pub => {
+                const searchableContent = [
+                    pub.title,
+                    pub.description,
+                    pub.category,
+                    ...(pub.tags || []),
+                    ...(pub.subcategories || [])
+                ].join(' ').toLowerCase();
+                
+                return searchableContent.includes(this.searchQuery.toLowerCase());
+            });
+        }
+
+        this.mainElement.innerHTML = filteredPublications.length ? 
+            filteredPublications.map(pub => {
+                const cleanPath = pub.path.replace(/\.md$/, '');
+                const limitedTags = pub.tags.slice(0, 3); // Only take first 3 tags
+                return `
+                    <article class="project-card" data-path="${cleanPath}">
+                        
+                        ${pub.series ? `
+                            <h1 class="series-number">${pub.series.number}</h1>
+                        ` : ''}
+                        <h2 class="project-title">${pub.title}</h2>
+                        ${pub.tags.length ? `
+                            <ul class="project-tags" aria-label="Project tags">
+                                ${pub.tags.map(tag => `
+                                    <li class="project-tag">
+                                        ${tag}
+                                    </li>
+                                `).join('')}
+                            </ul>
+                        ` : ''}
+                        ${pub.thumbnail ? `
+                            <img 
+                                src="${pub.thumbnail}" 
+                                alt="${pub.title}"
+                                class="project-thumbnail"
+                            >
+                        ` : ''}
+                        <p class="project-description">${pub.description}</p>
+                        <footer class="project-meta">
+                            <span class="project-category">${pub.category}</span>
+                            <time datetime="${pub.date.published}">
+                                ${new Date(pub.date.published).toLocaleDateString()}
+                            </time>
+                        </footer>
+                    </article>
+                `;
+            }).join('') :
+            '<div class="no-results">No projects found matching your criteria</div>';
+
+        this.attachProjectListeners();
     }
 
     renderFilters() {
@@ -84,7 +137,7 @@ export class ProjectList {
             });
             
             this.renderProjects();
-            this.attachProjectListeners();
+            // this.attachProjectListeners();
         });
 
         this.attachProjectListeners();
@@ -103,7 +156,7 @@ export class ProjectList {
 
     renderError() {
         this.mainElement.innerHTML = `
-            <div class="error-message">
+            <div class="error-message" role="alert">
                 Error loading projects. Please try again later.
             </div>
         `;

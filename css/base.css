@@ -6,6 +6,32 @@
     
 }
 
+button,article,
+a {
+    /* Remove tap highlight */
+    -webkit-tap-highlight-color: transparent;
+    tap-highlight-color: transparent;
+    
+    /* Remove touch callout/context menu (iOS Safari) */
+    -webkit-touch-callout: none;
+    touch-callout: none;
+    
+    /* Prevent text selection */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    
+    /* Control touch manipulation behavior */
+    touch-action: manipulation;
+}
+
+/* Optional: Remove focus outline if you're providing another focus indicator */
+button:focus,
+a:focus {
+    outline: none;
+}
+
 /* Structure de base */
 html {
     scroll-behavior: smooth;
