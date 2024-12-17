@@ -55,7 +55,7 @@
     page-break-inside: avoid;
     margin-bottom: 2rem;
     width: 100%;
-    background: var(--color-background);
+    /* background: var(--color-background); */
     cursor: pointer;
     /* border-radius: 8px; */
     padding: .5rem;
@@ -98,7 +98,7 @@
 }
 
 .project-tag {
-    background: var(--nac-background);
+    background: var(--color-tag-bg);
     padding: 0.25rem 0.75rem;
     border-radius: 9999px;
     font-size: 0.875rem;
@@ -423,9 +423,69 @@ html[data-theme="dark"] .theme-toggle::after {
 }
 
 /* Search Elements */
-.search-container {
+/* .search-container {
     flex: 1;
     min-width: 280px;
+} */
+
+.search-sort-container {
+    flex: 1;
+    min-width: 280px;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.sort-wrapper {
+    min-width: 140px;
+    position: relative;
+}
+
+.sort-select {
+    width: 100%;
+    height: 44px;
+    padding: 0 16px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 22px;
+    background: var(--nav-background);
+    color: var(--color-text);
+    font-size: 0.95rem;
+    cursor: pointer;
+    appearance: none;
+    padding-right: 32px;
+}
+
+.sort-wrapper::after {
+    content: '';
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 10px;
+    height: 10px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath d='M1 3h8L5 8 1 3z' fill='%23666'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    pointer-events: none;
+}
+
+.sort-select:hover {
+    border-color: rgba(0, 0, 0, 0.2);
+}
+
+.sort-select:focus {
+    outline: none;
+    border-color: rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 640px) {
+    .search-sort-container {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .sort-wrapper {
+        width: 100%;
+    }
 }
 
 .search-wrapper {
@@ -591,7 +651,7 @@ html[data-theme="dark"] .theme-toggle::after {
 .project-tag {
     font-size: 0.7rem;
     color: var(--color-text);
-    background-color: var(--nav-background);
+    /* background-color: var(--nav-background); */
     padding: 0.25rem 0.5rem;
     border-radius: 1rem;
     white-space: nowrap; /* Prevent tag text from wrapping */
@@ -599,9 +659,11 @@ html[data-theme="dark"] .theme-toggle::after {
 
 }
 
-.project-tag:hover {
-    background-color: var(--color-tag-bg-hover, #eaeaea);
-}
+/* .project-tag:hover {
+    background-color: var(--color-tag-bg-hover);
+} */
+
+
 
 .tag-hash {
     color: var(--color-tag-hash, #999);
@@ -621,4 +683,29 @@ html[data-theme="dark"] .theme-toggle::after {
     /* margin: -1.5rem -1.5rem 0; */
     max-height: 16rem;
     object-fit: cover;
+}
+
+
+/* test card effect */
+
+/* Update the card animations in components.css */
+
+.project-card {
+    opacity: 0;
+    transform: translateY(50px); /* Increased from 10px for more noticeable slide */
+    transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); /* Custom easing for smoother motion */
+    transition-delay: calc(var(--animation-order) * 0.1s); /* Slightly faster delay between cards */
+}
+
+.project-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .project-card {
+        transition: none;
+        opacity: 1;
+        transform: none;
+    }
 }

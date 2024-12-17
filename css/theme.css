@@ -35,6 +35,9 @@
     --color-shadow: rgba(0,0,0,0.1);
     --nav-background:rgba(255, 255, 255, 0.7);
     --nav-accent:rgba(15, 15, 15, 0.9);
+
+    --color-tag-bg:rgba(0, 0, 0, 0.1);
+    --color-tag-bg-hover: rgba(0, 0, 0, 0.3);
     
    
     
@@ -63,6 +66,9 @@ html[data-theme=dark] {
 
     --nav-accent:rgba(63, 63, 63, 0.9);
     --nav-background:rgba(15, 15, 15, 0.7);
+
+    --color-tag-bg:rgba(255, 255, 255, 0.1);
+    --color-tag-bg-hover: rgba(255, 255, 255, 0.3);
 
     --color-marked-fx:#ffbdc9 ;
     --color-deleted-fx: #ebebeb ;
