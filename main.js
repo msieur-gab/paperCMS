@@ -9,6 +9,7 @@ import { ResponsiveLayout } from './js/components/ResponsiveLayout.js';
 import { Router } from './js/core/router.js';
 import { ThemeManager } from './js/components/ThemeManager.js';
 import { SearchComponent } from './js/components/SearchComponent.js';
+import { InfoPanel } from './js/components/InfoPanel.js';
 
 class App {
     constructor() {
@@ -34,6 +35,14 @@ class App {
             sections: this.state.sections,
             defaultSection: 'about'
         });
+
+         // Initialize InfoPanel with required dependencies
+         this.infoPanel = new InfoPanel({
+            eventBus: this.eventBus,
+            contentParser: this.contentParser,
+            onArticleSelect: (path) => this.openProject(path)
+        });
+
 
         // Debounce timeouts
         this.scrollTimeout = null;
@@ -222,12 +231,17 @@ class App {
             const content = await response.text();
             const { metadata, html } = await this.contentParser.parse(content);
     
+            // Update info panel with new metadata
+            if (this.infoPanel) {
+                this.infoPanel.update(metadata);
+            }
+    
             // Update project title in header
             const projectTitle = document.querySelector('.project-header .project-title');
             if (projectTitle) {
                 projectTitle.textContent = metadata.title || '';
             }
-
+    
             if (this.projectDetailsContent) {
                 this.projectDetailsContent.innerHTML = html;
             }

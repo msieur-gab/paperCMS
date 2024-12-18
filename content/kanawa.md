@@ -3,8 +3,8 @@ title: Kanawa tsugi
 description: An exploration of Kanawa-tsugi, a traditional Japanese woodworking technique
 published: true
 author:
-    name: John Doe
-    avatar: /media/authors/john.jpg
+    name: Gabriel Baude
+    avatar: /content/media/authors/gabriel_baude.jpg
 category: woodworking
 subcategories:
     - design
@@ -17,6 +17,12 @@ tags:
 related:
     - content/hako-kakushi.md
     - content/daimochi.md
+documents:
+    - Wood Joints: Wood Joints in Classical Japanese Architecture
+    - Book Preview: Japanese Joinery Book Preview
+links:
+    - Traditional website: https://www.test.com
+    - ref website: https://www.test.com
 project:
     status: completed
     timeline:
