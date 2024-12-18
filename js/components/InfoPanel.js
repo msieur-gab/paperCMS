@@ -124,7 +124,7 @@ export class InfoPanel {
     
         this.panel.innerHTML = `
             <header class="info-panel-header">
-                <h2>Article Information</h2>
+                <h4>Article Information</h4>
                 <button class="close-info" aria-label="Close information panel">×</button>
             </header>
     
