@@ -32,136 +32,100 @@ export class ContentParser {
 
     
 
-    parseFrontmatter(yaml) {
-        const lines = yaml.trim().split('\n');
-        const result = {};
-        let currentContext = { object: result, indent: -2 };
-        let contextStack = [currentContext];
-        let currentKey = null;
-        let lastArrayKey = null;
-    
-        for (const line of lines) {
-            if (!line.trim()) continue;
-    
-            const indent = line.search(/\S/);
-            const trimmedLine = line.trim();
-    
-            // Handle array items (lines starting with -)
-            if (trimmedLine.startsWith('- ')) {
-                const value = trimmedLine.slice(2).trim();
-                
-                // Decide which array context to use
-                const arrayKey = indent <= (lastArrayKey?.indent || -1) 
-                    ? currentKey 
-                    : (lastArrayKey?.key || currentKey);
-                
-                const targetContext = contextStack[contextStack.length - 1];
-    
-                // Ensure the array exists and is an array
-                if (!Array.isArray(targetContext.object[arrayKey])) {
-                    targetContext.object[arrayKey] = [];
+parseFrontmatter(yaml) {
+    const lines = yaml.trim().split('\n');
+    const result = {};
+    let currentContext = { object: result, indent: -2 };
+    let contextStack = [currentContext];
+    let currentArray = null;
+    let currentKey = null;
+
+    for (const line of lines) {
+        if (!line.trim()) continue;
+
+        const indent = line.search(/\S/);
+        const trimmedLine = line.trim();
+
+        // Handle array items (lines starting with -)
+        if (trimmedLine.startsWith('- ')) {
+            const value = trimmedLine.slice(2).trim();
+
+            // If we're not already in an array context, create one
+            if (!currentArray) {
+                currentArray = [];
+                if (currentKey) {
+                    currentContext.object[currentKey] = currentArray;
                 }
-    
-                // Check if this is a key-value pair within an array
-                if (value.includes(': ')) {
-                    const [key, ...valueParts] = value.split(':');
-                    const val = valueParts.join(':').trim();
-    
-                    // Create an object for key-value pair
-                    targetContext.object[arrayKey].push({ [key.trim()]: val });
+            }
+
+            // Handle complex array items (objects)
+            if (value.includes(':')) {
+                const [key, itemValue] = value.split(':', 2);
+                if (itemValue.trim()) {
+                    // Simple key-value pair in array
+                    const arrayItem = {};
+                    arrayItem[key.trim()] = itemValue.trim();
+                    currentArray.push(arrayItem);
                 } else {
-                    // Simple array item
-                    targetContext.object[arrayKey].push(value);
+                    // Start of a complex object in array
+                    const newObj = {};
+                    currentArray.push(newObj);
+                    currentContext = { object: newObj, indent: indent + 2 };
+                    contextStack.push(currentContext);
                 }
-    
-                lastArrayKey = { key: arrayKey, indent };
-                continue;
+            } else {
+                // Simple array item
+                currentArray.push(value);
             }
-    
-            // Handle key-value pairs
-            if (trimmedLine.includes(':')) {
-                const [key, ...valueParts] = trimmedLine.split(':');
-                const value = valueParts.join(':').trim();
-                
-                // Pop contexts if we're moving back out
-                while (contextStack.length > 1 && indent <= contextStack[contextStack.length - 1].indent) {
-                    contextStack.pop();
-                }
-    
-                currentKey = key.trim();
-                const parentContext = contextStack[contextStack.length - 1];
-    
-                if (value) {
-                    // Simple key-value pair
-                    parentContext.object[currentKey] = value;
-                    lastArrayKey = null;
-                } else {
-                    // Nested object or array
-                    if (indent === 0 || indent <= parentContext.indent) {
-                        parentContext.object[currentKey] = {};
-                    } else {
-                        // New nested object
-                        const newContext = {
-                            object: parentContext.object[currentKey] = {},
-                            indent: indent,
-                            key: currentKey
-                        };
-                        contextStack.push(newContext);
-                    }
-                    lastArrayKey = { key: currentKey, indent };
-                }
-            }
+            continue;
         }
-    
-        return this.postProcessMetadata(result);
-    }
-    
-    postProcessMetadata(metadata) {
-        // Ensure arrays are properly initialized and processed
-        const arrayFields = ['subcategories', 'tags', 'related', 'documents', 'links'];
-        
-        for (const field of arrayFields) {
-            // Ensure the field exists and is an array
-            if (!metadata[field]) {
-                metadata[field] = [];
-            } else if (!Array.isArray(metadata[field])) {
-                // Convert object or non-array to array
-                if (typeof metadata[field] === 'object') {
-                    // Flatten objects into array of strings or keep complex objects
-                    metadata[field] = Object.entries(metadata[field]).map(([key, value]) => 
-                        typeof value === 'string' ? 
-                            (key ? `${key}: ${value}` : value) : 
-                            value
-                    );
-                } else {
-                    // Convert to array, handling potential string or single value
-                    metadata[field] = [metadata[field]];
-                }
-            }
+
+        // Reset array context if we're at a new key
+        currentArray = null;
+
+        // Handle regular key-value pairs
+        const [key, ...valueParts] = trimmedLine.split(':');
+        currentKey = key.trim();
+        let value = valueParts.join(':').trim();
+
+        // Pop back to appropriate level based on indentation
+        while (contextStack.length > 1 && indent <= contextStack[contextStack.length - 1].indent) {
+            contextStack.pop();
+            currentContext = contextStack[contextStack.length - 1];
         }
-    
-        // Ensure nested objects are preserved
-        const objectFields = ['project', 'author', 'date', 'timeline'];
-        
-        for (const field of objectFields) {
-            if (metadata[field]) {
-                // Ensure it's an object
-                if (typeof metadata[field] !== 'object' || metadata[field] === null) {
-                    metadata[field] = {};
-                }
-            }
-        }
-    
-        // Handle publication date
-        if (!metadata.date) {
-            metadata.date = {
+
+        // Handle special case for published: true
+        if (currentKey === 'published' && value === 'true') {
+            result.date = {
                 published: new Date().toISOString().split('T')[0],
                 updated: new Date().toISOString().split('T')[0]
             };
+            continue;
         }
-    
-        return metadata;
+
+        if (value) {
+            // Simple key-value pair
+            currentContext.object[currentKey] = value;
+        } else {
+            // New nested object
+            const newObj = {};
+            currentContext.object[currentKey] = newObj;
+            currentContext = { object: newObj, indent };
+            contextStack.push(currentContext);
+        }
     }
+
+    // Ensure date object exists
+    if (!result.date) {
+        result.date = {
+            published: new Date().toISOString().split('T')[0],
+            updated: new Date().toISOString().split('T')[0]
+        };
+    }
+
+    return result;
+}
+
     parseBody(markdown) {
         this.reset();
         const lines = markdown.trim().split('\n');

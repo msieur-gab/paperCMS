@@ -4,7 +4,7 @@ description: A hidden joint technique in traditional Japanese woodworking
 published: true
 author:
     name: Gabriel Baude
-    avatar: /media/authors/john.jpg
+    avatar: /content/media/authors/gabriel_baude.jpg
 category: dao
 subcategories:
     - design
@@ -17,6 +17,14 @@ tags:
 related:
     - content/kanawa.md
     - content/daimochi.md
+documents:
+    - Wood Joints: Wood Joints in Classical Japanese Architecture
+    - Book Preview: Japanese Joinery Book Preview
+    - another Wood Joints: Wood Joints in Classical Japanese Architecture
+    - and why not a Preview: Japanese Joinery Book Preview
+links:
+    - Traditional website: https://www.test.com
+    - ref website: https://www.test.com
 project:
     status: completed
     timeline:

@@ -61,12 +61,26 @@ export class Router {
         );
     }
 
-    cleanPath(path) {
-        return path.replace(/\.md$/, '');
-    }
+    // cleanPath(path) {
+    //     return path.replace(/\.md$/, '');
+    // }
 
+    // addMdExtension(path) {
+    //     return path.endsWith('.md') ? path : `${path}.md`;
+    // }
+
+    cleanPath(path) {
+        return path
+            .replace(/\.md$/, '')
+            .replace('content/', '')
+            .replace('- ', '');
+    }
+    
     addMdExtension(path) {
-        return path.endsWith('.md') ? path : `${path}.md`;
+        const cleanPath = path
+            .replace('- ', '')
+            .replace(/\.md$/, '');
+        return `${cleanPath}.md`;
     }
 
     destroy() {

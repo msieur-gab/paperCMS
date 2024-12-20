@@ -40,9 +40,22 @@ a {
     line-height: var(--body-line-height);
 }
 
-button {
+/* button {
     font-size: calc(var(--body-size) * .9);
+    min-width: 48px;
+    min-height: 48px;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 50%;
+    background: var(--nav-background);
+    color: var(--color-text-primary);
+    cursor: pointer;
+    transition: transform 300ms ease, background-color var(--theme-transition-duration), color var(--theme-transition-duration), box-shadow 300ms ease;
+
 }
+button:hover{
+    background: var(--color-marked-fx);
+} */
 
 figcaption {
     font-size: calc(var(--body-size) * .8);

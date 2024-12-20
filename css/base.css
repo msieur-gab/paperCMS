@@ -49,7 +49,7 @@ body {
    
     
 }
-body, h1, nav{
+main{
     transition: background-color var(--theme-transition-duration),
     color var(--theme-transition-duration); 
 }

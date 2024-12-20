@@ -3,4 +3,6 @@
 @import "layouts.css";
 @import "components.css";
 @import "typography.css";
-@import "theme.css"
+@import "theme.css";
+@import "infopanel.css";
+@import "drawer.css";
