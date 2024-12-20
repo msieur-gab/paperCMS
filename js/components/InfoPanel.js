@@ -38,23 +38,18 @@ export class InfoPanel {
     }
 
     createElements() {
-        // Create toggle button and add it to the header actions
+        // Create toggle button
+        this.toggleButton = document.createElement('button');
+        this.toggleButton.className = 'info-toggle';
+        this.toggleButton.setAttribute('aria-label', 'Show article information');
+        this.toggleButton.setAttribute('aria-expanded', 'false');
+
+        // Add button to project header initially
         const headerActions = document.querySelector('.project-header-actions');
         if (headerActions) {
-            this.toggleButton = document.createElement('button');
-            this.toggleButton.className = 'info-toggle';
-            this.toggleButton.setAttribute('aria-label', 'Show article information');
-            this.toggleButton.setAttribute('aria-expanded', 'false');
-            this.toggleButton.innerHTML = `
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="10"/>
-                    <path d="M12 16v-4"/>
-                    <path d="M12 8h.01"/>
-                </svg>
-            `;
             headerActions.insertBefore(this.toggleButton, headerActions.firstChild);
         }
-    
+
         // Create panel
         this.panel = document.createElement('aside');
         this.panel.className = 'info-panel';
@@ -62,9 +57,62 @@ export class InfoPanel {
         this.panel.setAttribute('aria-label', 'Article information');
         
         this.updatePanelContent();
-    
-        // Add panel to DOM
         document.body.appendChild(this.panel);
+    }
+
+    createCollapsibleGroup(title, content, isOpen = false) {
+        const id = 'group-' + title.toLowerCase().replace(/\s+/g, '-');
+        return `
+            <div class="info-group ${isOpen ? 'is-open' : ''}" data-group="${id}">
+                <div class="group-header">
+                    <button class="group-toggle" 
+                            aria-controls="${id}" 
+                            aria-expanded="${isOpen}">
+                        <span>${title}</span>
+                        <svg width="12" height="12" viewBox="0 0 12 12">
+                            <path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="group-content" 
+                     id="${id}" 
+                     aria-hidden="${!isOpen}"
+                     style="height: ${isOpen ? 'auto' : '0'}">
+                    <div class="group-inner">
+                        ${content}
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    setupCollapsibleGroups() {
+        this.panel.querySelectorAll('.group-toggle').forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                const group = toggle.closest('.info-group');
+                const content = group.querySelector('.group-content');
+                const inner = content.querySelector('.group-inner');
+                const isOpen = group.classList.contains('is-open');
+                
+                // Toggle state
+                group.classList.toggle('is-open');
+                toggle.setAttribute('aria-expanded', !isOpen);
+                content.setAttribute('aria-hidden', isOpen);
+                
+                // Animate height
+                requestAnimationFrame(() => {
+                    if (!isOpen) {
+                        const height = inner.offsetHeight;
+                        content.style.height = height + 'px';
+                    } else {
+                        content.style.height = content.offsetHeight + 'px';
+                        // Force reflow
+                        content.offsetHeight;
+                        content.style.height = '0';
+                    }
+                });
+            });
+        });
     }
 
     getRelatedArticleInfo(path) {
@@ -76,10 +124,9 @@ export class InfoPanel {
             };
         }
 
-        // Clean the path by removing 'content/' and '.md'
         const cleanPath = path
             .replace('content/', '')
-            .replace('- ', '')  // Remove dash and space if present
+            .replace('- ', '')
             .replace('.md', '');
             
         return this.publications.find(pub => pub.path === `${cleanPath}.md`) || {
@@ -88,14 +135,11 @@ export class InfoPanel {
         };
     }
 
-    ensureArray(value) {
-        // Simpler now that ContentParser guarantees arrays
-        return Array.isArray(value) ? value : [];
-    }
-
+    
     updatePanelContent() {
         if (!this.metadata) return;
     
+        // Extract all metadata with proper defaults
         const {
             title,
             description,
@@ -111,181 +155,205 @@ export class InfoPanel {
             timeline = {}
         } = this.metadata;
     
-        const authorInfo = {
-            name: this.metadata.name || author.name,
-            avatar: author.avatar || this.metadata.avatar
-        };
+        // Log to check what we're getting
+        console.log('Author data:', author);
+
+        const isButtonInPanel = this.panel.contains(this.toggleButton);
+        if (isButtonInPanel) {
+            this.toggleButton.remove();
+        }
+
+        // 1. Article Details Section
+        const articleDetails = `
+        <dl>
+            ${title ? `
+                <div class="info-item">
+                    <dt>Title</dt>
+                    <dd class="article-title">${title}</dd>
+                </div>
+            ` : ''}
     
-        const projectInfo = {
-            status: this.metadata.status || project.status,
-            client: this.metadata.client || project.client,
-            timeline: timeline || project.timeline
-        };
+            ${description ? `
+                <div class="info-item">
+                    <dt>Description</dt>
+                    <dd class="article-description">${description}</dd>
+                </div>
+            ` : ''}
     
+            ${author.name ? `
+                <div class="info-item author-item">
+                    ${author.avatar ? `
+                        <img src="${author.avatar}" 
+                             alt="${author.name}" 
+                             class="author-avatar">
+                    ` : ''}
+                    <div class="author-details">
+                        <dt>Author</dt>
+                        <dd>${author.name}</dd>
+                    </div>
+                </div>
+            ` : ''}
+    
+            ${date.published ? `
+                <div class="info-item">
+                    <dt>Published</dt>
+                    <dd>${new Intl.DateTimeFormat('en-US', {
+                        month: 'long',
+                        day: 'numeric',
+                        year: 'numeric'
+                    }).format(new Date(date.published))}</dd>
+                </div>
+            ` : ''}
+    
+            ${category ? `
+                <div class="info-item">
+                    <dt>Category</dt>
+                    <dd>${category}</dd>
+                </div>
+            ` : ''}
+    
+            ${tags.length ? `
+                <div class="info-item">
+                    <dt>Tags</dt>
+                    <dd class="tags-list">
+                        ${tags.map(tag => `
+                            <span class="info-tag">${tag}</span>
+                        `).join('')}
+                    </dd>
+                </div>
+            ` : ''}
+    
+            ${subcategories.length ? `
+                <div class="info-item">
+                    <dt>Subcategories</dt>
+                    <dd class="subcategories-list">
+                        ${subcategories.map(sub => `
+                            <span class="info-subcategory">${sub}</span>
+                        `).join('')}
+                    </dd>
+                </div>
+            ` : ''}
+        </dl>
+    `;
+        // 2. Related Content Section
+        const relatedContent = related.length || documents.length || links.length ? `
+            <dl>
+                ${related.length ? `
+                    <div class="info-item">
+                        <dt>Related Articles</dt>
+                        <dd class="related-articles">
+                            ${related.map(path => {
+                                const article = this.getRelatedArticleInfo(path);
+                                const cleanPath = path.replace('content/', '').replace('.md', '');
+                                return `
+                                    <a href="#project/${cleanPath}" 
+                                       class="related-article"
+                                       data-path="${cleanPath}">
+                                        <strong>${article.title}</strong>
+                                        ${article.description ? `
+                                            <p>${article.description}</p>
+                                        ` : ''}
+                                    </a>
+                                `;
+                            }).join('')}
+                        </dd>
+                    </div>
+                ` : ''}
+                ${documents.length ? `
+                    <div class="info-item">
+                        <dt>Documents</dt>
+                        <dd class="documents-list">
+                            ${documents.map(doc => {
+                                const title = typeof doc === 'object' 
+                                    ? Object.keys(doc)[0] 
+                                    : doc;
+                                const url = typeof doc === 'object' 
+                                    ? doc[title] 
+                                    : '';
+                                return `
+                                    <a href="${url}" class="document-link" 
+                                       target="_blank" rel="noopener noreferrer">
+                                        <strong>${title}</strong>
+                                    </a>
+                                `;
+                            }).join('')}
+                        </dd>
+                    </div>
+                ` : ''}
+                ${links.length ? `
+                    <div class="info-item">
+                        <dt>External Links</dt>
+                        <dd class="external-links">
+                            ${links.map(link => {
+                                const title = typeof link === 'object' 
+                                    ? Object.keys(link)[0] 
+                                    : link;
+                                const url = typeof link === 'object' 
+                                    ? link[title] 
+                                    : '';
+                                return `
+                                    <a href="${url}" class="external-link" 
+                                       target="_blank" rel="noopener noreferrer">
+                                        <strong>${title}</strong>
+                                    </a>
+                                `;
+                            }).join('')}
+                        </dd>
+                    </div>
+                ` : ''}
+            </dl>
+        ` : '';
+
+        // 3. Project Details Section
+        const projectDetails = project.status || project.client || timeline.start ? `
+            <dl>
+                ${project.status ? `
+                    <div class="info-item">
+                        <dt>Status</dt>
+                        <dd>${project.status}</dd>
+                    </div>
+                ` : ''}
+                ${project.client ? `
+                    <div class="info-item">
+                        <dt>Client</dt>
+                        <dd>${project.client}</dd>
+                    </div>
+                ` : ''}
+                ${timeline.start && timeline.end ? `
+                    <div class="info-item">
+                        <dt>Timeline</dt>
+                        <dd>${timeline.start} - ${timeline.end}</dd>
+                    </div>
+                ` : ''}
+            </dl>
+        ` : '';
+
+        // Assemble panel content
         this.panel.innerHTML = `
             <header class="info-panel-header">
                 <h4>Article Information</h4>
                 <button class="close-info" aria-label="Close information panel">×</button>
             </header>
-    
             <div class="info-panel-content">
-                <section class="article-metadata">
-                    <dl>
-                        ${authorInfo.name || authorInfo.avatar ? `
-                            <dt>Author</dt>
-                            <dd class="author-info">
-                                ${authorInfo.avatar ? `
-                                    <img src="${authorInfo.avatar}" alt="${authorInfo.name}" class="author-avatar">
-                                ` : ''}
-                                ${authorInfo.name ? `
-                                    <span class="author-name">${authorInfo.name}</span>
-                                ` : ''}
-                            </dd>
-                        ` : ''}
-    
-                        ${date.published ? `
-                            <dt>Published</dt>
-                            <dd>${new Date(date.published).toLocaleDateString()}</dd>
-                        ` : ''}
-                        
-                        ${date.updated && date.updated !== date.published ? `
-                            <dt>Updated</dt>
-                            <dd>${new Date(date.updated).toLocaleDateString()}</dd>
-                        ` : ''}
-                        
-                        ${category ? `
-                            <dt>Category</dt>
-                            <dd>${category}</dd>
-                        ` : ''}
-    
-                        ${subcategories && subcategories.length > 0 ? `
-                            <dt>Subcategories</dt>
-                            <dd>
-                                <ul class="subcategories-list">
-                                    ${subcategories.map(subcat => `
-                                        <li>${subcat}</li>
-                                    `).join('')}
-                                </ul>
-                            </dd>
-                        ` : ''}
-    
-                        ${tags && tags.length > 0 ? `
-                            <dt>Tags</dt>
-                            <dd>
-                                <ul class="tags-list">
-                                    ${tags.map(tag => `
-                                        <li>${tag}</li>
-                                    `).join('')}
-                                </ul>
-                            </dd>
-                        ` : ''}
-    
-                        ${projectInfo.status ? `
-                            <dt>Project Status</dt>
-                            <dd>${projectInfo.status}</dd>
-                        ` : ''}
-                        
-                        ${projectInfo.client ? `
-                            <dt>Client</dt>
-                            <dd>${projectInfo.client}</dd>
-                        ` : ''}
-    
-                        ${projectInfo.timeline?.start && projectInfo.timeline?.end ? `
-                            <dt>Timeline</dt>
-                            <dd>${projectInfo.timeline.start} - ${projectInfo.timeline.end}</dd>
-                        ` : ''}
-    
-                        ${related && related.length > 0 ? `
-                            <dt>Related Articles</dt>
-                            <dd>
-                                <ul class="related-articles">
-                                    ${related.map(path => {
-                                        const cleanPath = path
-                                            .replace('content/', '')
-                                            .replace('- ', '')
-                                            .replace('.md', '');
-                                        const article = this.getRelatedArticleInfo(path);
-                                        return `
-                                            <li>
-                                                <a href="#project/${cleanPath}" 
-                                                   class="related-article"
-                                                   data-path="${cleanPath}">
-                                                    <strong>${article.title}</strong>
-                                                    ${article.description ? `
-                                                        <p>${article.description}</p>
-                                                    ` : ''}
-                                                </a>
-                                            </li>
-                                        `;
-                                    }).join('')}
-                                </ul>
-                            </dd>
-                        ` : ''}
-    
-                        ${documents && documents.length > 0 ? `
-                            <dt>Documents</dt>
-                            <dd>
-                                <ul class="documents-list">
-                                    ${documents.map(doc => {
-                                        const title = typeof doc === 'object' 
-                                            ? Object.keys(doc)[0] 
-                                            : doc;
-                                        const url = typeof doc === 'object' 
-                                            ? doc[title] 
-                                            : '';
-                                        
-                                        return `
-                                            <li>
-                                                <a href="${url}" 
-                                                   class="document-link" 
-                                                   target="_blank" 
-                                                   rel="noopener noreferrer">
-                                                    ${title}
-                                                </a>
-                                            </li>
-                                        `;
-                                    }).join('')}
-                                </ul>
-                            </dd>
-                        ` : ''}
-                        
-                        ${links && links.length > 0 ? `
-                            <dt>External Links</dt>
-                            <dd>
-                                <ul class="links-list">
-                                    ${links.map(link => {
-                                        const title = typeof link === 'object' 
-                                            ? Object.keys(link)[0] 
-                                            : link;
-                                        const url = typeof link === 'object' 
-                                            ? link[title] 
-                                            : '';
-                                        
-                                        return `
-                                            <li>
-                                                <a href="${url}" 
-                                                   class="external-link" 
-                                                   target="_blank" 
-                                                   rel="noopener noreferrer">
-                                                    ${title}
-                                                </a>
-                                            </li>
-                                        `;
-                                    }).join('')}
-                                </ul>
-                            </dd>
-                        ` : ''}
-                    </dl>
-                </section>
+                ${this.createCollapsibleGroup('Article Details', articleDetails, true)}
+                ${relatedContent ? this.createCollapsibleGroup('Related Content', relatedContent) : ''}
+                ${projectDetails ? this.createCollapsibleGroup('Project Info', projectDetails) : ''}
             </div>
         `;
+
+        // Setup collapsible behavior
+        this.setupCollapsibleGroups();
     }
 
     setupEventListeners() {
         // Toggle panel visibility
         this.toggleButton.addEventListener('click', () => {
-            const isOpen = this.panel.classList.toggle('active');
-            this.toggleButton.setAttribute('aria-expanded', isOpen);
+            const isOpen = !this.panel.classList.contains('active');
+            if (isOpen) {
+                this.show();
+            } else {
+                this.hide();
+            }
         });
 
         // Close button
@@ -325,7 +393,7 @@ export class InfoPanel {
         });
 
         // Handle window resize
-        window.addEventListener('resize', () => {
+        this.handleResize = () => {
             if (this.debounceTimeout) {
                 clearTimeout(this.debounceTimeout);
             }
@@ -334,25 +402,24 @@ export class InfoPanel {
                     this.hide();
                 }
             }, 150);
-        });
+        };
+
+        window.addEventListener('resize', this.handleResize);
     }
 
     show() {
         this.panel.classList.add('active');
+        this.toggleButton.classList.add('active');
         this.toggleButton.setAttribute('aria-expanded', 'true');
-        this.eventBus.emit('infoPanelStateChange', { isOpen: true });
     }
 
     hide() {
         this.panel.classList.remove('active');
+        this.toggleButton.classList.remove('active');
         this.toggleButton.setAttribute('aria-expanded', 'false');
-        this.eventBus.emit('infoPanelStateChange', { isOpen: false });
     }
 
     update(metadata) {
-        console.log('Updating InfoPanel with metadata:', metadata);
-        
-        // Merge top-level properties with nested structures
         this.metadata = {
             author: {},
             date: {},
@@ -376,7 +443,6 @@ export class InfoPanel {
             this.panel.remove();
         }
         
-        // Clean up event listeners
         window.removeEventListener('resize', this.handleResize);
     }
 }

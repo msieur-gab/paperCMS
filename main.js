@@ -11,6 +11,7 @@ import { ThemeManager } from './js/components/ThemeManager.js';
 import { SearchComponent } from './js/components/SearchComponent.js';
 import { InfoPanel } from './js/components/InfoPanel.js';
 
+
 class App {
     constructor() {
         // Core elements
@@ -19,6 +20,8 @@ class App {
         this.projectDetailsContent = document.getElementById('project-details-content');
         this.mediaContainer = document.querySelector('.project-media');
         
+
+
         // State management
         this.state = {
             currentSection: 'about',
@@ -57,6 +60,7 @@ class App {
             await this.initializeComponents();
             await this.router.handleInitialURL();
             this.setupEventListeners();
+            
             
             // Ensure initial state is correct
             if (!this.state.isProjectOpen) {
@@ -323,6 +327,9 @@ class App {
     updateSection(section, isPopState = false) {
         this.state.currentSection = section;
         this.updateNavigation(section);
+
+        // Emit section change event
+        this.eventBus.emit('sectionChange', { section });
         
         if (!isPopState) {
             if (section === 'project-details' && this.state.isProjectOpen) {

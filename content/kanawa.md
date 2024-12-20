@@ -1,7 +1,7 @@
 ---
-title: Kanawa tsugi
+title: Kanawa tsugite
 description: An exploration of Kanawa-tsugi, a traditional Japanese woodworking technique
-published: true
+published: 22/12/2024
 author:
     name: Gabriel Baude
     avatar: /content/media/authors/gabriel_baude.jpg
@@ -18,11 +18,12 @@ related:
     - content/hako-kakushi.md
     - content/daimochi.md
 documents:
-    - Wood Joints: Wood Joints in Classical Japanese Architecture
+    - Wood Joints in Classical Japanese Architecture: https://www.test.com
     - Book Preview: Japanese Joinery Book Preview
 links:
     - Traditional website: https://www.test.com
     - ref website: https://www.test.com
+    - Extensive informations and details about how to cut and use each specific joints: https://www.test.com
 project:
     status: completed
     timeline:

@@ -125,10 +125,10 @@
     flex-wrap: wrap;
 }
 
-.category-btn, .close-project, button {
+/* removed button the time to fix info toggle */
+.category-btn, .close-project {
     padding: 0.5rem 1rem;
     border: none;
-    /* border: 1px solid var(--color-border); */
     border-radius: 2rem;
     background: var(--nav-background);
     cursor: pointer;
