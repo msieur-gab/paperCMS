@@ -39,6 +39,12 @@
     --color-tag-bg:rgba(0, 0, 0, 0.1);
     --color-tag-bg-hover: rgba(0, 0, 0, 0.3);
     
+    --btn-bg-color:rgba(255, 255, 255, 0.7);
+    --btn-bg-color-hover:rgba(201, 201, 201, 0.7);
+    --btn-bg-color-active:rgb(255, 255, 255);
+    --btn-icon-color:rgba(20, 20, 20, 0.7);
+ 
+
    
     
     /* Effects - Theme aware */
@@ -72,6 +78,11 @@ html[data-theme=dark] {
 
     --color-marked-fx:#ffbdc9 ;
     --color-deleted-fx: #ebebeb ;
+
+    --btn-bg-color:rgba(20, 20, 20, 0.7);
+    --btn-bg-color-hover:rgba(90, 90, 90, 0.7);
+    --btn-bg-color-active:rgba(0, 0, 0, 1);
+    --btn-icon-color:rgba(255, 255, 255, 0.7);
 
     /* --highlight-bg: url(//s2.svgbox.net/pen-brushes.svg?ic=brush-8&color=ffbdc9); */
     /* --redacted-fx:url(//s2.svgbox.net/pen-brushes.svg?ic=brush-9&color=ebebeb); */

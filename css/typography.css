@@ -51,11 +51,19 @@ a {
     color: var(--color-text-primary);
     cursor: pointer;
     transition: transform 300ms ease, background-color var(--theme-transition-duration), color var(--theme-transition-duration), box-shadow 300ms ease;
+}*/
 
+button{
+    background: var(--color-background) !important;
 }
 button:hover{
-    background: var(--color-marked-fx);
-} */
+    background: var(--btn-bg-color-hover) !important;
+} 
+.active{
+    color: var(--color-text) !important;
+    background: var(--btn-bg-color-active) !important;
+
+} 
 
 figcaption {
     font-size: calc(var(--body-size) * .8);
