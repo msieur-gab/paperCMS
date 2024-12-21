@@ -318,37 +318,48 @@ blockquote::after {
 /* In components.css */
 /* Theme toggle button styles */
 .theme-toggle {
-    position: fixed;
-    z-index: 999;
-    top: 1rem;
-    left: 1rem;
     width: 48px;
     height: 48px;
     padding: 0.75rem;
     border: none;
     border-radius: 50%;
+    cursor: pointer;
     background: var(--color-background);
     color: var(--color-text-primary);
-    cursor: pointer;
-    box-shadow: 0 2px 8px var(--color-shadow);
     transition: transform 300ms ease,
                 background-color var(--theme-transition-duration),
                 color var(--theme-transition-duration),
                 box-shadow 300ms ease;
 }
 
-.theme-toggle:hover {
+/* Specific styles for the main theme toggle (outside drawer) */
+body > .theme-toggle {
+    position: fixed;
+    z-index: 999;
+    top: 1rem;
+    left: 1rem;
+    box-shadow: 0 2px 8px var(--color-shadow);
+}
+
+body > .theme-toggle:hover {
     transform: scale(1.1);
     box-shadow: 0 4px 12px var(--color-shadow);
 }
 
-/* Icon container */
-.theme-toggle-icon {
+/* Specific styles for theme toggle inside settings drawer */
+.settings-control-group .theme-toggle {
     position: relative;
-    width: 24px;
-    height: 24px;
+    box-shadow: none;
+    background: var(--btn-bg-color);
+    color: var(--btn-icon-color);
 }
 
+.settings-control-group .theme-toggle:hover {
+    background: var(--btn-bg-color-hover);
+    transform: none;
+}
+
+/* Icon styles that apply to both */
 .theme-toggle::before,
 .theme-toggle::after {
     content: '';
@@ -357,7 +368,7 @@ blockquote::after {
     left: 50%;
     width: 24px;
     height: 24px;
-    background-color: var(--icon-fill); /* Color of the icon */
+    background-color: var(--icon-fill);
     -webkit-mask-size: contain;
     mask-size: contain;
     -webkit-mask-repeat: no-repeat;
@@ -380,8 +391,7 @@ blockquote::after {
     opacity: 0;
 }
 
-
-/* Dark theme icon states */
+/* Dark theme icon states - these apply to both */
 html[data-theme="dark"] .theme-toggle::before {
     opacity: 0;
     transform: translate(-50%, -50%) rotate(90deg);

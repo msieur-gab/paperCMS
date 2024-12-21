@@ -22,10 +22,6 @@ class App {
         this.mediaContainer = document.querySelector('.project-media');
         
 
-        this.settingsManager = new SettingsManager(this.eventBus);
-
-
-
         // State management
         this.state = {
             currentSection: 'about',
@@ -83,6 +79,8 @@ class App {
         
         // Initialize theme manager 
         this.themeManager = new ThemeManager(this.eventBus);
+        //then initialize the drawer
+        this.settingsManager = new SettingsManager(this.eventBus);
 
         // Initialize media management
         this.mediaManager = new MediaManager(this.mediaContainer);

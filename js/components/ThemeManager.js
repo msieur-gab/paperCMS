@@ -5,8 +5,12 @@ export class ThemeManager {
         this.mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
         this.transitionDuration = 500;
         
+        // Get both theme toggle buttons (main and drawer)
+        this.themeToggles = document.querySelectorAll('.theme-toggle');
+        
         // Bind methods for event listeners
         this.handleSystemThemeChange = this.handleSystemThemeChange.bind(this);
+        this.handleThemeToggle = this.handleThemeToggle.bind(this);
         
         this.initialize();
     }
@@ -18,12 +22,17 @@ export class ThemeManager {
         // Listen for system theme changes
         this.mediaQuery.addEventListener('change', this.handleSystemThemeChange);
         
-        // Set up theme toggle button
-        const themeToggle = document.querySelector('.theme-toggle');
-        if (themeToggle) {
-            themeToggle.addEventListener('click', () => this.toggleTheme());
-            this.updateToggleButton(themeToggle);
-        }
+        // Set up theme toggle buttons
+        this.themeToggles.forEach(toggle => {
+            toggle.addEventListener('click', this.handleThemeToggle);
+            this.updateToggleButton(toggle);
+        });
+    }
+
+    handleThemeToggle() {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        this.applyTheme(newTheme);
     }
 
     async applyTheme(theme) {
@@ -41,11 +50,10 @@ export class ThemeManager {
 
         document.documentElement.setAttribute('data-theme', effectiveTheme);
         
-        // Update toggle button if it exists
-        const toggle = document.querySelector('.theme-toggle');
-        if (toggle) {
+        // Update all toggle buttons
+        this.themeToggles.forEach(toggle => {
             this.updateToggleButton(toggle);
-        }
+        });
 
         // Emit theme change event
         this.eventBus.emit('themeUpdated', {
@@ -60,12 +68,6 @@ export class ThemeManager {
         }
     }
 
-    toggleTheme() {
-        const currentTheme = document.documentElement.getAttribute('data-theme');
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        this.applyTheme(newTheme);
-    }
-
     updateToggleButton(toggle) {
         const currentTheme = document.documentElement.getAttribute('data-theme');
         toggle.setAttribute('aria-label', `Switch to ${currentTheme === 'dark' ? 'light' : 'dark'} theme`);
@@ -74,9 +76,8 @@ export class ThemeManager {
     destroy() {
         this.mediaQuery.removeEventListener('change', this.handleSystemThemeChange);
         
-        const themeToggle = document.querySelector('.theme-toggle');
-        if (themeToggle) {
-            themeToggle.removeEventListener('click', () => this.toggleTheme());
-        }
+        this.themeToggles.forEach(toggle => {
+            toggle.removeEventListener('click', this.handleThemeToggle);
+        });
     }
 }

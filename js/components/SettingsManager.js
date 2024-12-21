@@ -12,19 +12,31 @@ export class SettingsManager {
             step: 1
         };
         
+        if (!this.drawer || !this.toggleButton) {
+            console.warn('Settings drawer elements not found in DOM');
+            return;
+        }
+        
         this.setupEventListeners();
         this.loadSavedSettings();
     }
 
-    setupEventListeners() {
+
+ setupEventListeners() {
         // Drawer controls
         this.toggleButton.addEventListener('click', () => this.toggleDrawer());
-        this.closeButton.addEventListener('click', () => this.closeDrawer());
+        this.closeButton?.addEventListener('click', () => this.closeDrawer());
         
         // Font size controls
-        document.querySelector('.font-size-increase').addEventListener('click', () => this.changeFontSize(1));
-        document.querySelector('.font-size-decrease').addEventListener('click', () => this.changeFontSize(-1));
-        document.querySelector('.font-size-reset').addEventListener('click', () => this.resetFontSize());
+        const fontControls = {
+            increase: document.querySelector('.font-size-increase'),
+            decrease: document.querySelector('.font-size-decrease'),
+            reset: document.querySelector('.font-size-reset')
+        };
+
+        fontControls.increase?.addEventListener('click', () => this.changeFontSize(1));
+        fontControls.decrease?.addEventListener('click', () => this.changeFontSize(-1));
+        fontControls.reset?.addEventListener('click', () => this.resetFontSize());
         
         // Close on backdrop tap
         this.drawer.addEventListener('click', (e) => {
@@ -45,6 +57,13 @@ export class SettingsManager {
                 this.closeDrawer();
             }
         }, { passive: true });
+        
+        // Close on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !this.drawer.getAttribute('aria-hidden')) {
+                this.closeDrawer();
+            }
+        });
     }
 
     toggleDrawer() {
@@ -52,12 +71,16 @@ export class SettingsManager {
         this.drawer.setAttribute('aria-hidden', !isHidden);
         
         // Update main nav position
-        document.querySelector('.main-nav').classList.toggle('drawer-open');
+        document.querySelector('.main-nav')?.classList.toggle('drawer-open');
+        
+        // Update toggle button state
+        this.toggleButton.setAttribute('aria-expanded', !isHidden);
     }
 
     closeDrawer() {
         this.drawer.setAttribute('aria-hidden', 'true');
-        document.querySelector('.main-nav').classList.remove('drawer-open');
+        document.querySelector('.main-nav')?.classList.remove('drawer-open');
+        this.toggleButton.setAttribute('aria-expanded', 'false');
     }
 
     changeFontSize(direction) {
