@@ -35,8 +35,8 @@
 
 .main-nav a.active {
     opacity: 1;
-    background: var(--nav-accent);
-    color: var(--color-text-contraste);
+    background: var(--nav-bg-color-active) !important;
+    color: var(--nav-text-color-active) !important;
 }
 
 @media (max-width: 767px) {

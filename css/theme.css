@@ -43,6 +43,11 @@
     --btn-bg-color-hover:rgba(201, 201, 201, 0.7);
     --btn-bg-color-active:rgb(255, 255, 255);
     --btn-icon-color:rgba(20, 20, 20, 0.7);
+
+    --nav-bg-color-active:rgba(0, 0, 0, 1);
+    --nav-text-color-active:rgb(240, 240, 240);
+
+ 
  
 
    
@@ -83,6 +88,9 @@ html[data-theme=dark] {
     --btn-bg-color-hover:rgba(90, 90, 90, 0.7);
     --btn-bg-color-active:rgba(0, 0, 0, 1);
     --btn-icon-color:rgba(255, 255, 255, 0.7);
+
+    --nav-bg-color-active:rgba(0, 0, 0, 1);
+    --nav-text-color-active:rgb(240, 240, 240);
 
     /* --highlight-bg: url(//s2.svgbox.net/pen-brushes.svg?ic=brush-8&color=ffbdc9); */
     /* --redacted-fx:url(//s2.svgbox.net/pen-brushes.svg?ic=brush-9&color=ebebeb); */
