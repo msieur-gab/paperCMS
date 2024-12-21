@@ -326,10 +326,10 @@ export class InfoPanel {
                         <dd>${project.client}</dd>
                     </div>
                 ` : ''}
-                ${timeline.start && timeline.end ? `
+                ${project.timeline?.start && project.timeline?.end ? `
                     <div class="info-item">
                         <dt>Timeline</dt>
-                        <dd>${timeline.start} - ${timeline.end}</dd>
+                        <dd>${project.timeline.start} - ${project.timeline.end}</dd>
                     </div>
                 ` : ''}
             </dl>

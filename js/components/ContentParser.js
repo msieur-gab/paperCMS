@@ -15,7 +15,6 @@ export class ContentParser {
         const { frontmatter, body } = this.extractFrontmatter(content);
         const metadata = this.parseFrontmatter(frontmatter);
         const html = this.parseBody(body);
-        
         return { metadata, html };
     }
 
@@ -30,14 +29,32 @@ export class ContentParser {
         };
     }
 
-    
+    parseArrayItem(value, arrayKey) {
+        // Handle compact format (title | url | description)
+        if (value.includes(' | ')) {
+            const [title, url, description] = value.split(' | ').map(s => s.trim());
+            return {
+                title,
+                url,
+                description: description || ''
+            };
+        }
+        
+        // Handle key-value format (title: value)
+        if (value.includes(': ')) {
+            const [key, itemValue] = value.split(':', 2);
+            return { [key.trim()]: itemValue.trim() };
+        }
+        
+        // Handle simple string
+        return value;
+    }
 
     parseFrontmatter(yaml) {
         const lines = yaml.trim().split('\n');
         const result = {};
         let currentContext = { object: result, indent: -2 };
         let contextStack = [currentContext];
-        let currentKey = null;
         let lastArrayKey = null;
     
         for (const line of lines) {
@@ -46,35 +63,27 @@ export class ContentParser {
             const indent = line.search(/\S/);
             const trimmedLine = line.trim();
     
-            // Handle array items (lines starting with -)
+            // Handle array items
             if (trimmedLine.startsWith('- ')) {
                 const value = trimmedLine.slice(2).trim();
-                
-                // Decide which array context to use
-                const arrayKey = indent <= (lastArrayKey?.indent || -1) 
-                    ? currentKey 
-                    : (lastArrayKey?.key || currentKey);
-                
-                const targetContext = contextStack[contextStack.length - 1];
+                const parentContext = contextStack[contextStack.length - 1];
+                const arrayKey = lastArrayKey?.key;
     
-                // Ensure the array exists and is an array
-                if (!Array.isArray(targetContext.object[arrayKey])) {
-                    targetContext.object[arrayKey] = [];
+                // Ensure parent has the array
+                if (!Array.isArray(parentContext.object[arrayKey])) {
+                    parentContext.object[arrayKey] = [];
                 }
     
-                // Check if this is a key-value pair within an array
+                // Handle key-value pairs in arrays
                 if (value.includes(': ')) {
-                    const [key, ...valueParts] = value.split(':');
-                    const val = valueParts.join(':').trim();
-    
-                    // Create an object for key-value pair
-                    targetContext.object[arrayKey].push({ [key.trim()]: val });
+                    const [key, objValue] = value.split(':', 2);
+                    parentContext.object[arrayKey].push({
+                        [key.trim()]: objValue.trim()
+                    });
                 } else {
                     // Simple array item
-                    targetContext.object[arrayKey].push(value);
+                    parentContext.object[arrayKey].push(value);
                 }
-    
-                lastArrayKey = { key: arrayKey, indent };
                 continue;
             }
     
@@ -82,32 +91,27 @@ export class ContentParser {
             if (trimmedLine.includes(':')) {
                 const [key, ...valueParts] = trimmedLine.split(':');
                 const value = valueParts.join(':').trim();
-                
-                // Pop contexts if we're moving back out
+                const currentKey = key.trim();
+    
+                // Pop back to appropriate level based on indentation
                 while (contextStack.length > 1 && indent <= contextStack[contextStack.length - 1].indent) {
                     contextStack.pop();
                 }
     
-                currentKey = key.trim();
-                const parentContext = contextStack[contextStack.length - 1];
+                const currentContext = contextStack[contextStack.length - 1];
     
                 if (value) {
                     // Simple key-value pair
-                    parentContext.object[currentKey] = value;
-                    lastArrayKey = null;
+                    currentContext.object[currentKey] = value;
                 } else {
-                    // Nested object or array
-                    if (indent === 0 || indent <= parentContext.indent) {
-                        parentContext.object[currentKey] = {};
-                    } else {
-                        // New nested object
-                        const newContext = {
-                            object: parentContext.object[currentKey] = {},
-                            indent: indent,
-                            key: currentKey
-                        };
-                        contextStack.push(newContext);
-                    }
+                    // Create new nested object
+                    const newObj = {};
+                    currentContext.object[currentKey] = newObj;
+                    contextStack.push({
+                        object: newObj,
+                        indent: indent,
+                        key: currentKey
+                    });
                     lastArrayKey = { key: currentKey, indent };
                 }
             }
@@ -115,53 +119,73 @@ export class ContentParser {
     
         return this.postProcessMetadata(result);
     }
-    
+
     postProcessMetadata(metadata) {
-        // Ensure arrays are properly initialized and processed
-        const arrayFields = ['subcategories', 'tags', 'related', 'documents', 'links'];
-        
-        for (const field of arrayFields) {
-            // Ensure the field exists and is an array
-            if (!metadata[field]) {
-                metadata[field] = [];
-            } else if (!Array.isArray(metadata[field])) {
-                // Convert object or non-array to array
-                if (typeof metadata[field] === 'object') {
-                    // Flatten objects into array of strings or keep complex objects
-                    metadata[field] = Object.entries(metadata[field]).map(([key, value]) => 
-                        typeof value === 'string' ? 
-                            (key ? `${key}: ${value}` : value) : 
-                            value
-                    );
-                } else {
-                    // Convert to array, handling potential string or single value
-                    metadata[field] = [metadata[field]];
-                }
+        // Ensure arrays are arrays and not nested objects
+        ['related', 'documents', 'links', 'tags', 'subcategories'].forEach(key => {
+            if (metadata[key] && typeof metadata[key] === 'object' && !Array.isArray(metadata[key])) {
+                // If it's an object with a nested array, extract the array
+                const nestedArray = metadata[key][key];
+                metadata[key] = Array.isArray(nestedArray) ? nestedArray : [];
+            } else if (!metadata[key]) {
+                metadata[key] = [];
             }
-        }
-    
-        // Ensure nested objects are preserved
-        const objectFields = ['project', 'author', 'date', 'timeline'];
-        
-        for (const field of objectFields) {
-            if (metadata[field]) {
-                // Ensure it's an object
-                if (typeof metadata[field] !== 'object' || metadata[field] === null) {
-                    metadata[field] = {};
-                }
-            }
-        }
-    
-        // Handle publication date
-        if (!metadata.date) {
-            metadata.date = {
+        });
+
+        // Define default structure
+        const defaultStructure = {
+            title: '',
+            description: '',
+            author: {
+                name: '',
+                avatar: '',
+                bio: ''
+            },
+            project: {
+                status: '',
+                timeline: {
+                    start: '',
+                    end: ''
+                },
+                client: ''
+            },
+            date: {
                 published: new Date().toISOString().split('T')[0],
                 updated: new Date().toISOString().split('T')[0]
-            };
-        }
-    
-        return metadata;
+            },
+            category: '',
+            subcategories: [],
+            tags: [],
+            related: [],
+            documents: [],
+            links: []
+        };
+
+        return this.deepMerge(defaultStructure, metadata);
     }
+
+    deepMerge(target, source) {
+        const output = Object.assign({}, target);
+        if (this.isObject(target) && this.isObject(source)) {
+            Object.keys(source).forEach(key => {
+                if (this.isObject(source[key])) {
+                    if (!(key in target)) {
+                        Object.assign(output, { [key]: source[key] });
+                    } else {
+                        output[key] = this.deepMerge(target[key], source[key]);
+                    }
+                } else {
+                    Object.assign(output, { [key]: source[key] });
+                }
+            });
+        }
+        return output;
+    }
+
+    isObject(item) {
+        return (item && typeof item === 'object' && !Array.isArray(item));
+    }
+
     parseBody(markdown) {
         this.reset();
         const lines = markdown.trim().split('\n');
@@ -251,7 +275,6 @@ export class ContentParser {
     }
 
     parseParagraph(line) {
-        // Si la ligne est vide ou commence par un caractère spécial, ne pas créer de paragraphe
         if (!line || line.startsWith('#') || line.startsWith('```') || line.startsWith('>')) {
             return '';
         }
@@ -260,40 +283,24 @@ export class ContentParser {
 
     parseList(line) {
         const items = [];
-        let currentIndent = line.search(/\S/);
-        let currentLine = line;
         const listType = line.trim().startsWith('-') ? 'ul' : 'ol';
-
-        // Traiter la première ligne
-        const content = currentLine.replace(/^[\s-]*|\d+\.\s*/, '').trim();
+        const content = line.replace(/^[\s-]*|\d+\.\s*/, '').trim();
         items.push(`<li>${this.parseInline(content)}</li>`);
-
         return `<${listType}>${items.join('')}</${listType}>`;
     }
 
     parseInline(text) {
-        const redactor = new TextRedactor();
         return text
-        
-            // Liens
             .replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, text, url) => {
                 const isRelative = url.startsWith('/') || url.startsWith('./') || url.startsWith('../');
                 const finalUrl = isRelative ? `${this.baseUrl}${url}` : url;
                 return `<a href="${finalUrl}">${text}</a>`;
             })
-            // Gras
             .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-            // Italique
             .replace(/\*(.*?)\*/g, '<em>$1</em>')
-            // Code inline
             .replace(/`([^`]+)`/g, '<code>$1</code>')
-            // Surlignage
             .replace(/==(.*?)==/g, '<mark>$1</mark>')
-            // Texte barré/supprimé
-            .replace(/~~(.*?)~~/g, (_, text) => {
-                return redactor.createRedactedElement(text);
-            })
-            // Notes de bas de page
+            .replace(/~~(.*?)~~/g, '<del>$1</del>')
             .replace(/\[\^(\d+)\]/g, (_, id) => {
                 return `<sup><a href="#fn${id}" id="ref${id}" class="footnote-link">[${id}]</a></sup>`;
             });
@@ -348,21 +355,5 @@ export class ContentParser {
         });
         html += '</div>';
         return html;
-    }
-}
-
-class TextRedactor {
-    constructor() {
-        this.redactionChar = 'X';
-    }
-
-    redactText(text) {
-        // Preserve spaces, punctuation, and line breaks
-        return text.replace(/[^\s\n.,!?;:]/g, this.redactionChar);
-    }
-
-    createRedactedElement(text) {
-        const redactedText = this.redactText(text);
-        return `<del aria-label="Redacted text">${redactedText}</del>`;
     }
 }
