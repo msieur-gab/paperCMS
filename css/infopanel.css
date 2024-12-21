@@ -205,10 +205,13 @@ dd {
 
 /* Close Button */
 .close-info {
+    width: 48px;
+    height: 48px;
     padding: 0.5rem;
-    background: none;
+    border-radius: 50%;
+    background: var(--btn-bg-color);
     border: none;
-    color: var(--color-text);
+    color: var(--btn-icon-color);
     font-size: 1.5rem;
     line-height: 1;
     cursor: pointer;
