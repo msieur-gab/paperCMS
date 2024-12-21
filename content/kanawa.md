@@ -23,7 +23,6 @@ documents:
 links:
     - Traditional website: https://www.test.com
     - ref website: https://www.test.com
-    - Extensive informations and details about how to cut and use each specific joints: https://www.test.com
 project:
     status: completed
     timeline:
