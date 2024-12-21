@@ -10,6 +10,7 @@ import { Router } from './js/core/router.js';
 import { ThemeManager } from './js/components/ThemeManager.js';
 import { SearchComponent } from './js/components/SearchComponent.js';
 import { InfoPanel } from './js/components/InfoPanel.js';
+import { SettingsManager } from './js/components/SettingsManager.js';
 
 
 class App {
@@ -20,6 +21,9 @@ class App {
         this.projectDetailsContent = document.getElementById('project-details-content');
         this.mediaContainer = document.querySelector('.project-media');
         
+
+        this.settingsManager = new SettingsManager(this.eventBus);
+
 
 
         // State management
@@ -407,6 +411,9 @@ class App {
         }
         if (this.themeManager) {
             this.themeManager.destroy();
+        }
+        if (this.settingsManager) {
+            this.settingsManager.closeDrawer();
         }
         
         if (this.scrollTimeout) clearTimeout(this.scrollTimeout);

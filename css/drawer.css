@@ -1,10 +1,10 @@
-/* Add to components.css */
+/* Settings drawer */
 .settings-drawer {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
-    height: 60vh;
+    height:20vh;
     background: var(--color-background);
     border-top: 1px solid var(--color-border);
     transform: translateY(100%);
@@ -19,12 +19,12 @@
 
 /* When drawer is open, push up the nav */
 .settings-drawer[aria-hidden="false"] ~ .main-nav {
-    transform: translateY(calc(-60vh + 5rem));
+    transform: translateY(calc(-60vh + 5rem)) translateX(-50%);
 }
 
 .settings-content {
     height: 100%;
-    padding: 1rem;
+    padding: 1.5rem;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
@@ -44,11 +44,12 @@
     border-bottom: 1px solid var(--color-border);
 }
 
-/* Update main-nav styles */
+/* Update main-nav styles to include transition */
 .main-nav {
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Settings toggle button */
 .settings-toggle {
     padding: 0.75rem;
     color: var(--color-text);
@@ -58,4 +59,40 @@
 
 .settings-toggle:hover {
     opacity: 1;
+}
+
+/* Font size controls */
+.font-size-controls {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.font-size-controls button {
+    min-width: 48px;
+    min-height: 48px;
+    border-radius: 50%;
+    background: var(--btn-bg-color);
+    color: var(--btn-icon-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.font-size-controls button:hover {
+    background: var(--btn-bg-color-hover);
+}
+
+/* Close button */
+.close-settings {
+    min-width: 48px;
+    min-height: 48px;
+    border-radius: 50%;
+    background: var(--btn-bg-color);
+    color: var(--btn-icon-color);
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
