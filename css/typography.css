@@ -54,10 +54,10 @@ a {
 }*/
 
 button{
-    background: var(--color-background) !important;
+    /* background: var(--color-background) !important; */
 }
 button:hover{
-    background: var(--btn-bg-color-hover) !important;
+    /* background: var(--btn-bg-color-hover) !important; */
 } 
 .active{
     color: var(--color-text) !important;

@@ -6,11 +6,27 @@
     right: 0;
     height:20vh;
     background: var(--bg-color-darker);
-    border-top: 1px solid var(--color-border);
+    border-top: 1px solid #333;
     transform: translateY(100%);
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 50; /* Just below main-nav */
     /* border-radius: 1rem 1rem 0 0; */
+}
+
+.settings-drawer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 30px;
+    background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.4) 0%,
+        rgba(0, 0, 0, 0.05) 80%,
+        transparent 100%
+    );
+    pointer-events: none; /* Ensures clicks pass through to content */
 }
 
 .settings-drawer[aria-hidden="false"] {
@@ -72,8 +88,8 @@
 }
 
 .font-size-controls button {
-    min-width: 48px;
-    min-height: 48px;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
     background: var(--btn-bg-color);
     color: var(--btn-icon-color);
@@ -88,8 +104,8 @@
 
 /* Close button */
 .close-settings {
-    min-width: 48px;
-    min-height: 48px;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
     background: var(--btn-bg-color);
     color: var(--btn-icon-color);
@@ -127,8 +143,8 @@
 
 .font-size-controls button {
     padding: 0.5rem;
-    min-width: 40px;
-    height: 40px;
+    width: 48px;
+    height: 48px;
     border: none;
     border-radius: 0.5rem;
     background: var(--btn-bg-color);
@@ -149,8 +165,8 @@
 /* Theme toggle in settings */
 .settings-control-group .theme-toggle {
     align-self: flex-start;
-    width: 40px;
-    height: 40px;
+    width: 48px;
+    height: 48px;
     padding: 0.5rem;
     border: none;
     border-radius: 0.5rem;
@@ -167,7 +183,8 @@
 /* Responsive adjustments */
 @media (max-width: 480px) {
     .settings-controls {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
+        /* grid-template-columns: 2fr; */
+        gap: 1rem;
+        padding: 0 1rem;
     }
 }
