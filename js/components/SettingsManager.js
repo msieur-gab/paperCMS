@@ -21,8 +21,7 @@ export class SettingsManager {
         this.loadSavedSettings();
     }
 
-
- setupEventListeners() {
+    setupEventListeners() {
         // Drawer controls
         this.toggleButton.addEventListener('click', () => this.toggleDrawer());
         this.closeButton?.addEventListener('click', () => this.closeDrawer());
@@ -38,29 +37,64 @@ export class SettingsManager {
         fontControls.decrease?.addEventListener('click', () => this.changeFontSize(-1));
         fontControls.reset?.addEventListener('click', () => this.resetFontSize());
         
-        // Close on backdrop tap
-        this.drawer.addEventListener('click', (e) => {
-            if (e.target === this.drawer) {
+        // Enhanced click outside handling using mousedown
+        document.addEventListener('mousedown', (e) => {
+            if (this.drawer.getAttribute('aria-hidden') === 'false' && 
+                !this.drawer.contains(e.target) && 
+                !this.toggleButton.contains(e.target)) {
                 this.closeDrawer();
+                e.preventDefault();
             }
         });
 
-        // Handle swipe down to close
-        let touchStart = 0;
+        // Enhanced touch handling for mobile
+        let touchStart = { y: 0, x: 0 };
+        let touchMove = { y: 0, x: 0 };
+        
         this.drawer.addEventListener('touchstart', (e) => {
-            touchStart = e.touches[0].clientY;
+            if (e.target === this.drawer) {
+                touchStart.y = e.touches[0].clientY;
+                touchStart.x = e.touches[0].clientX;
+                touchMove = { ...touchStart };
+            }
         }, { passive: true });
 
         this.drawer.addEventListener('touchmove', (e) => {
-            const delta = e.touches[0].clientY - touchStart;
-            if (delta > 50) {
-                this.closeDrawer();
+            if (e.target === this.drawer) {
+                touchMove.y = e.touches[0].clientY;
+                touchMove.x = e.touches[0].clientX;
+                
+                const deltaY = touchMove.y - touchStart.y;
+                const deltaX = Math.abs(touchMove.x - touchStart.x);
+                
+                // Only handle vertical swipes
+                if (deltaY > 30 && deltaX < 30) {
+                    // Add visual feedback during swipe
+                    this.drawer.style.transform = `translateY(${deltaY}px)`;
+                    
+                    if (deltaY > 100) {
+                        this.closeDrawer();
+                    }
+                }
             }
         }, { passive: true });
+        
+        this.drawer.addEventListener('touchend', () => {
+            if (this.drawer.getAttribute('aria-hidden') === 'false') {
+                this.drawer.style.transform = '';
+            }
+        });
         
         // Close on escape key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && !this.drawer.getAttribute('aria-hidden')) {
+                this.closeDrawer();
+            }
+        });
+
+        // Handle click on backdrop
+        this.drawer.addEventListener('click', (e) => {
+            if (e.target === this.drawer) {
                 this.closeDrawer();
             }
         });
@@ -81,6 +115,9 @@ export class SettingsManager {
         this.drawer.setAttribute('aria-hidden', 'true');
         document.querySelector('.main-nav')?.classList.remove('drawer-open');
         this.toggleButton.setAttribute('aria-expanded', 'false');
+        
+        // Reset any transform applied during swipe
+        this.drawer.style.transform = '';
     }
 
     changeFontSize(direction) {
