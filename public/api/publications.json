@@ -5,7 +5,7 @@
             "path": "kanawa.md",
             "title": "Kanawa tsugite",
             "description": "In the realm of design, the most elegant solutions often emerge from the harmonious balance between function and form. Kanawa-tsugite, a sophisticated Japanese woodworking joint, exemplifies this principle through centuries of refinement. This joining technique transcends its utilitarian origins, teaching modern designers crucial lessons about material integrity, structural elegance, and the power of constraint-driven innovation. By studying its precise geometries and thoughtful construction, we gain insights into how limitations can foster creativity, how complexity can arise from simple rules, and how structural requirements can give birth to aesthetic beauty. Through this exploration of Kanawa-tsugite, we'll uncover how traditional craftsmanship continues to inform contemporary design thinking, offering valuable principles for creating solutions that are both technically sound and visually compelling.",
-            "thumbnail": "\/content\/media\/tsugi3.jpg",
+            "thumbnail": "./content/media/tsugi3.jpg",
             "status": "published",
             "date": {
                 "published": "2024-12-22",
@@ -24,15 +24,15 @@
             ],
             "author": {
                 "name": "Gabriel Baude",
-                "avatar": "\/content\/media\/authors\/gabriel_baude.jpg"
+                "avatar": "./content/media/authors/gabriel_baude.jpg"
             },
             "related": [
-                "content\/hako-kakushi.md",
-                "content\/daimochi.md"
+                "content/hako-kakushi.md",
+                "content/daimochi.md"
             ],
             "documents": [
                 {
-                    "Wood Joints in Classical Japanese Architecture": "https:\/\/www.test.com"
+                    "Wood Joints in Classical Japanese Architecture": "https://www.test.com"
                 },
                 {
                     "Book Preview": "Japanese Joinery Book Preview"
@@ -40,26 +40,26 @@
             ],
             "links": [
                 {
-                    "Traditional website": "https:\/\/www.test.com"
+                    "Traditional website": "https://www.test.com"
                 },
                 {
-                    "ref website": "https:\/\/www.test.com"
+                    "ref website": "https://www.test.com"
                 },
                 {
-                    "Extensive informations and details about how to cut and use each specific joints": "https:\/\/www.test.com"
+                    "Extensive informations and details about how to cut and use each specific joints": "https://www.test.com"
                 }
             ],
             "seo": {
                 "title": "Kanawa tsugite",
                 "description": "In the realm of design, the most elegant solutions often emerge from the harmonious balance between function and form. Kanawa-tsugite, a sophisticated Japanese woodworking joint, exemplifies this principle through centuries of refinement. This joining technique transcends its utilitarian origins, teaching modern designers crucial lessons about material integrity, structural elegance, and the power of constraint-driven innovation. By studying its precise geometries and thoughtful construction, we gain insights into how limitations can foster creativity, how complexity can arise from simple rules, and how structural requirements can give birth to aesthetic beauty. Through this exploration of Kanawa-tsugite, we'll uncover how traditional craftsmanship continues to inform contemporary design thinking, offering valuable principles for creating solutions that are both technically sound and visually compelling.",
                 "keywords": "kanawa-tsugi, joinery, craftsmanship, wood, design, japanese-craft",
-                "canonical": "https:\/\/msieur-gab.github.io\/paperCMS\/\/index.html#project\/kanawa",
+                "canonical": "https://msieur-gab.github.io/paperCMS/index.html#project/kanawa",
                 "og": {
                     "title": "Kanawa tsugite",
                     "description": "In the realm of design, the most elegant solutions often emerge from the harmonious balance between function and form. Kanawa-tsugite, a sophisticated Japanese woodworking joint, exemplifies this principle through centuries of refinement. This joining technique transcends its utilitarian origins, teaching modern designers crucial lessons about material integrity, structural elegance, and the power of constraint-driven innovation. By studying its precise geometries and thoughtful construction, we gain insights into how limitations can foster creativity, how complexity can arise from simple rules, and how structural requirements can give birth to aesthetic beauty. Through this exploration of Kanawa-tsugite, we'll uncover how traditional craftsmanship continues to inform contemporary design thinking, offering valuable principles for creating solutions that are both technically sound and visually compelling.",
-                    "image": "\/content\/media\/tsugi3.jpg",
+                    "image": "./content/media/tsugi3.jpg",
                     "type": "exploration",
-                    "url": "https:\/\/msieur-gab.github.io\/paperCMS\/\/index.html#project\/kanawa"
+                    "url": "https://msieur-gab.github.io/paperCMS/index.html#project/kanawa"
                 },
                 "alternates": []
             }
@@ -88,11 +88,11 @@
             ],
             "author": {
                 "name": "Gabriel Baude",
-                "avatar": "\/content\/media\/authors\/gabriel_baude.jpg"
+                "avatar": "./content/media/authors/gabriel_baude.jpg"
             },
             "related": [
-                "content\/kanawa.md",
-                "content\/hako-kakushi.md"
+                "content/kanawa.md",
+                "content/hako-kakushi.md"
             ],
             "documents": [
                 {
@@ -104,23 +104,23 @@
             ],
             "links": [
                 {
-                    "Traditional website": "https:\/\/www.test.com"
+                    "Traditional website": "https://www.test.com"
                 },
                 {
-                    "ref website": "https:\/\/www.test.com"
+                    "ref website": "https://www.test.com"
                 }
             ],
             "seo": {
                 "title": "Daimochi Tsugi",
                 "description": "Design excellence often manifests in solutions that appear deceptively simple yet harbor profound complexity beneath their surface. We explore how encestral joining technique demonstrates how structural requirements can drive aesthetic innovation, challenging our modern assumptions about the relationship between engineering and design. The Daimochi Tsugi reveals that true innovation in design often lies not in adding complexity, but in discovering the elegant simplicity hidden within complex problems.",
                 "keywords": "daimochi, joinery, craftsmanship, wood, design, japanese-craft",
-                "canonical": "https:\/\/msieur-gab.github.io\/paperCMS\/\/index.html#project\/daimochi",
+                "canonical": "https://msieur-gab.github.io/paperCMS/index.html#project/daimochi",
                 "og": {
                     "title": "Daimochi Tsugi",
                     "description": "Design excellence often manifests in solutions that appear deceptively simple yet harbor profound complexity beneath their surface. We explore how encestral joining technique demonstrates how structural requirements can drive aesthetic innovation, challenging our modern assumptions about the relationship between engineering and design. The Daimochi Tsugi reveals that true innovation in design often lies not in adding complexity, but in discovering the elegant simplicity hidden within complex problems.",
                     "image": "",
                     "type": "application",
-                    "url": "https:\/\/msieur-gab.github.io\/paperCMS\/\/index.html#project\/daimochi"
+                    "url": "https://msieur-gab.github.io/paperCMS/index.html#project/daimochi"
                 },
                 "alternates": []
             }
@@ -130,7 +130,7 @@
             "path": "slow-design-md.md",
             "title": "Embracing slow design",
             "description": "\"Exploring how Taoist principles offer a revolutionary perspective on contemporary innovation and creation. This exploration challenges our rapid-paced approach through the lens of Wu Wei, revealing how intentional slowness leads to more meaningful and sustainable design solutions.\"",
-            "thumbnail": "\/content\/media\/dao1.jpg",
+            "thumbnail": "./content/media/dao1.jpg",
             "status": "published",
             "date": {
                 "published": "2024-12-22",
@@ -149,11 +149,11 @@
             ],
             "author": {
                 "name": "Gabriel Baude",
-                "avatar": "\/content\/media\/authors\/gabriel_baude.jpg"
+                "avatar": "./content/media/authors/gabriel_baude.jpg"
             },
             "related": [
-                "content\/kanawa.md",
-                "content\/daimochi.md"
+                "content/kanawa.md",
+                "content/daimochi.md"
             ],
             "documents": [],
             "links": [],
@@ -161,13 +161,13 @@
                 "title": "Embracing slow design",
                 "description": "\"Exploring how Taoist principles offer a revolutionary perspective on contemporary innovation and creation. This exploration challenges our rapid-paced approach through the lens of Wu Wei, revealing how intentional slowness leads to more meaningful and sustainable design solutions.\"",
                 "keywords": "slow-design, taoism, design-thinking, sustainability, design, japanese-craft",
-                "canonical": "https:\/\/msieur-gab.github.io\/paperCMS\/\/index.html#project\/slow-design-md",
+                "canonical": "https://msieur-gab.github.io/paperCMS/index.html#project/slow-design-md",
                 "og": {
                     "title": "Embracing slow design",
                     "description": "\"Exploring how Taoist principles offer a revolutionary perspective on contemporary innovation and creation. This exploration challenges our rapid-paced approach through the lens of Wu Wei, revealing how intentional slowness leads to more meaningful and sustainable design solutions.\"",
-                    "image": "\/content\/media\/dao1.jpg",
+                    "image": "./content/media/dao1.jpg",
                     "type": "exploration",
-                    "url": "https:\/\/msieur-gab.github.io\/paperCMS\/\/index.html#project\/slow-design-md"
+                    "url": "https://msieur-gab.github.io/paperCMS/index.html#project/slow-design-md"
                 },
                 "alternates": []
             }
@@ -196,12 +196,12 @@
             ],
             "author": {
                 "name": "Gabriel Baude",
-                "avatar": "\/content\/media\/authors\/gabriel_baude.jpg"
+                "avatar": "./content/media/authors/gabriel_baude.jpg"
             },
             "related": [
-                "content\/machine-learning-basics.md",
-                "content\/ai-compliance.md",
-                "content\/specialized-ai-development.md"
+                "content/machine-learning-basics.md",
+                "content/ai-compliance.md",
+                "content/specialized-ai-development.md"
             ],
             "documents": [
                 {
@@ -219,29 +219,29 @@
             ],
             "links": [
                 {
-                    "Yann LeCun's Perspective": "https:\/\/twitter.com\/ylecun\/status\/1450809828268548101"
+                    "Yann LeCun's Perspective": "https://twitter.com/ylecun/status/1450809828268548101"
                 },
                 {
-                    "Stanford AI Lab Blog": "https:\/\/ai.stanford.edu\/blog\/specialized-models"
+                    "Stanford AI Lab Blog": "https://ai.stanford.edu/blog/specialized-models"
                 },
                 {
-                    "Google AI Blog - Custom Models": "https:\/\/ai.googleblog.com\/custom-models"
+                    "Google AI Blog - Custom Models": "https://ai.googleblog.com/custom-models"
                 },
                 {
-                    "Scale AI on Domain Expertise": "https:\/\/scale.com\/blog\/domain-expertise"
+                    "Scale AI on Domain Expertise": "https://scale.com/blog/domain-expertise"
                 }
             ],
             "seo": {
                 "title": "The Case for Custom AI",
                 "description": "While large language models promise universal solutions, their limitations in specialized contexts make a compelling case for custom AI development. This article explores how building tailored models that embrace uncertainty and continuous learning can better serve specific business needs, ensure cost control, and maintain compliance while avoiding the pitfalls of false confidence inherent in general-purpose AI solutions.",
                 "keywords": "custom-models, AI-development, cost-optimization, compliance, artificial-intelligence, machine-learning",
-                "canonical": "https:\/\/msieur-gab.github.io\/paperCMS\/\/index.html#project\/custom-ai-article",
+                "canonical": "https://msieur-gab.github.io/paperCMS/index.html#project/custom-ai-article",
                 "og": {
                     "title": "The Case for Custom AI",
                     "description": "While large language models promise universal solutions, their limitations in specialized contexts make a compelling case for custom AI development. This article explores how building tailored models that embrace uncertainty and continuous learning can better serve specific business needs, ensure cost control, and maintain compliance while avoiding the pitfalls of false confidence inherent in general-purpose AI solutions.",
                     "image": "",
                     "type": "reflexion",
-                    "url": "https:\/\/msieur-gab.github.io\/paperCMS\/\/index.html#project\/custom-ai-article"
+                    "url": "https://msieur-gab.github.io/paperCMS/index.html#project/custom-ai-article"
                 },
                 "alternates": []
             }
@@ -251,7 +251,7 @@
             "path": "hako-kakushi.md",
             "title": "Hako Kakushi Tsugi",
             "description": "A hidden joint technique in traditional Japanese woodworking",
-            "thumbnail": "\/content\/media\/tsugi3.jpg",
+            "thumbnail": "./content/media/tsugi3.jpg",
             "status": "published",
             "date": {
                 "published": "2024-12-22",
@@ -270,12 +270,12 @@
             ],
             "author": {
                 "name": "Gabriel Baude",
-                "avatar": "\/content\/media\/authors\/gabriel_baude.jpg"
+                "avatar": "./content/media/authors/gabriel_baude.jpg"
             },
             "related": [
-                "content\/kanawa.md",
-                "content\/daimochi.md",
-                "content\/mortise_test.md"
+                "content/kanawa.md",
+                "content/daimochi.md",
+                "content/mortise_test.md"
             ],
             "documents": [
                 {
@@ -287,23 +287,23 @@
             ],
             "links": [
                 {
-                    "Traditional website": "https:\/\/www.test.com"
+                    "Traditional website": "https://www.test.com"
                 },
                 {
-                    "ref website": "https:\/\/www.test.com"
+                    "ref website": "https://www.test.com"
                 }
             ],
             "seo": {
                 "title": "Hako Kakushi Tsugi",
                 "description": "A hidden joint technique in traditional Japanese woodworking",
                 "keywords": "hako-kakushi, joinery, craftsmanship, wood, design, japanese-craft",
-                "canonical": "https:\/\/msieur-gab.github.io\/paperCMS\/\/index.html#project\/hako-kakushi",
+                "canonical": "https://msieur-gab.github.io/paperCMS/index.html#project/hako-kakushi",
                 "og": {
                     "title": "Hako Kakushi Tsugi",
                     "description": "A hidden joint technique in traditional Japanese woodworking",
-                    "image": "\/content\/media\/tsugi3.jpg",
+                    "image": "./content/media/tsugi3.jpg",
                     "type": "exploration",
-                    "url": "https:\/\/msieur-gab.github.io\/paperCMS\/\/index.html#project\/hako-kakushi"
+                    "url": "https://msieur-gab.github.io/paperCMS/index.html#project/hako-kakushi"
                 },
                 "alternates": []
             }

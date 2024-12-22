@@ -29,25 +29,19 @@ class MarkdownConverter
     {
         $publications = array();
         $files = $this->getMarkdownFiles($this->contentDir);
-        $this->processingStats['total'] = count($files);
 
         foreach ($files as $file) {
             try {
                 $content = file_get_contents($file);
                 if ($metadata = $this->extractFrontmatter($content)) {
                     $metadata = $this->validateMetadata($metadata, $file);
-                    $this->updateStats($metadata);
 
                     if ($this->shouldInclude($metadata)) {
                         $publications[] = $this->createPublicationData($metadata, $file);
-                        $this->processingStats['success']++;
                     }
                 }
             } catch (Exception $e) {
-                $this->processingStats['errors'][] = [
-                    'file' => basename($file),
-                    'error' => $e->getMessage()
-                ];
+                echo "Error processing file " . basename($file) . ": " . $e->getMessage() . "\n";
                 continue;
             }
         }
@@ -56,15 +50,21 @@ class MarkdownConverter
             return $a['reference'] - $b['reference'];
         });
 
+        // Ensure output directory exists
         $outputDir = dirname($this->outputFile);
         if (!is_dir($outputDir)) {
             mkdir($outputDir, 0755, true);
         }
 
-        $json = json_encode(['publications' => $publications], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        // Encode JSON without escaping slashes and with pretty print
+        $json = json_encode(
+            ['publications' => $publications],
+            JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
+        );
+
         file_put_contents($this->outputFile, $json);
 
-        return $count = count($publications);
+        return count($publications);
     }
 
     public function getProcessingStats()
@@ -234,45 +234,82 @@ class MarkdownConverter
         }
     }
 
+    private function cleanPath($path)
+    {
+        // Remove backslashes and normalize forward slashes
+        $path = str_replace('\\', '/', $path);
+        // Remove double forward slashes
+        $path = preg_replace('#/+#', '/', $path);
+        // Remove starting forward slash
+        $path = ltrim($path, '/');
+        return $path;
+    }
+
     private function createPublicationData($metadata, $file)
     {
-        $relativePath = str_replace($this->contentDir . '/', '', $file);
-        $filename = pathinfo($file, PATHINFO_FILENAME);
-        $canonicalUrl = $this->baseUrl . '/index.html#project/' . $filename;
+        // Clean the file path
+        $relativePath = $this->cleanPath(str_replace($this->contentDir . '/', '', $file));
 
-        return array(
+        // Clean thumbnail path if it exists
+        $thumbnail = '';
+        if (!empty($metadata['thumbnail'])) {
+            // Remove any existing 'content/' prefix before adding it
+            $cleanedPath = $this->cleanPath($metadata['thumbnail']);
+            $cleanedPath = preg_replace('/^content\//', '', $cleanedPath);
+            $thumbnail = './content/' . $cleanedPath;
+        }
+
+        // Clean author avatar if it exists
+        if (isset($metadata['author']['avatar'])) {
+            $metadata['author']['avatar'] = './' . $this->cleanPath($metadata['author']['avatar']);
+        }
+
+        // Clean related paths if they exist
+        $related = [];
+        if (!empty($metadata['related'])) {
+            $related = array_map(function ($path) {
+                return $this->cleanPath($path);
+            }, $metadata['related']);
+        }
+
+        // Create data array with cleaned paths
+        $data = array(
             'reference' => $metadata['reference'],
             'path' => $relativePath,
             'title' => $metadata['title'],
             'description' => $metadata['description'],
-            'thumbnail' => $metadata['thumbnail'] ?? '',
+            'thumbnail' => $thumbnail,
             'status' => $metadata['status'],
             'date' => $metadata['date'],
             'category' => $metadata['category'],
             'subcategories' => $metadata['subcategories'] ?? [],
             'tags' => $metadata['tags'],
             'author' => $metadata['author'],
-            'related' => $metadata['related'] ?? [],
+            'related' => $related,
             'documents' => $metadata['documents'] ?? [],
-            'links' => $metadata['links'] ?? [],
-            'seo' => [
+            'links' => $metadata['links'] ?? []
+        );
+
+        // Add SEO data with cleaned thumbnail path
+        $data['seo'] = [
+            'title' => $metadata['title'],
+            'description' => $metadata['description'],
+            'keywords' => implode(', ', array_merge(
+                $metadata['tags'],
+                $metadata['subcategories'] ?? []
+            )),
+            'canonical' => $this->baseUrl . 'index.html#project/' . pathinfo($relativePath, PATHINFO_FILENAME),
+            'og' => [
                 'title' => $metadata['title'],
                 'description' => $metadata['description'],
-                'keywords' => implode(', ', array_merge(
-                    $metadata['tags'],
-                    $metadata['subcategories'] ?? []
-                )),
-                'canonical' => $canonicalUrl,
-                'og' => [
-                    'title' => $metadata['title'],
-                    'description' => $metadata['description'],
-                    'image' => $metadata['thumbnail'] ?? '',
-                    'type' => $metadata['category'],
-                    'url' => $canonicalUrl
-                ],
-                'alternates' => $metadata['seo']['alternates'] ?? []
-            ]
-        );
+                'image' => $thumbnail,
+                'type' => $metadata['category'],
+                'url' => $this->baseUrl . 'index.html#project/' . pathinfo($relativePath, PATHINFO_FILENAME)
+            ],
+            'alternates' => $metadata['seo']['alternates'] ?? []
+        ];
+
+        return $data;
     }
 }
 
