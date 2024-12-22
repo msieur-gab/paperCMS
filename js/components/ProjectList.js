@@ -93,14 +93,121 @@ export class ProjectList {
         this.categories = ['all', ...uniqueCategories];
     }
 
-    renderProjects() {
-        let filteredPublications = this.publications.filter(pub => 
-            this.selectedCategory === 'all' || pub.category === this.selectedCategory
-        );
+    isSearchingForStatus() {
+        if (!this.searchQuery) return false;
+        
+        const statusPatterns = {
+            'archived': /(?:--|#|-)(?:archived?)\b/i,
+            'published': /(?:--|#|-)published\b/i,
+            'draft': /(?:--|#|-)draft\b/i
+        };
 
-        // Apply search filter if needed
+        return Object.values(statusPatterns).some(pattern => 
+            pattern.test(this.searchQuery)
+        );
+    }
+
+    renderProjects() {
+    //     // Initial filter: only published content by default
+    // let filteredPublications = this.publications.filter(pub => 
+    //     // Only show published content unless specifically searching for other statuses
+    //     (pub.status === 'published' || this.isSearchingForStatus()) &&
+    //     // Keep existing category filter
+    //     (this.selectedCategory === 'all' || pub.category === this.selectedCategory)
+    // );
+
+    let filteredPublications = this.publications.filter(pub => 
+        this.selectedCategory === 'all' || pub.category === this.selectedCategory
+    );
+
+
+    
         if (this.searchQuery) {
-            filteredPublications = filteredPublications.filter(pub => {
+            // Status keywords patterns
+            const statusPatterns = {
+                'archived': /(?:--|#|-)(?:archived?)\b/i,  // Matches --archived, #archived, -archived
+                'published': /(?:--|#|-)published\b/i,
+                'draft': /(?:--|#|-)draft\b/i
+            };
+    
+            // Related content pattern matching
+            const relatedPattern = /(?:--|#|-)related:(\d+)/i;
+            const relatedMatch = this.searchQuery.match(relatedPattern);
+    
+            if (relatedMatch) {
+                // Related content handling stays the same
+                const referenceNumber = relatedMatch[1];
+                const sourcePublication = this.publications.find(pub => 
+                    pub.reference === referenceNumber
+                );
+    
+                if (sourcePublication && sourcePublication.related) {
+                    const relatedPaths = sourcePublication.related.map(path => 
+                        path.replace('content/', '').replace(/^-\s*/, '')
+                    );
+                    
+                    filteredPublications = filteredPublications.filter(pub => 
+                        relatedPaths.includes(pub.path)
+                    );
+                } else {
+                    filteredPublications = [];
+                }
+                
+                const remainingQuery = this.searchQuery.replace(relatedMatch[0], '').trim();
+                if (remainingQuery) {
+                    filteredPublications = this.applyRegularSearch(filteredPublications, remainingQuery);
+                }
+            } else {
+                // Check for status patterns
+                let statusMatch = null;
+                let matchedStatus = null;
+    
+                // Find first matching status pattern
+                for (const [status, pattern] of Object.entries(statusPatterns)) {
+                    const match = this.searchQuery.match(pattern);
+                    if (match) {
+                        statusMatch = match[0];
+                        matchedStatus = status;
+                        break;
+                    }
+                }
+    
+                if (statusMatch) {
+                    // Remove the matched pattern and apply status filter
+                    const remainingQuery = this.searchQuery.replace(statusMatch, '').trim();
+                    filteredPublications = this.applyStatusFilter(filteredPublications, matchedStatus, remainingQuery);
+                } else {
+                    // Regular search
+                    filteredPublications = this.applyRegularSearch(filteredPublications, this.searchQuery);
+                }
+            }
+        }
+    
+        // Apply sorting and render
+        filteredPublications = this.sortPublications(filteredPublications);
+        this.renderFilteredPublications(filteredPublications);
+    }
+    
+    // Helper methods to keep the code organized
+    applyRegularSearch(publications, query) {
+        return publications.filter(pub => {
+            const searchableContent = [
+                pub.title,
+                pub.description,
+                pub.category,
+                ...(pub.tags || []),
+                ...(pub.subcategories || [])
+            ].join(' ').toLowerCase();
+            
+            return searchableContent.includes(query.toLowerCase());
+        });
+    }
+    
+    applyStatusFilter(publications, status, remainingQuery) {
+        return publications.filter(pub => {
+            const matchesStatus = pub.status === status;
+            
+            if (remainingQuery) {
                 const searchableContent = [
                     pub.title,
                     pub.description,
@@ -109,14 +216,14 @@ export class ProjectList {
                     ...(pub.subcategories || [])
                 ].join(' ').toLowerCase();
                 
-                return searchableContent.includes(this.searchQuery.toLowerCase());
-            });
-        }
-
-        // Apply sorting
-        filteredPublications = this.sortPublications(filteredPublications);
-
-        // Render HTML
+                return matchesStatus && searchableContent.includes(remainingQuery);
+            }
+            
+            return matchesStatus;
+        });
+    }
+    
+    renderFilteredPublications(filteredPublications) {
         this.mainElement.innerHTML = filteredPublications.length ? 
             filteredPublications.map((pub, index) => `
                 <article class="project-card" data-path="${pub.path.replace(/\.md$/, '')}" style="--animation-order: ${index}">
@@ -124,22 +231,21 @@ export class ProjectList {
                 </article>
             `).join('') :
             '<div class="no-results">No projects found matching your criteria</div>';
-
-        // Trigger animations
+    
         requestAnimationFrame(() => {
             this.mainElement.querySelectorAll('.project-card').forEach(card => {
                 card.classList.add('visible');
             });
         });
-
+    
         this.attachProjectListeners();
     }
 
     getProjectCardContent(pub) {
         return `
-            ${pub.series ? `<h1 class="series-number">${pub.series.number}</h1>` : ''}
+            ${pub.reference ? `<h1 class="series-number">${pub.reference}</h1>` : ''}
             <h2 class="project-title">${pub.title}</h2>
-            ${pub.tags.length ? `
+            ${pub.tags?.length ? `
                 <ul class="project-tags" aria-label="Project tags">
                     ${pub.tags.map(tag => `<li class="project-tag">${tag}</li>`).join('')}
                 </ul>
@@ -153,6 +259,7 @@ export class ProjectList {
                 <time datetime="${pub.date.published}">
                     ${new Date(pub.date.published).toLocaleDateString()}
                 </time>
+                ${pub.status ? `<span class="project-status">${pub.status}</span>` : ''}
             </footer>
         `;
     }

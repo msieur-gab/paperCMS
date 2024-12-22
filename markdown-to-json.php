@@ -1,21 +1,25 @@
 <?php
-
 class MarkdownConverter
 {
     private $contentDir;
     private $outputFile;
-    private $baseDir;
+    private $baseUrl;
+    private $processingStats = [
+        'total' => 0,
+        'success' => 0,
+        'errors' => [],
+        'categories' => [],
+        'statusCount' => [],
+        'missingFields' => []
+    ];
 
     public function __construct($baseDir = null)
     {
-        // If no base directory provided, use the directory where the script is located
         $this->baseDir = $baseDir ?: dirname(__FILE__);
-
-        // Set paths relative to base directory
         $this->contentDir = $this->baseDir . '/content';
         $this->outputFile = $this->baseDir . '/public/api/publications.json';
+        $this->baseUrl = 'https://www.yourdomain.com';
 
-        // Ensure content directory exists
         if (!is_dir($this->contentDir)) {
             throw new Exception("Content directory not found at: " . $this->contentDir);
         }
@@ -25,54 +29,79 @@ class MarkdownConverter
     {
         $publications = array();
         $files = $this->getMarkdownFiles($this->contentDir);
+        $this->processingStats['total'] = count($files);
 
         foreach ($files as $file) {
-            $content = file_get_contents($file);
-            if ($metadata = $this->extractFrontmatter($content)) {
-                if ($this->isPublished($metadata)) {
-                    $publications[] = $this->createPublicationData($metadata, $file);
+            try {
+                $content = file_get_contents($file);
+                if ($metadata = $this->extractFrontmatter($content)) {
+                    $metadata = $this->validateMetadata($metadata, $file);
+                    $this->updateStats($metadata);
+
+                    if ($this->shouldInclude($metadata)) {
+                        $publications[] = $this->createPublicationData($metadata, $file);
+                        $this->processingStats['success']++;
+                    }
                 }
+            } catch (Exception $e) {
+                $this->processingStats['errors'][] = [
+                    'file' => basename($file),
+                    'error' => $e->getMessage()
+                ];
+                continue;
             }
         }
 
-        // Sort by publication date (newest first)
         usort($publications, function ($a, $b) {
-            return strtotime($b['date']['published']) - strtotime($a['date']['published']);
+            return $a['reference'] - $b['reference'];
         });
 
-        // Create output directory if it doesn't exist
         $outputDir = dirname($this->outputFile);
         if (!is_dir($outputDir)) {
             mkdir($outputDir, 0755, true);
         }
 
-        // Write JSON file
-        $json = json_encode(array('publications' => $publications), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        $json = json_encode(['publications' => $publications], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
         file_put_contents($this->outputFile, $json);
 
-        return count($publications);
+        return $count = count($publications);
+    }
+
+    public function getProcessingStats()
+    {
+        return [
+            'overall' => [
+                'total' => $this->processingStats['total'],
+                'success' => $this->processingStats['success'],
+                'errors' => count($this->processingStats['errors'])
+            ],
+            'categories' => $this->processingStats['categories'],
+            'status' => $this->processingStats['statusCount'],
+            'missing' => $this->processingStats['missingFields'],
+            'errorDetails' => $this->processingStats['errors']
+        ];
+    }
+
+    private function shouldInclude($metadata)
+    {
+        return isset($metadata['status']) &&
+            in_array($metadata['status'], ['published', 'archived']);
     }
 
     private function getMarkdownFiles($dir)
     {
-        try {
-            $files = array();
-            $iterator = new RecursiveIteratorIterator(
-                new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS)
-            );
+        $files = array();
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS)
+        );
 
-            foreach ($iterator as $file) {
-                if ($file->isFile() && $file->getExtension() === 'md') {
-                    $files[] = $file->getPathname();
-                }
+        foreach ($iterator as $file) {
+            if ($file->isFile() && $file->getExtension() === 'md') {
+                $files[] = $file->getPathname();
             }
-
-            return $files;
-        } catch (Exception $e) {
-            echo "Error accessing directory: " . $dir . "\n";
-            echo "Error message: " . $e->getMessage() . "\n";
-            return array();
         }
+
+        return $files;
     }
 
     private function extractFrontmatter($content)
@@ -87,117 +116,163 @@ class MarkdownConverter
     {
         $lines = explode("\n", $yaml);
         $result = array();
-        $parents = array();
-        $currentLevel = 0;
-        $previousLevel = 0;
-        $currentArray = null;
+        $currentKey = '';
+        $currentArray = [];
+        $inArray = false;
+        $arrayIndent = 0;
 
         foreach ($lines as $line) {
-            if (trim($line) === '')
+            $line = rtrim($line);
+            if (empty($line))
                 continue;
 
-            $level = strlen($line) - strlen(ltrim($line));
-            $line = trim($line);
+            $indent = strlen($line) - strlen(ltrim($line));
+            $line = ltrim($line);
 
-            // Handle arrays (lines starting with -)
             if (strpos($line, '- ') === 0) {
-                $value = trim(substr($line, 1));
-                if ($currentArray === null) {
-                    $currentArray = array();
-                    $this->setValueInArray($result, $parents, $currentArray);
+                $value = substr($line, 2);
+
+                if (!$inArray) {
+                    $inArray = true;
+                    $arrayIndent = $indent;
+                    $currentArray = [];
                 }
-                $currentArray[] = $value;
+
+                if (strpos($value, ':') !== false) {
+                    list($key, $val) = explode(':', $value, 2);
+                    $currentArray[] = array(trim($key) => trim($val));
+                } else {
+                    $currentArray[] = trim($value);
+                }
+
+                $result[$currentKey] = $currentArray;
                 continue;
             } else {
-                $currentArray = null;
+                if ($inArray && $indent <= $arrayIndent) {
+                    $inArray = false;
+                }
             }
 
-            // Handle key-value pairs
-            if (strpos($line, ':') !== false) {
-                $parts = explode(':', $line, 2);
-                $key = trim($parts[0]);
-                $value = isset($parts[1]) ? trim($parts[1]) : '';
+            if (preg_match('/^([^:]+):(.*)$/', $line, $matches)) {
+                $key = trim($matches[1]);
+                $value = trim($matches[2]);
 
-                if ($level < $previousLevel) {
-                    $parents = array_slice($parents, 0, $level / 2);
-                }
-
-                if ($value === '') {
-                    // This is a parent key
-                    $parents[$level] = $key;
-                    $this->setValueInArray($result, array_slice($parents, 0, $level / 2 + 1), array());
+                if ($indent == 0) {
+                    $currentKey = $key;
+                    if ($value !== '') {
+                        $result[$key] = $value;
+                    } else {
+                        $result[$key] = array();
+                    }
+                    $inArray = false;
                 } else {
-                    // This is a value
-                    $this->setValueInArray($result, $parents, $value, $key);
+                    if (!empty($value)) {
+                        if (!isset($result[$currentKey]) || !is_array($result[$currentKey])) {
+                            $result[$currentKey] = array();
+                        }
+                        $result[$currentKey][$key] = $value;
+                    }
                 }
-
-                $previousLevel = $level;
             }
         }
 
         return $result;
     }
 
-    private function setValueInArray(&$array, $parents, $value, $lastKey = null)
+    private function validateMetadata($metadata, $currentFile)
     {
-        $current = &$array;
-        foreach ($parents as $parent) {
-            if (!isset($current[$parent])) {
-                $current[$parent] = array();
+        $required = ['reference', 'title', 'description', 'status', 'date', 'category', 'author', 'tags'];
+        foreach ($required as $field) {
+            if (!isset($metadata[$field])) {
+                throw new Exception(sprintf(
+                    "Missing required field '%s' in file: %s",
+                    $field,
+                    basename($currentFile)
+                ));
             }
-            $current = &$current[$parent];
         }
-        if ($lastKey !== null) {
-            $current[$lastKey] = $value;
-        } else {
-            $current = $value;
+
+        $validStatuses = ['published', 'draft', 'archived'];
+        if (!in_array($metadata['status'], $validStatuses)) {
+            throw new Exception(sprintf(
+                "Invalid status value '%s' in file: %s\nExpected one of: %s",
+                $metadata['status'],
+                basename($currentFile),
+                implode(', ', $validStatuses)
+            ));
         }
+
+        $validCategories = ['exploration', 'reflexion', 'application'];
+        if (!in_array($metadata['category'], $validCategories)) {
+            throw new Exception(sprintf(
+                "Invalid category value '%s' in file: %s\nExpected one of: %s",
+                $metadata['category'],
+                basename($currentFile),
+                implode(', ', $validCategories)
+            ));
+        }
+
+        return $metadata;
     }
 
-    private function isPublished($metadata)
+    private function updateStats($metadata)
     {
-        if (!isset($metadata['date']['published'])) {
-            return false;
-        }
+        $category = $metadata['category'] ?? 'undefined';
+        $this->processingStats['categories'][$category] =
+            ($this->processingStats['categories'][$category] ?? 0) + 1;
 
-        $publishDate = strtotime($metadata['date']['published']);
-        return $publishDate !== false && $publishDate <= time();
+        $status = $metadata['status'] ?? 'undefined';
+        $this->processingStats['statusCount'][$status] =
+            ($this->processingStats['statusCount'][$status] ?? 0) + 1;
+
+        $optionalFields = ['thumbnail', 'subcategories', 'related', 'documents', 'links'];
+        foreach ($optionalFields as $field) {
+            if (empty($metadata[$field])) {
+                $this->processingStats['missingFields'][$field] =
+                    ($this->processingStats['missingFields'][$field] ?? 0) + 1;
+            }
+        }
     }
 
     private function createPublicationData($metadata, $file)
     {
         $relativePath = str_replace($this->contentDir . '/', '', $file);
-        $slug = pathinfo($file, PATHINFO_FILENAME);
+        $filename = pathinfo($file, PATHINFO_FILENAME);
+        $canonicalUrl = $this->baseUrl . '/index.html#project/' . $filename;
 
         return array(
-            'slug' => $slug,
+            'reference' => $metadata['reference'],
             'path' => $relativePath,
-            'title' => isset($metadata['title']) ? $metadata['title'] : '',
-            'description' => isset($metadata['description']) ? $metadata['description'] : '',
-            'date' => isset($metadata['date']) ? $metadata['date'] : array(),
-            'author' => isset($metadata['author']) ? $metadata['author'] : array(),
-            'category' => isset($metadata['category']) ? $metadata['category'] : '',
-            'subcategories' => isset($metadata['subcategories']) ? $metadata['subcategories'] : array(),
-            'tags' => isset($metadata['tags']) ? $metadata['tags'] : array(),
-            'related' => isset($metadata['related']) ? $metadata['related'] : array(),
-            'project' => isset($metadata['project']) ? $metadata['project'] : array()
+            'title' => $metadata['title'],
+            'description' => $metadata['description'],
+            'thumbnail' => $metadata['thumbnail'] ?? '',
+            'status' => $metadata['status'],
+            'date' => $metadata['date'],
+            'category' => $metadata['category'],
+            'subcategories' => $metadata['subcategories'] ?? [],
+            'tags' => $metadata['tags'],
+            'author' => $metadata['author'],
+            'related' => $metadata['related'] ?? [],
+            'documents' => $metadata['documents'] ?? [],
+            'links' => $metadata['links'] ?? [],
+            'seo' => [
+                'title' => $metadata['title'],
+                'description' => $metadata['description'],
+                'keywords' => implode(', ', array_merge(
+                    $metadata['tags'],
+                    $metadata['subcategories'] ?? []
+                )),
+                'canonical' => $canonicalUrl,
+                'og' => [
+                    'title' => $metadata['title'],
+                    'description' => $metadata['description'],
+                    'image' => $metadata['thumbnail'] ?? '',
+                    'type' => $metadata['category'],
+                    'url' => $canonicalUrl
+                ],
+                'alternates' => $metadata['seo']['alternates'] ?? []
+            ]
         );
     }
 }
-
-// Get the project root directory
-$projectRoot = dirname(__FILE__);
-
-// Create converter with project root
-try {
-    $converter = new MarkdownConverter($projectRoot);
-    $count = $converter->processFiles();
-    echo "Successfully processed $count publications\n";
-} catch (Exception $e) {
-    echo "Error: " . $e->getMessage() . "\n";
-    echo "Current directory: " . getcwd() . "\n";
-    echo "Project root: " . $projectRoot . "\n";
-    die();
-}
-
 ?>

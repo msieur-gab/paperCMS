@@ -1,11 +1,16 @@
 ---
+reference: 12
 title: Kanawa tsugite
-description: An exploration of Kanawa-tsugi, a traditional Japanese woodworking technique
-published: 22/12/2024
+description: In the realm of design, the most elegant solutions often emerge from the harmonious balance between function and form. Kanawa-tsugite, a sophisticated Japanese woodworking joint, exemplifies this principle through centuries of refinement. This joining technique transcends its utilitarian origins, teaching modern designers crucial lessons about material integrity, structural elegance, and the power of constraint-driven innovation. By studying its precise geometries and thoughtful construction, we gain insights into how limitations can foster creativity, how complexity can arise from simple rules, and how structural requirements can give birth to aesthetic beauty. Through this exploration of Kanawa-tsugite, we'll uncover how traditional craftsmanship continues to inform contemporary design thinking, offering valuable principles for creating solutions that are both technically sound and visually compelling.
+date:
+    published: 2024-12-22
+    updated: 2024-12-22
+thumbnail: /content/media/tsugi3.jpg
+status: published
 author:
     name: Gabriel Baude
     avatar: /content/media/authors/gabriel_baude.jpg
-category: woodworking
+category: exploration
 subcategories:
     - design
     - japanese-craft

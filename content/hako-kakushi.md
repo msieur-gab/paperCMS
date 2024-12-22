@@ -1,11 +1,16 @@
 ---
+reference: 34
 title: Hako Kakushi Tsugi
 description: A hidden joint technique in traditional Japanese woodworking
-published: true
+date:
+    published: 2024-12-22
+    updated: 2024-12-22
+thumbnail: /content/media/tsugi3.jpg
+status: published
 author:
     name: Gabriel Baude
     avatar: /content/media/authors/gabriel_baude.jpg
-category: woodworking
+category: exploration
 subcategories:
     - design
     - japanese-craft
@@ -17,6 +22,7 @@ tags:
 related:
     - content/kanawa.md
     - content/daimochi.md
+    - content/mortise_test.md
 documents:
     - Wood Joints: Wood Joints in Classical Japanese Architecture
     - Book Preview: Japanese Joinery Book Preview
