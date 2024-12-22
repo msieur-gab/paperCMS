@@ -24,7 +24,7 @@
             ],
             "author": {
                 "name": "Gabriel Baude",
-                "avatar": "./content/media/authors/gabriel_baude.jpg"
+                "avatar": "./media/authors/gabriel_baude.jpg"
             },
             "related": [
                 "content/hako-kakushi.md",
@@ -88,7 +88,7 @@
             ],
             "author": {
                 "name": "Gabriel Baude",
-                "avatar": "./content/media/authors/gabriel_baude.jpg"
+                "avatar": "./media/authors/gabriel_baude.jpg"
             },
             "related": [
                 "content/kanawa.md",
@@ -149,7 +149,7 @@
             ],
             "author": {
                 "name": "Gabriel Baude",
-                "avatar": "./content/media/authors/gabriel_baude.jpg"
+                "avatar": "./media/authors/gabriel_baude.jpg"
             },
             "related": [
                 "content/kanawa.md",
@@ -196,7 +196,7 @@
             ],
             "author": {
                 "name": "Gabriel Baude",
-                "avatar": "./content/media/authors/gabriel_baude.jpg"
+                "avatar": "./media/authors/gabriel_baude.jpg"
             },
             "related": [
                 "content/machine-learning-basics.md",
@@ -270,7 +270,7 @@
             ],
             "author": {
                 "name": "Gabriel Baude",
-                "avatar": "./content/media/authors/gabriel_baude.jpg"
+                "avatar": "./media/authors/gabriel_baude.jpg"
             },
             "related": [
                 "content/kanawa.md",
