@@ -7,26 +7,31 @@ main {
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
+    /* change */
+    width: 100%;
+    position: relative;
 }
 
 main::-webkit-scrollbar {
     display: none;
 }
 section{
-    margin-top: 10vh;
-    margin-bottom: 10vh;
+    /* margin-top: 10vh; */
+    /* margin-bottom: 10vh; */
     min-height: 100vh;
     align-content: center;
 }
 /* Sections */
+/* Fix for section sizing */
 .section {
-    max-width: 70%;
-    margin: 0 auto;
-    /* width: 100vw; */
+    min-width: 100%;
+    width: 100%;
     height: 100%;
     scroll-snap-align: start;
     scroll-snap-stop: always;
     position: relative;
+    /* Prevent content jumping during transitions */
+    flex-shrink: 0;
 }
 
 .section-content {
@@ -62,6 +67,7 @@ section{
     /* overflow-y: auto; */
     padding-right: 1rem;
     margin-right: -1rem;
+    padding-bottom: 5rem;
 }
 
 /* .projects-grid {
@@ -72,7 +78,7 @@ section{
 } */
 
 .projects-grid {
-    margin: 10px auto;
+    /* margin: 10px auto; */
     width: 100%;
     columns: 5 20rem;  /* 4 columns, each minimum 20rem wide */
     column-gap: 2rem;
@@ -80,8 +86,35 @@ section{
     /* padding: 2rem; */
 }
 
+/* Project details section specific handling */
+#project-details {
+    display: none;  /* Hidden by default */
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
 
+/* When project is open */
+main:not(.no-project) #project-details {
+    display: flex;
+    opacity: 1;
+}
+/* Ensure other sections maintain proper width when project is closed */
+main.no-project .section:not(#project-details) {
+    /* This helps maintain proper scroll snap points */
+    scroll-snap-align: start;
+}
 
+/* Prevent scroll snap during transitions */
+main.resizing {
+    scroll-snap-type: none;
+    scroll-behavior: auto;
+}
+
+/* Re-enable scroll snap after transition */
+main:not(.resizing) {
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+}
 
 
 /* Media Queries */
@@ -116,7 +149,7 @@ section{
     }
 
     .section-content {
-        padding: 0 2rem;
+        padding: 0 1rem;
     }
 
     .projects-grid {

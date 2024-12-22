@@ -1,7 +1,7 @@
 ---
 reference: 13
 title: Daimochi Tsugi
-description: Design excellence often manifests in solutions that appear deceptively simple yet harbor profound complexity beneath their surface. The Daimochi Tsugi joint stands as a testament to this principle, representing centuries of architectural design thinking distilled into a precise geometric form. This powerful joining technique demonstrates how structural requirements can drive aesthetic innovation, challenging our modern assumptions about the relationship between engineering and design. By studying its sophisticated load distribution systems and elegant proportions, we gain insight into timeless design principles- how to harness material properties, how to transform structural necessities into visual assets, and how to achieve maximum impact through minimum intervention. The Daimochi Tsugi reveals that true innovation in design often lies not in adding complexity, but in discovering the elegant simplicity hidden within complex problems.
+description: Design excellence often manifests in solutions that appear deceptively simple yet harbor profound complexity beneath their surface. We explore how encestral joining technique demonstrates how structural requirements can drive aesthetic innovation, challenging our modern assumptions about the relationship between engineering and design. The Daimochi Tsugi reveals that true innovation in design often lies not in adding complexity, but in discovering the elegant simplicity hidden within complex problems.
 date:
     published: 2024-12-22
     updated: 2024-12-22

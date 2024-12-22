@@ -150,29 +150,29 @@ class App {
     }
 
     setupLayoutHandlers() {
-        // Responsive layout handling
         window.addEventListener('resize', () => {
             if (this.resizeTimeout) clearTimeout(this.resizeTimeout);
             
+            // Add resizing class to disable scroll snap
             this.mainElement.classList.add('resizing');
             
             this.resizeTimeout = setTimeout(() => {
+                // Calculate proper scroll position
                 const currentSection = this.state.currentSection;
                 const sectionIndex = this.state.sections.indexOf(currentSection);
-                const scrollLeft = sectionIndex * this.mainElement.clientWidth;
+                const scrollLeft = sectionIndex * window.innerWidth;
                 
+                // Scroll to correct position without animation
                 this.mainElement.scrollTo({
                     left: scrollLeft,
                     behavior: 'auto'
                 });
                 
-                this.mainElement.classList.remove('resizing');
+                // Remove resizing class after a brief delay to ensure smooth transition
+                setTimeout(() => {
+                    this.mainElement.classList.remove('resizing');
+                }, 50);
             }, 150);
-        });
-
-        // Layout change handling
-        this.eventBus.on('layoutChange', ({ isMobile }) => {
-            this.handleLayoutChange(isMobile);
         });
     }
 
@@ -281,19 +281,23 @@ class App {
 
     closeProject() {
         if (!this.state.isProjectOpen) return;
-
+    
+        // Add resizing class before transition
+        this.mainElement.classList.add('resizing');
+        
         const workIndex = this.state.sections.indexOf('work');
         this.mainElement.scrollTo({
-            left: workIndex * this.mainElement.clientWidth,
+            left: workIndex * window.innerWidth,
             behavior: 'smooth'
         });
-
+    
+        // Update state after transition
         setTimeout(() => {
             this.state.isProjectOpen = false;
             this.state.currentSection = 'work';
-            
             this.mainElement.classList.add('no-project');
             
+            // Clean up project details
             const projectNav = this.mainNav.querySelector('a[section="project-details"]');
             if (projectNav) projectNav.remove();
             
@@ -303,6 +307,11 @@ class App {
             if (this.intersectionManager) {
                 this.intersectionManager.disconnect();
             }
+            
+            // Remove resizing class after everything is done
+            setTimeout(() => {
+                this.mainElement.classList.remove('resizing');
+            }, 50);
         }, 500);
     }
 

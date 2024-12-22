@@ -18,7 +18,7 @@ class MarkdownConverter
         $this->baseDir = $baseDir ?: dirname(__FILE__);
         $this->contentDir = $this->baseDir . '/content';
         $this->outputFile = $this->baseDir . '/public/api/publications.json';
-        $this->baseUrl = 'https://www.yourdomain.com';
+        $this->baseUrl = 'https://msieur-gab.github.io/paperCMS/';
 
         if (!is_dir($this->contentDir)) {
             throw new Exception("Content directory not found at: " . $this->contentDir);
@@ -275,4 +275,5 @@ class MarkdownConverter
         );
     }
 }
+
 ?>

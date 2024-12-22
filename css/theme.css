@@ -110,3 +110,9 @@ html[data-theme="dark"]  img[src$=".svg"] {
     /* Invert colors and adjust brightness for dark theme */
     filter: invert(1) brightness(0.9);
 }
+
+
+.search-container,
+.sort-container {
+    display: none;
+}

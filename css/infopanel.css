@@ -3,7 +3,7 @@
     position: fixed;
     top: 0;
     right: 0;
-    width: min(400px, 90vw);
+    width: min(400px, 100vw);
     height: 100vh;
     background: var(--color-background);
     border-left: 1px solid var(--color-border);
@@ -241,11 +241,12 @@ dd {
 /* Mobile Adjustments */
 @media (max-width: 768px) {
     .info-panel {
-        width: 90vw;
+        width: 100vw;
     }
 
     .info-panel-content {
         padding: 1rem;
+        padding-bottom: 5rem;
     }
 
     .info-panel-header {
