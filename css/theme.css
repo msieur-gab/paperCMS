@@ -112,7 +112,11 @@ html[data-theme="dark"]  img[src$=".svg"] {
 }
 
 
-.search-container,
+
+
+@media (max-width: 768px) {
+    .search-container,
 .sort-container {
     display: none;
+}
 }
