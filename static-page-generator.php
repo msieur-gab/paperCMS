@@ -85,7 +85,8 @@ class StaticPageGenerator
         $title = isset($publication['title']) ? htmlspecialchars($publication['title']) . ' - Gabriel Baude' : 'Gabriel Baude';
         $description = isset($publication['description']) ? htmlspecialchars($publication['description']) : 'Portfolio of Gabriel Baude - Designer and technologist';
         $image = isset($publication['thumbnail']) ? $this->resolveImagePath($publication['thumbnail']) : 'content/media/og-default.jpg';
-        $url = $this->baseUrl . '#project/' . str_replace('.md', '', basename($publication['path']));
+        $staticUrl = $this->baseUrl . 'static/' . str_replace('.md', '.html', basename($publication['path']));
+        $spaUrl = $this->baseUrl . '#project/' . str_replace('.md', '', basename($publication['path']));
         
         return <<<HTML
 <!DOCTYPE html>
@@ -98,14 +99,14 @@ class StaticPageGenerator
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="article">
-    <meta property="og:url" content="{$url}">
+    <meta property="og:url" content="{$staticUrl}">
     <meta property="og:title" content="{$title}">
     <meta property="og:description" content="{$description}">
     <meta property="og:image" content="{$this->baseUrl}{$image}">
     
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="{$url}">
+    <meta property="twitter:url" content="{$staticUrl}">
     <meta property="twitter:title" content="{$title}">
     <meta property="twitter:description" content="{$description}">
     <meta property="twitter:image" content="{$this->baseUrl}{$image}">
@@ -115,17 +116,17 @@ class StaticPageGenerator
     
     <!-- Structured Data -->
     <script type="application/ld+json">
-    {$this->buildStructuredDataFromPublication($publication, $url)}
+    {$this->buildStructuredDataFromPublication($publication, $staticUrl)}
     </script>
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="{$url}">
+    <link rel="canonical" href="{$staticUrl}">
     
     <!-- Redirect to SPA -->
     <script>
         // Redirect to single page app after brief delay for crawlers
         setTimeout(function() {
-            window.location.href = "{$url}";
+            window.location.href = "{$spaUrl}";
         }, 1000);
     </script>
     
@@ -194,13 +195,13 @@ class StaticPageGenerator
         
         <div class="loading">
             <p><strong>Loading interactive portfolio...</strong></p>
-            <p>If not redirected automatically, <a href="{$url}">click here to view the full project</a>.</p>
+            <p>If not redirected automatically, <a href="{$spaUrl}">click here to view the full project</a>.</p>
         </div>
         
         <noscript>
             <div style="background: #f8d7da; color: #721c24; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
                 <strong>JavaScript Required:</strong> This portfolio requires JavaScript to display the full interactive experience. 
-                <a href="{$url}">Please enable JavaScript</a> to continue.
+                <a href="{$spaUrl}">Please enable JavaScript</a> to continue.
             </div>
         </noscript>
     </div>
@@ -324,17 +325,20 @@ HTML;
             return $imagePath; // Already absolute URL
         }
         
+        // Clean up the path - remove ./ prefix and normalize
+        $imagePath = ltrim($imagePath, './');
+        
         // Handle relative paths - ensure they point to content/media/
         if (strpos($imagePath, 'media/') === 0) {
             return 'content/' . $imagePath;
         }
         
-        if (strpos($imagePath, '/content/') !== false) {
-            return ltrim($imagePath, '/');
+        if (strpos($imagePath, 'content/') === 0) {
+            return $imagePath; // Already has content/ prefix
         }
         
         // Default: assume it's in content/media/
-        return 'content/media/' . ltrim($imagePath, '/');
+        return 'content/media/' . $imagePath;
     }
 
 
