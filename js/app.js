@@ -123,14 +123,7 @@ class App {
     }
 
     setupProjectHandlers() {
-        // Project close button
-        document.addEventListener('click', (e) => {
-            const closeButton = e.target.closest('.close-project');
-            if (closeButton) {
-                e.preventDefault();
-                this.closeProject();
-            }
-        });
+        // Project handlers can be added here in the future if needed
     }
 
     setupLayoutHandlers() {
@@ -297,47 +290,6 @@ class App {
         }
     }
 
-    closeProject() {
-        if (!this.state.isProjectOpen) return;
-    
-        // Add resizing class before transition
-        this.mainElement.classList.add('resizing');
-        
-        const workIndex = this.state.sections.indexOf('work');
-        this.mainElement.scrollTo({
-            left: workIndex * window.innerWidth,
-            behavior: 'smooth'
-        });
-    
-        // Update state after transition
-        setTimeout(() => {
-            this.state.isProjectOpen = false;
-            this.state.currentSection = 'work';
-            this.mainElement.classList.add('no-project');
-            
-            // Clean up project navigation
-            this.navigation.removeProjectFromNav();
-            
-            this.router.updateURL('work');
-            this.navigation.updateActiveSection('work');
-            
-            // Update SEO for work section
-            this.metaManager.updateForSection('work');
-            
-            // Clean up media components
-            if (this.intersectionManager) {
-                this.intersectionManager.disconnect();
-            }
-            if (this.mediaManager) {
-                this.mediaManager.destroy();
-            }
-            
-            // Remove resizing class after everything is done
-            setTimeout(() => {
-                this.mainElement.classList.remove('resizing');
-            }, 50);
-        }, 500);
-    }
 
     navigateToSection(section, isPopState = false) {
         // Prevent navigation to project-details if no project is open

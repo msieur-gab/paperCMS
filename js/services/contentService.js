@@ -185,15 +185,77 @@ export class ContentService {
         html = html.split('\n\n').map(paragraph => {
             paragraph = paragraph.trim();
             if (!paragraph) return '';
-            if (paragraph.startsWith('<')) return paragraph;
+            
+            // Skip if it's already a complete HTML block element
+            if (paragraph.match(/^<(h[1-6]|div|figure|blockquote|pre|ul|ol|li)\b/)) {
+                return paragraph;
+            }
+            
+            // If it contains inline HTML tags but isn't a block element, wrap in paragraph
             return `<p>${paragraph}</p>`;
         }).join('\n');
+        
+        // Create sections based on H1 headlines (like in About section)
+        html = this.createSections(html);
         
         console.log('Final HTML output length:', html.length);
         console.log('Final HTML contains media blocks:', html.includes('media-block'));
         console.log('Final HTML contains data-media:', html.includes('data-media'));
         
         return html;
+    }
+
+    // Create sections based on H1 and standalone H2 headlines (matching About section structure)
+    createSections(html) {
+        // Split content by H1 and H2 tags to create sections
+        const parts = html.split(/(<h[12]>.*?<\/h[12]>)/);
+        let result = '';
+        let currentSection = '';
+        let hasH1InSection = false;
+        
+        for (let i = 0; i < parts.length; i++) {
+            const part = parts[i].trim();
+            if (!part) continue;
+            
+            // Check if this is an H1 or H2 tag
+            const isH1 = part.match(/^<h1>.*<\/h1>$/);
+            const isH2 = part.match(/^<h2>.*<\/h2>$/);
+            
+            if (isH1) {
+                // H1 always starts a new section
+                if (currentSection) {
+                    result += `<section>\n${currentSection}\n</section>\n`;
+                    currentSection = '';
+                }
+                currentSection = part;
+                hasH1InSection = true;
+            } else if (isH2) {
+                // H2 starts a new section only if there's no H1 in current section
+                if (!hasH1InSection && currentSection) {
+                    result += `<section>\n${currentSection}\n</section>\n`;
+                    currentSection = part;
+                    hasH1InSection = false;
+                } else if (!hasH1InSection) {
+                    // No current section, start new one with H2
+                    currentSection = part;
+                    hasH1InSection = false;
+                } else {
+                    // H2 within H1 section, just add to current section
+                    currentSection += (currentSection ? '\n' : '') + part;
+                }
+            } else {
+                // Regular content, add to current section
+                currentSection += (currentSection ? '\n' : '') + part;
+            }
+        }
+        
+        // Close final section if exists
+        if (currentSection) {
+            result += `<section>\n${currentSection}\n</section>\n`;
+        }
+        
+        // If no H1 or H2 tags were found, return original content
+        return result || html;
     }
 
     // Clear cache

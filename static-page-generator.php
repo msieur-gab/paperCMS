@@ -1,5 +1,6 @@
 <?php
 require_once 'markdown-to-json.php';
+require_once 'config.php';
 
 class StaticPageGenerator
 {
@@ -13,7 +14,7 @@ class StaticPageGenerator
         $this->baseDir = $baseDir ?: dirname(__FILE__);
         $this->contentDir = $this->baseDir . '/content';
         $this->staticDir = $this->baseDir . '/static';
-        $this->baseUrl = 'https://msieur-gab.github.io/paperCMS/';
+        $this->baseUrl = Config::getBaseUrlWithSlash();
         
         // Use existing MarkdownConverter for metadata extraction
         $this->converter = new MarkdownConverter($baseDir);

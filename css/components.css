@@ -127,7 +127,7 @@
 }
 
 /* removed button the time to fix info toggle */
-.category-btn, .close-project {
+.category-btn {
     padding: 0.5rem 0.75rem ;
     border: none;
     border-radius: 2rem;
@@ -137,7 +137,7 @@
     color: var(--color-text);
 }
 
-.category-btn:hover, .close-project:hover {
+.category-btn:hover {
     background: var(--color-background);
 }
 
@@ -282,22 +282,6 @@ blockquote::after {
     font-size: var(--h2-size);
 }
 
-/* .close-project {
-    background: none;
-    border: none;
-    font-size: 2rem;
-    line-height: 1;
-    cursor: pointer;
-    padding: 0.5rem;
-    color: var(--color-text);
-    transition: color 0.3s ease;
-    opacity: 0.6;
-}
-
-.close-project:hover {
-    opacity: 1;
-    color: var(--color-text);
-} */
 
 /* Ajustements responsive */
 @media (max-width: 767px) {
@@ -309,10 +293,6 @@ blockquote::after {
         font-size: calc(var(--h2-size) * 0.8);
     }
 
-    .close-project {
-        font-size: 1.5rem;
-        /* padding: 0.25rem; */
-    }
 }
 
 /* theme manager */

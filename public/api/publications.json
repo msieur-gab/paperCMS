@@ -309,6 +309,70 @@
             }
         },
         {
+            "reference": "33",
+            "path": "pebbble.md",
+            "title": "Pebbble - Crafting Presence Through Code",
+            "description": "Pebbble is a design-driven project born from a deeply human need — to preserve the irreplaceable bond of a parent's voice across physical and digital divides. It blends ancient ritual, modern cryptography, and crafted hardware into a secure, tactile experience. Drawing from Japanese joinery philosophy, it redefines technology as a vessel of presence, resilience, and love.",
+            "thumbnail": "./content/media/pebbles.jpg",
+            "status": "published",
+            "date": {
+                "published": "2025-08-12",
+                "updated": "2025-08-12"
+            },
+            "category": "exploration",
+            "subcategories": [
+                "design",
+                "user-experience",
+                "hardware",
+                "cryptography"
+            ],
+            "tags": [
+                "product design",
+                "user experience",
+                "cryptography",
+                "hardware",
+                "mobile development",
+                "kanawa-tsugi"
+            ],
+            "author": {
+                "name": "Gabriel Baude",
+                "avatar": "./media/authors/gabriel_baude.jpg"
+            },
+            "related": [
+                "content/kanawa-tsugite.md"
+            ],
+            "documents": [
+                {
+                    "Pebbble Technical Whitepaper": "https://www.example.com"
+                },
+                {
+                    "Refactor Progress Tracker": "https://www.example.com"
+                }
+            ],
+            "links": [
+                {
+                    "Project website": "https://loomr.org"
+                },
+                {
+                    "GitHub repository": "https://github.com/example/pebbble"
+                }
+            ],
+            "seo": {
+                "title": "Pebbble - Crafting Presence Through Code",
+                "description": "Pebbble is a design-driven project born from a deeply human need — to preserve the irreplaceable bond of a parent's voice across physical and digital divides. It blends ancient ritual, modern cryptography, and crafted hardware into a secure, tactile experience. Drawing from Japanese joinery philosophy, it redefines technology as a vessel of presence, resilience, and love.",
+                "keywords": "product design, user experience, cryptography, hardware, mobile development, kanawa-tsugi, design, user-experience, hardware, cryptography",
+                "canonical": "https://msieur-gab.github.io/paperCMS/index.html#project/pebbble",
+                "og": {
+                    "title": "Pebbble - Crafting Presence Through Code",
+                    "description": "Pebbble is a design-driven project born from a deeply human need — to preserve the irreplaceable bond of a parent's voice across physical and digital divides. It blends ancient ritual, modern cryptography, and crafted hardware into a secure, tactile experience. Drawing from Japanese joinery philosophy, it redefines technology as a vessel of presence, resilience, and love.",
+                    "image": "./content/media/pebbles.jpg",
+                    "type": "exploration",
+                    "url": "https://msieur-gab.github.io/paperCMS/index.html#project/pebbble"
+                },
+                "alternates": []
+            }
+        },
+        {
             "reference": "34",
             "path": "hako-kakushi.md",
             "title": "Hako Kakushi Tsugi",
