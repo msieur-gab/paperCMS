@@ -1,5 +1,6 @@
 <?php
 require_once 'markdown-to-json.php';
+require_once 'static-page-generator.php';
 
 // Add minimal inline styles
 $styles = <<<EOT
@@ -45,9 +46,15 @@ EOT;
 echo $styles;
 
 try {
+    // Process JSON files
     $converter = new MarkdownConverter();
     $count = $converter->processFiles();
     $stats = $converter->getProcessingStats();
+
+    // Generate static HTML pages for social media
+    $staticGenerator = new StaticPageGenerator();
+    $staticResults = $staticGenerator->generateAllPages();
+    $staticStats = $staticGenerator->getGenerationStats();
 
     echo "<h2>Content Processing Summary</h2>";
     echo "<div class='grid'>";
@@ -104,7 +111,65 @@ try {
         echo "</table></div>";
     }
 
+    // Static Page Generation Stats
+    echo "<div><table>
+            <tr><th colspan='2'>Static Page Generation</th></tr>
+            <tr>
+                <td>Pages Generated</td>
+                <td class='count success'>{$staticResults['generated']}</td>
+            </tr>
+            <tr>
+                <td>Generation Errors</td>
+                <td class='count " . (count($staticResults['errors']) > 0 ? 'error' : '') . "'>" . count($staticResults['errors']) . "</td>
+            </tr>
+            <tr>
+                <td>Total Static Files</td>
+                <td class='count'>{$staticStats['static_pages_count']}</td>
+            </tr>
+          </table></div>";
+
     echo "</div>"; // Close grid
+
+    // Generated Static Pages List
+    if ($staticResults['generated'] > 0) {
+        $staticFiles = glob('static/*.html');
+        if (!empty($staticFiles)) {
+            echo "<h2>Generated Static Pages</h2>";
+            echo "<div style='display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;'>";
+            foreach ($staticFiles as $file) {
+                $filename = basename($file);
+                $fileUrl = './static/' . $filename;
+                $fileSize = round(filesize($file) / 1024, 1);
+                $modTime = date('Y-m-d H:i:s', filemtime($file));
+                
+                echo "<div style='border: 1px solid #ddd; border-radius: 4px; padding: 1rem;'>";
+                echo "<h3 style='margin: 0 0 0.5rem; font-size: 1rem;'><a href='$fileUrl' target='_blank'>$filename</a></h3>";
+                echo "<div style='font-size: 0.8rem; color: #666;'>";
+                echo "<div>Size: {$fileSize} KB</div>";
+                echo "<div>Modified: $modTime</div>";
+                echo "</div>";
+                echo "</div>";
+            }
+            echo "</div>";
+        }
+    }
+
+    // Static Generation Error Details (if any)
+    if (!empty($staticResults['errors'])) {
+        echo "<h2>Static Generation Errors</h2>
+              <table>
+                <tr>
+                    <th>File</th>
+                    <th>Error Message</th>
+                </tr>";
+        foreach ($staticResults['errors'] as $error) {
+            echo "<tr>
+                    <td>{$error['file']}</td>
+                    <td class='error'>{$error['error']}</td>
+                  </tr>";
+        }
+        echo "</table>";
+    }
 
     // Error Details Section (if any)
     if (!empty($stats['errorDetails'])) {

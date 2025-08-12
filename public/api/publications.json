@@ -126,6 +126,68 @@
             }
         },
         {
+            "reference": "21",
+            "path": "talent-ai-article.md",
+            "title": "Nurturing Hidden Talents",
+            "description": "Exploring how AI and LLMs can help organizations uncover and nurture hidden talents, drawing parallels with forest ecosystems to understand organizational growth and potential.",
+            "thumbnail": "./content/media/diversity01.webp",
+            "status": "published",
+            "date": {
+                "published": "2024-12-22",
+                "updated": "2024-12-22"
+            },
+            "category": "exploration",
+            "subcategories": [
+                "artificial-intelligence",
+                "talent-management"
+            ],
+            "tags": [
+                "AI",
+                "talent-development",
+                "organizational-growth",
+                "machine-learning",
+                "soft-skills"
+            ],
+            "author": {
+                "name": "Gabriel Baude",
+                "avatar": "./media/authors/gabriel_baude.jpg"
+            },
+            "related": [
+                "content/ai-ethics.md",
+                "content/team-development.md"
+            ],
+            "documents": [
+                {
+                    "Project Results": "Talent Analysis Findings 2024"
+                },
+                {
+                    "Research Paper": "AI in HR Management"
+                }
+            ],
+            "links": [
+                {
+                    "Methodology Details": "https://example.com/methodology"
+                },
+                {
+                    "Case Studies": "https://example.com/cases"
+                }
+            ],
+            "seo": {
+                "title": "Nurturing Hidden Talents",
+                "description": "Exploring how AI and LLMs can help organizations uncover and nurture hidden talents, drawing parallels with forest ecosystems to understand organizational growth and potential.",
+                "keywords": "AI, talent-development, organizational-growth, machine-learning, soft-skills, artificial-intelligence, talent-management",
+                "canonical": "https://msieur-gab.github.io/paperCMS/index.html#project/talent-ai-article",
+                "og": {
+                    "title": "Nurturing Hidden Talents",
+                    "description": "Exploring how AI and LLMs can help organizations uncover and nurture hidden talents, drawing parallels with forest ecosystems to understand organizational growth and potential.",
+                    "image": "./content/media/diversity01.webp",
+                    "type": "exploration",
+                    "url": "https://msieur-gab.github.io/paperCMS/index.html#project/talent-ai-article"
+                },
+                "alternates": []
+            }
+        },
+        {
             "reference": "26",
             "path": "slow-design-md.md",
             "title": "Embracing slow design",

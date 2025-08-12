@@ -1,6 +1,6 @@
 export class IntersectionManager {
-    constructor(eventBus, options = {}) {
-        this.eventBus = eventBus;
+    constructor(mediaManager, options = {}) {
+        this.mediaManager = mediaManager; // Direct reference
         
         console.log('Creating IntersectionManager with root:', document.querySelector('.content-scroll'));
 
@@ -12,17 +12,18 @@ export class IntersectionManager {
 
         this.observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                console.log('Intersection detected:', 
-                    entry.target.querySelector('img')?.alt || entry.target.tagName,
+                const elementDesc = entry.target.querySelector('img')?.alt || 
+                                 entry.target.textContent?.substring(0, 50) || 
+                                 entry.target.tagName;
+                console.log('Intersection detected:', elementDesc,
                     'isIntersecting:', entry.isIntersecting,
                     'ratio:', entry.intersectionRatio
                 );
                 
                 // Trigger on a lower threshold
                 if (entry.isIntersecting && entry.intersectionRatio >= 0.2) {
-                    console.log('Emitting mediaIntersection for:', 
-                        entry.target.querySelector('img')?.alt || entry.target.tagName);
-                    this.eventBus.emit('mediaIntersection', entry.target);
+                    console.log('Calling mediaManager.updateMedia for:', elementDesc);
+                    this.mediaManager.updateMedia({ element: entry.target }); // Correct format
                 }
             });
         }, observerOptions);

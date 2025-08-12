@@ -50,11 +50,19 @@ export class MediaManager {
 
     async setNewMedia(mediaConfig) {
         const { element } = mediaConfig;
-        if (!element) return;
+        console.log('setNewMedia called with:', element);
+        if (!element) {
+            console.error('No element provided to setNewMedia');
+            return;
+        }
 
         // Find the current-media figure container
         const mediaContainer = this.aside.querySelector('.current-media');
-        if (!mediaContainer) return;
+        console.log('Media container found:', mediaContainer);
+        if (!mediaContainer) {
+            console.error('No .current-media container found in aside');
+            return;
+        }
 
         // Clear current content
         mediaContainer.innerHTML = '';
@@ -75,15 +83,27 @@ export class MediaManager {
         mediaContainer.appendChild(clone);
         this.currentMedia = clone;
 
-        console.log('Media updated:', element.querySelector('img')?.alt);
+        console.log('Media updated:', element.querySelector('img')?.alt || element.tagName || 'Unknown element');
 
     }
 
     destroy() {
         this.currentMedia = null;
-        const mediaContainer = this.aside.querySelector('.current-media');
+        const mediaContainer = this.aside?.querySelector('.current-media');
         if (mediaContainer) {
             mediaContainer.innerHTML = '';
         }
+        this.state.isTransitioning = false;
+        this.state.currentMediaId = null;
+    }
+
+    clear() {
+        // Immediate clear without animation
+        const mediaContainer = this.aside?.querySelector('.current-media');
+        if (mediaContainer) {
+            mediaContainer.innerHTML = '';
+        }
+        this.currentMedia = null;
+        this.state.currentMediaId = null;
     }
 }
