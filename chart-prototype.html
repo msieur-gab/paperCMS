@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chart.js Prototype - PaperCMS</title>
+    <style>
+        :root {
+            /* Import your existing theme variables */
+            --font-headlines: 'Orienta', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --font-body: Roboto, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --theme-transition-duration: 500ms;
+        }
+
+        /* Light theme (default) - Yellow-based palette */
+        :root:not([data-theme]), html[data-theme=light] {
+            color-scheme: light;
+            --color-text: #333;
+            --color-text-light: #666;
+            --color-background: #cacaca;
+            --color-border: #eee;
+            --nav-background: rgba(255, 255, 255, 0.7);
+            
+            /* Light theme chart colors - Yellow-based palette from #fefcbf */
+            --chart-primary: #fefcbf;      /* Your exact yellow */
+            --chart-secondary: #f5f08a;    /* Slightly darker yellow */
+            --chart-tertiary: #ebe666;     /* Medium yellow */
+            --chart-quaternary: #d4cc42;   /* Darker yellow */
+            --chart-quinary: #bdb21e;      /* Deep yellow */
+            --chart-accent: #a39800;       /* Very dark yellow */
+            --chart-text: #333;
+            --chart-grid: #eee;
+            --chart-background: #cacaca;
+        }
+
+        /* Dark theme - Pink-based palette */
+        html[data-theme="dark"] {
+            color-scheme: dark;
+            --color-text: #ebebeb;
+            --color-text-light: #ced4da;
+            --color-background: #242529;
+            --color-border: #495057;
+            --nav-background: rgba(15, 15, 15, 0.7);
+            
+            /* Dark theme chart colors - Pink-based palette from #ffbdc9 */
+            --chart-primary: #ffbdc9;      /* Your exact pink */
+            --chart-secondary: #ff9fb0;    /* Slightly darker pink */
+            --chart-tertiary: #ff8197;     /* Medium pink */
+            --chart-quaternary: #ff637e;   /* Darker pink */
+            --chart-quinary: #ff4565;      /* Deep pink */
+            --chart-accent: #e6274c;       /* Very dark pink */
+            --chart-text: #ebebeb;
+            --chart-grid: #495057;
+            --chart-background: #242529;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--color-background);
+            color: var(--color-text);
+            padding: 2rem;
+            transition: background-color var(--theme-transition-duration), 
+                       color var(--theme-transition-duration);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .theme-toggle {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            background: var(--nav-background);
+            color: var(--color-text);
+            cursor: pointer;
+            transition: all var(--theme-transition-duration);
+        }
+
+        .theme-toggle:hover {
+            background: var(--color-border);
+        }
+
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-container {
+            background: var(--color-background);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        .chart-title {
+            font-family: var(--font-headlines);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--color-text);
+        }
+
+        .chart-canvas {
+            width: 100% !important;
+            height: 300px !important;
+            max-width: 100%;
+            max-height: 300px;
+        }
+
+        .data-preview {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: var(--color-border);
+            border-radius: 8px;
+        }
+
+        .data-preview h3 {
+            font-family: var(--font-headlines);
+            margin-bottom: 1rem;
+            color: var(--color-text);
+        }
+
+        .data-preview pre {
+            background: var(--color-background);
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            color: var(--color-text);
+        }
+
+        /* Interactive Chart Tester Styles */
+        .interactive-section {
+            margin: 3rem 0;
+        }
+
+        .interactive-section h2 {
+            font-family: var(--font-headlines);
+            margin-bottom: 2rem;
+            color: var(--color-text);
+        }
+
+        .tester-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .config-panel {
+            background: var(--color-border);
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+
+        .config-panel h3 {
+            font-family: var(--font-headlines);
+            margin-bottom: 1rem;
+            color: var(--color-text);
+        }
+
+        .config-controls {
+            margin-bottom: 1rem;
+        }
+
+        .config-controls label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--color-text);
+        }
+
+        .config-select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            background: var(--color-background);
+            color: var(--color-text);
+            font-family: var(--font-body);
+        }
+
+        .config-textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 1rem;
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            background: var(--color-background);
+            color: var(--color-text);
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            resize: vertical;
+            margin-bottom: 1rem;
+        }
+
+        .config-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .generate-btn,
+        .example-btn {
+            padding: 0.75rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: var(--font-body);
+            transition: all var(--theme-transition-duration);
+        }
+
+        .generate-btn {
+            background: var(--chart-primary);
+            color: var(--color-text);
+            flex: 1;
+        }
+
+        .example-btn {
+            background: var(--nav-background);
+            color: var(--color-text);
+        }
+
+        .generate-btn:hover,
+        .example-btn:hover {
+            opacity: 0.8;
+            transform: translateY(-1px);
+        }
+
+        .test-chart-container {
+            background: var(--color-background);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .test-chart-title {
+            font-family: var(--font-headlines);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--color-text);
+        }
+
+        .test-chart-canvas {
+            width: 100% !important;
+            height: 300px !important;
+            max-width: 100%;
+            max-height: 300px;
+        }
+
+        .chart-error {
+            background: #fee;
+            border: 1px solid #fcc;
+            border-radius: 4px;
+            padding: 1rem;
+            color: #c00;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+
+        .examples-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .example-block {
+            background: var(--color-background);
+            padding: 1rem;
+            border-radius: 4px;
+            border: 1px solid var(--color-border);
+        }
+
+        .example-block h4 {
+            font-family: var(--font-headlines);
+            margin-bottom: 0.5rem;
+            color: var(--color-text);
+        }
+
+        @media (max-width: 640px) {
+            .chart-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .chart-container {
+                padding: 1rem;
+            }
+
+            .tester-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .examples-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Chart.js Prototype for PaperCMS</h1>
+            <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
+        </div>
+
+        <div class="chart-grid">
+            <!-- Bar Chart -->
+            <div class="chart-container">
+                <div class="chart-title">Bar Chart - Project Timeline</div>
+                <canvas id="barChart" class="chart-canvas"></canvas>
+            </div>
+
+            <!-- Line Chart -->
+            <div class="chart-container">
+                <div class="chart-title">Line Chart - Performance Over Time</div>
+                <canvas id="lineChart" class="chart-canvas"></canvas>
+            </div>
+
+            <!-- Pie Chart -->
+            <div class="chart-container">
+                <div class="chart-title">Pie Chart - Technology Distribution</div>
+                <canvas id="pieChart" class="chart-canvas"></canvas>
+            </div>
+
+            <!-- Doughnut Chart -->
+            <div class="chart-container">
+                <div class="chart-title">Doughnut Chart - Budget Allocation</div>
+                <canvas id="doughnutChart" class="chart-canvas"></canvas>
+            </div>
+        </div>
+
+        <div class="interactive-section">
+            <h2>Interactive Chart Tester</h2>
+            <div class="tester-layout">
+                <div class="config-panel">
+                    <h3>Chart Configuration</h3>
+                    <div class="config-controls">
+                        <label for="chartType">Chart Type:</label>
+                        <select id="chartType" class="config-select">
+                            <option value="bar">Bar Chart</option>
+                            <option value="line">Line Chart</option>
+                            <option value="pie">Pie Chart</option>
+                            <option value="doughnut">Doughnut Chart</option>
+                        </select>
+                    </div>
+                    <textarea id="chartConfig" class="config-textarea" placeholder="Enter your chart configuration JSON here...">
+{
+  "title": "Test Chart",
+  "data": {
+    "labels": ["Jan", "Feb", "Mar", "Apr"],
+    "datasets": [{
+      "label": "Sales",
+      "data": [65, 59, 80, 81]
+    }]
+  }
+}</textarea>
+                    <div class="config-actions">
+                        <button id="generateChart" class="generate-btn">Generate Chart</button>
+                        <button id="loadExample" class="example-btn">Load Example</button>
+                    </div>
+                </div>
+                
+                <div class="test-chart-container">
+                    <div class="test-chart-title">Generated Chart</div>
+                    <canvas id="testChart" class="test-chart-canvas"></canvas>
+                    <div class="chart-error" id="chartError" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="data-preview">
+            <h3>Example Markdown Chart Blocks</h3>
+            <div class="examples-grid">
+                <div class="example-block">
+                    <h4>Bar Chart</h4>
+                    <pre><code>```chart-bar
+{
+  "title": "Project Timeline",
+  "data": {
+    "labels": ["Research", "Design", "Development", "Testing"],
+    "datasets": [{
+      "label": "Hours",
+      "data": [40, 60, 120, 30]
+    }]
+  }
+}
+```</code></pre>
+                </div>
+                
+                <div class="example-block">
+                    <h4>Multi-Dataset Line Chart</h4>
+                    <pre><code>```chart-line
+{
+  "title": "Performance by Country",
+  "data": {
+    "labels": ["Q1", "Q2", "Q3", "Q4"],
+    "datasets": [
+      {
+        "label": "France",
+        "data": [65, 78, 82, 92]
+      },
+      {
+        "label": "Germany", 
+        "data": [55, 68, 75, 85]
+      },
+      {
+        "label": "Spain",
+        "data": [45, 58, 65, 78]
+      }
+    ]
+  }
+}
+```</code></pre>
+                </div>
+                
+                <div class="example-block">
+                    <h4>Multi-Year Bar Chart</h4>
+                    <pre><code>```chart-bar
+{
+  "title": "Revenue Comparison",
+  "data": {
+    "labels": ["Q1", "Q2", "Q3", "Q4"],
+    "datasets": [
+      {
+        "label": "2023",
+        "data": [120, 150, 180, 200]
+      },
+      {
+        "label": "2024",
+        "data": [140, 170, 195, 220]
+      }
+    ]
+  }
+}
+```</code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    <script>
+        // Chart utility class for consistent styling
+        class ChartStyleManager {
+            constructor() {
+                this.updateTheme();
+            }
+
+            updateTheme() {
+                const root = document.documentElement;
+                const style = getComputedStyle(root);
+                
+                this.colors = {
+                    primary: style.getPropertyValue('--chart-primary').trim(),
+                    secondary: style.getPropertyValue('--chart-secondary').trim(),
+                    tertiary: style.getPropertyValue('--chart-tertiary').trim(),
+                    quaternary: style.getPropertyValue('--chart-quaternary').trim(),
+                    quinary: style.getPropertyValue('--chart-quinary').trim(),
+                    accent: style.getPropertyValue('--chart-accent').trim(),
+                    text: style.getPropertyValue('--chart-text').trim(),
+                    grid: style.getPropertyValue('--chart-grid').trim(),
+                    background: style.getPropertyValue('--chart-background').trim()
+                };
+
+                this.defaultOptions = {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: {
+                        duration: 750
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: this.colors.text,
+                                font: {
+                                    family: 'Roboto, system-ui, -apple-system, sans-serif',
+                                    size: 12
+                                }
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: this.colors.background,
+                            titleColor: this.colors.text,
+                            bodyColor: this.colors.text,
+                            borderColor: this.colors.grid,
+                            borderWidth: 1
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: this.colors.text,
+                                font: {
+                                    size: 11
+                                }
+                            },
+                            grid: {
+                                color: this.colors.grid,
+                                lineWidth: 0.5
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                color: this.colors.text,
+                                font: {
+                                    size: 11
+                                }
+                            },
+                            grid: {
+                                color: this.colors.grid,
+                                lineWidth: 0.5
+                            }
+                        }
+                    }
+                };
+            }
+
+            getColorPalette(count = 6) {
+                return [
+                    this.colors.primary,
+                    this.colors.secondary,
+                    this.colors.tertiary,
+                    this.colors.quaternary,
+                    this.colors.quinary,
+                    this.colors.accent
+                ].slice(0, count);
+            }
+
+            createDataset(label, data, type = 'bar') {
+                const colors = this.getColorPalette(data.length);
+                
+                const dataset = {
+                    label: label,
+                    data: data,
+                    borderWidth: 2,
+                    borderRadius: 4
+                };
+
+                if (type === 'bar') {
+                    dataset.backgroundColor = colors.map(color => color + '80'); // Add transparency
+                    dataset.borderColor = colors;
+                } else if (type === 'line') {
+                    dataset.backgroundColor = this.colors.primary + '20';
+                    dataset.borderColor = this.colors.primary;
+                    dataset.tension = 0.4;
+                    dataset.fill = true;
+                } else if (type === 'pie' || type === 'doughnut') {
+                    dataset.backgroundColor = colors.map(color => color + '80');
+                    dataset.borderColor = colors;
+                }
+
+                return dataset;
+            }
+
+            mergeOptions(customOptions = {}) {
+                return Chart.helpers.merge({}, this.defaultOptions, customOptions);
+            }
+        }
+
+        // Initialize chart style manager
+        const chartStyles = new ChartStyleManager();
+        let charts = {};
+        let testChart = null;
+
+        // Create charts
+        function createCharts() {
+            // Bar Chart
+            const barCanvas = document.getElementById('barChart');
+            barCanvas.width = barCanvas.offsetWidth;
+            barCanvas.height = 300;
+            const barCtx = barCanvas.getContext('2d');
+            charts.bar = new Chart(barCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Research', 'Design', 'Development', 'Testing'],
+                    datasets: [
+                        chartStyles.createDataset('Hours', [40, 60, 120, 30], 'bar')
+                    ]
+                },
+                options: chartStyles.mergeOptions({
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Project Timeline',
+                            color: chartStyles.colors.text
+                        }
+                    }
+                })
+            });
+
+            // Line Chart
+            const lineCanvas = document.getElementById('lineChart');
+            lineCanvas.width = lineCanvas.offsetWidth;
+            lineCanvas.height = 300;
+            const lineCtx = lineCanvas.getContext('2d');
+            charts.line = new Chart(lineCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5'],
+                    datasets: [
+                        chartStyles.createDataset('Performance', [65, 78, 82, 85, 92], 'line')
+                    ]
+                },
+                options: chartStyles.mergeOptions({
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Performance Over Time',
+                            color: chartStyles.colors.text
+                        }
+                    }
+                })
+            });
+
+            // Pie Chart
+            const pieCanvas = document.getElementById('pieChart');
+            pieCanvas.width = pieCanvas.offsetWidth;
+            pieCanvas.height = 300;
+            const pieCtx = pieCanvas.getContext('2d');
+            charts.pie = new Chart(pieCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['JavaScript', 'CSS', 'HTML', 'PHP', 'Other'],
+                    datasets: [
+                        chartStyles.createDataset('Languages', [45, 25, 15, 10, 5], 'pie')
+                    ]
+                },
+                options: chartStyles.mergeOptions({
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Technology Distribution',
+                            color: chartStyles.colors.text
+                        }
+                    },
+                    scales: {} // Remove scales for pie chart
+                })
+            });
+
+            // Doughnut Chart
+            const doughnutCanvas = document.getElementById('doughnutChart');
+            doughnutCanvas.width = doughnutCanvas.offsetWidth;
+            doughnutCanvas.height = 300;
+            const doughnutCtx = doughnutCanvas.getContext('2d');
+            charts.doughnut = new Chart(doughnutCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Development', 'Design', 'Testing', 'Marketing'],
+                    datasets: [
+                        chartStyles.createDataset('Budget', [40, 30, 20, 10], 'doughnut')
+                    ]
+                },
+                options: chartStyles.mergeOptions({
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Budget Allocation',
+                            color: chartStyles.colors.text
+                        }
+                    },
+                    scales: {} // Remove scales for doughnut chart
+                })
+            });
+        }
+
+        // Theme management
+        let isDarkMode = false;
+
+        function toggleTheme() {
+            isDarkMode = !isDarkMode;
+            document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
+            
+            // Update chart styles and recreate charts
+            chartStyles.updateTheme();
+            destroyCharts();
+            createCharts();
+        }
+
+        function destroyCharts() {
+            Object.values(charts).forEach(chart => {
+                if (chart) {
+                    chart.destroy();
+                }
+            });
+            charts = {};
+        }
+
+        // Interactive chart tester functionality
+        function generateTestChart() {
+            const chartType = document.getElementById('chartType').value;
+            const configText = document.getElementById('chartConfig').value;
+            const errorDiv = document.getElementById('chartError');
+            const testCanvas = document.getElementById('testChart');
+            
+            try {
+                // Clear previous error
+                errorDiv.style.display = 'none';
+                errorDiv.textContent = '';
+                
+                // Parse JSON configuration
+                const config = JSON.parse(configText);
+                
+                // Destroy existing test chart
+                if (testChart) {
+                    testChart.destroy();
+                    testChart = null;
+                }
+                
+                // Prepare canvas
+                testCanvas.width = testCanvas.offsetWidth;
+                testCanvas.height = 300;
+                const ctx = testCanvas.getContext('2d');
+                
+                // Create dataset with proper styling
+                const styledData = {
+                    labels: config.data.labels,
+                    datasets: config.data.datasets.map((dataset, index) => {
+                        // For multiple datasets, each gets a single color from the palette
+                        // For single dataset with multiple data points, use multiple colors
+                        let styledDataset;
+                        
+                        if (config.data.datasets.length > 1) {
+                            // Multiple datasets: each dataset gets one color
+                            const colors = chartStyles.getColorPalette(config.data.datasets.length);
+                            const datasetColor = colors[index % colors.length];
+                            
+                            styledDataset = {
+                                label: dataset.label,
+                                data: dataset.data,
+                                borderWidth: 2,
+                                borderRadius: 4
+                            };
+                            
+                            if (chartType === 'bar') {
+                                styledDataset.backgroundColor = datasetColor + '80'; // Add transparency
+                                styledDataset.borderColor = datasetColor;
+                            } else if (chartType === 'line') {
+                                styledDataset.backgroundColor = datasetColor + '20';
+                                styledDataset.borderColor = datasetColor;
+                                styledDataset.tension = 0.4;
+                                styledDataset.fill = false; // Don't fill for multi-line
+                            }
+                        } else {
+                            // Single dataset: use the existing createDataset method
+                            styledDataset = chartStyles.createDataset(dataset.label, dataset.data, chartType);
+                        }
+                        
+                        // Override with any custom properties from config
+                        return { ...styledDataset, ...dataset };
+                    })
+                };
+                
+                // Chart options
+                let chartOptions = chartStyles.mergeOptions({
+                    plugins: {
+                        title: {
+                            display: !!config.title,
+                            text: config.title,
+                            color: chartStyles.colors.text,
+                            font: {
+                                family: 'Orienta, system-ui, -apple-system, sans-serif',
+                                size: 16
+                            }
+                        }
+                    }
+                });
+                
+                // Remove scales for pie/doughnut charts
+                if (chartType === 'pie' || chartType === 'doughnut') {
+                    chartOptions.scales = {};
+                }
+                
+                // Create the test chart
+                testChart = new Chart(ctx, {
+                    type: chartType,
+                    data: styledData,
+                    options: chartOptions
+                });
+                
+            } catch (error) {
+                // Show error message
+                errorDiv.textContent = `Error: ${error.message}`;
+                errorDiv.style.display = 'block';
+                console.error('Chart generation error:', error);
+            }
+        }
+        
+        function loadExample() {
+            const chartType = document.getElementById('chartType').value;
+            const examples = {
+                bar: {
+                    title: "Project Development Hours by Year",
+                    data: {
+                        labels: ["Planning", "Design", "Development", "Testing", "Deployment"],
+                        datasets: [
+                            {
+                                label: "2023",
+                                data: [32, 45, 120, 60, 24]
+                            },
+                            {
+                                label: "2024", 
+                                data: [28, 52, 95, 75, 30]
+                            }
+                        ]
+                    }
+                },
+                line: {
+                    title: "Website Performance Comparison",
+                    data: {
+                        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+                        datasets: [
+                            {
+                                label: "Desktop (ms)",
+                                data: [850, 720, 680, 650, 580, 520]
+                            },
+                            {
+                                label: "Mobile (ms)",
+                                data: [1200, 1050, 980, 920, 850, 780]
+                            },
+                            {
+                                label: "Tablet (ms)",
+                                data: [950, 850, 800, 750, 700, 650]
+                            }
+                        ]
+                    }
+                },
+                pie: {
+                    title: "Technology Stack Distribution",
+                    data: {
+                        labels: ["JavaScript", "CSS", "HTML", "PHP", "Python"],
+                        datasets: [{
+                            label: "Lines of Code",
+                            data: [2500, 1200, 800, 600, 400]
+                        }]
+                    }
+                },
+                doughnut: {
+                    title: "Budget Allocation",
+                    data: {
+                        labels: ["Development", "Design", "Marketing", "Infrastructure"],
+                        datasets: [{
+                            label: "Budget %",
+                            data: [45, 25, 20, 10]
+                        }]
+                    }
+                }
+            };
+            
+            const example = examples[chartType];
+            document.getElementById('chartConfig').value = JSON.stringify(example, null, 2);
+        }
+        
+        // Event listeners for interactive section
+        function setupInteractive() {
+            document.getElementById('generateChart').addEventListener('click', generateTestChart);
+            document.getElementById('loadExample').addEventListener('click', loadExample);
+            
+            // Generate initial chart
+            generateTestChart();
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            createCharts();
+            setupInteractive();
+        });
+    </script>
+</body>
+</html>
