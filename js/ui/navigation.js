@@ -20,7 +20,6 @@ export class Navigation {
                 
                 // Prevent navigation to project-details if no project is open
                 if (section === 'project-details' && !this.app.state.isProjectOpen) {
-                    console.warn('Cannot navigate to project details - no project is open');
                     return;
                 }
                 

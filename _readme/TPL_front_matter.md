@@ -64,7 +64,7 @@ excerpt: A shorter version of the description for listings (optional, falls back
 author: 
     name: John Doe
     email: john@example.com   # Optional
-    avatar: /media/authors/john.jpg   # Optional
+    avatar: /content/media/avatars/john.jpg   # Optional
 
 # Categorization
 category: woodworking    # Primary category

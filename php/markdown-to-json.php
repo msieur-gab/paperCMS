@@ -17,7 +17,7 @@ class MarkdownConverter
 
     public function __construct($baseDir = null)
     {
-        $this->baseDir = $baseDir ?: dirname(__FILE__);
+        $this->baseDir = $baseDir ?: dirname(dirname(__FILE__));
         $this->contentDir = $this->baseDir . '/content';
         $this->outputFile = $this->baseDir . '/public/api/publications.json';
         $this->baseUrl = Config::getBaseUrlWithSlash();
@@ -95,9 +95,13 @@ class MarkdownConverter
             $thumbnail = './content/' . $this->cleanPath($metadata['thumbnail']);
         }
 
-        // Clean author avatar
-        if (isset($metadata['author']['avatar'])) {
-            $metadata['author']['avatar'] = './' . $this->cleanPath($metadata['author']['avatar']);
+        // Clean contributor avatars
+        if (isset($metadata['contributors']) && is_array($metadata['contributors'])) {
+            foreach ($metadata['contributors'] as &$contributor) {
+                if (isset($contributor['avatar'])) {
+                    $contributor['avatar'] = './' . $this->cleanPath($contributor['avatar']);
+                }
+            }
         }
 
         // Clean related paths
@@ -121,7 +125,7 @@ class MarkdownConverter
             'category' => $metadata['category'],
             'subcategories' => $metadata['subcategories'] ?? [],
             'tags' => $metadata['tags'],
-            'author' => $metadata['author'],
+            'contributors' => $metadata['contributors'] ?? [],
             'related' => $related,
             'documents' => $metadata['documents'] ?? [],
             'links' => $metadata['links'] ?? [],
@@ -216,6 +220,7 @@ class MarkdownConverter
         $currentArray = [];
         $inArray = false;
         $arrayIndent = 0;
+        $currentArrayItem = null;
 
         foreach ($lines as $line) {
             $line = rtrim($line);
@@ -235,17 +240,36 @@ class MarkdownConverter
                 }
 
                 if (strpos($value, ':') !== false) {
+                    // Array item with key-value pair
                     list($key, $val) = explode(':', $value, 2);
-                    $currentArray[] = array(trim($key) => trim($val));
+                    $currentArrayItem = array(trim($key) => trim($val));
+                    $currentArray[] = $currentArrayItem;
                 } else {
+                    // Simple array item
+                    $currentArrayItem = array();
                     $currentArray[] = trim($value);
                 }
 
                 $result[$currentKey] = $currentArray;
                 continue;
             } else {
-                if ($inArray && $indent <= $arrayIndent) {
+                // Check if we're continuing a nested array item
+                if ($inArray && $indent > $arrayIndent && $currentArrayItem !== null && is_array($currentArrayItem)) {
+                    if (preg_match('/^([^:]+):(.*)$/', $line, $matches)) {
+                        $key = trim($matches[1]);
+                        $value = trim($matches[2]);
+                        
+                        // Add to the last array item
+                        $lastIndex = count($currentArray) - 1;
+                        if ($lastIndex >= 0 && is_array($currentArray[$lastIndex])) {
+                            $currentArray[$lastIndex][$key] = $value;
+                            $result[$currentKey] = $currentArray;
+                        }
+                    }
+                    continue;
+                } elseif ($inArray && $indent <= $arrayIndent) {
                     $inArray = false;
+                    $currentArrayItem = null;
                 }
             }
 
@@ -261,6 +285,7 @@ class MarkdownConverter
                         $result[$key] = array();
                     }
                     $inArray = false;
+                    $currentArrayItem = null;
                 } else {
                     if (!empty($value)) {
                         if (!isset($result[$currentKey]) || !is_array($result[$currentKey])) {
@@ -277,7 +302,7 @@ class MarkdownConverter
 
     private function validateMetadata($metadata, $currentFile)
     {
-        $required = ['reference', 'title', 'description', 'status', 'date', 'category', 'author', 'tags'];
+        $required = ['reference', 'title', 'description', 'status', 'date', 'category', 'contributors', 'tags'];
         foreach ($required as $field) {
             if (!isset($metadata[$field])) {
                 throw new Exception(sprintf(

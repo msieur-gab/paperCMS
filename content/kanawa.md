@@ -7,9 +7,16 @@ date:
     updated: 2024-12-22
 thumbnail: /content/media/tsugi3.jpg
 status: published
-author:
-    name: Gabriel Baude
-    avatar: /content/media/authors/gabriel_baude.jpg
+contributors:
+    - role: author
+      name: Gabriel Baude
+      avatar: /content/media/avatars/gabriel_baude.jpg
+    - role: reviewer
+      name: Dr. Evelyn Reed
+      avatar: /content/media/avatars/sven_martinov.jpg
+    - role: editor
+      name: Alex Chen
+      avatar: /content/media/avatars/olivier_gonthier.jpg
 category: exploration
 subcategories:
     - design
@@ -83,6 +90,29 @@ Saws are also essential tools in Kanawa-tsugi. Japanese saws, known for their th
 In addition to tools, specific types of wood are commonly used in Kanawa-tsugi joinery. Japanese craftsmen often choose woods such as hinoki (Japanese cypress) and kiso hinoki (a specific type of hinoki) for their strength, stability, and resistance to decay. These woods have been used for centuries in traditional Japanese architecture and are highly regarded for their durability.
 
 Furthermore, the wood used in Kanawa-tsugi is carefully selected and seasoned to ensure optimal performance. The moisture content of the wood is crucial, as excessive moisture can lead to warping and shrinking, compromising the integrity of the joint. Therefore, craftsmen take great care in selecting and preparing the wood before embarking on the Kanawa-tsugi process.
+
+```chart-bar
+{
+  "title": "Performance by Country",
+  "data": {
+    "labels": ["Q1", "Q2", "Q3", "Q4"],
+    "datasets": [
+      {
+        "label": "France",
+        "data": [65, 78, 82, 92]
+      },
+      {
+        "label": "Italy", 
+        "data": [55, 68, 75, 85]
+      },
+      {
+        "label": "Spain",
+        "data": [45, 58, 65, 78]
+      }
+    ]
+  }
+}
+```
 
 
 ## The Aesthetics of Kanawa-tsugi

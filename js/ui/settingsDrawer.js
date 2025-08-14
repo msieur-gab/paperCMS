@@ -16,7 +16,6 @@ export class SettingsDrawer {
         };
         
         if (!this.drawer || !this.toggleButton) {
-            console.warn('Settings drawer elements not found in DOM');
             return;
         }
         

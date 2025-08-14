@@ -53,9 +53,12 @@ export class ContentService {
         }
         
         const [_, frontmatter, body] = match;
+        const metadata = this.parseYAML(frontmatter);
+        const html = this.markdownToHTML(body);
+        
         return {
-            metadata: this.parseYAML(frontmatter), 
-            html: this.markdownToHTML(body)
+            metadata: metadata, 
+            html: html
         };
     }
 
@@ -105,8 +108,10 @@ export class ContentService {
     
     // Basic markdown to HTML focusing on media elements preservation
     markdownToHTML(markdown) {
-        console.log('Converting markdown to HTML, input length:', markdown.length);
         let html = markdown;
+        
+        // PRESERVE: Chart blocks before other processing
+        html = this.parseChartBlocks(html);
         
         // PRESERVE: Media blocks with attributes (critical for your magazine layout)
         html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)\s*\{([^}]+)\}/g, (match, alt, src, attrs) => {
@@ -125,19 +130,11 @@ export class ContentService {
         });
         
         // PRESERVE: Standard images as media blocks (for magazine layout)
-        const imageMatches = html.match(/!\[([^\]]*)\]\(([^)]+)\)/g);
-        const blockquoteMatches = html.match(/(^> .+(?:\n> .+)*)/gm);
-        console.log('Found image matches:', imageMatches);
-        console.log('Found blockquote matches:', blockquoteMatches);
-        
         html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (match, alt, src) => {
-            console.log('Converting image:', match, 'alt:', alt, 'src:', src);
-            
             // Fix path: media/ should be content/media/
             let resolvedSrc = src;
             if (src.startsWith('media/')) {
                 resolvedSrc = 'content/' + src;
-                console.log('Resolved image path from', src, 'to', resolvedSrc);
             }
             
             // All images should be media blocks for the magazine layout to work
@@ -160,16 +157,16 @@ export class ContentService {
         
         // PRESERVE: Highlight and strikethrough effects (critical for text styling)
         html = html.replace(/==([^=]+)==/g, '<mark>$1</mark>');
-        html = html.replace(/~~([^~]+)~~/g, '<del>$1</del>');
+        html = html.replace(/~~([^~]+)~~/g, (match, content) => {
+            return `<del>${this.redactText(content)}</del>`;
+        });
         
         // PRESERVE: Blockquotes as media elements (for magazine layout sidebar)
         // Handle multi-line blockquotes properly
         html = html.replace(/(^> .+(?:\n> .+)*)/gm, (match) => {
-            console.log('Found blockquote:', match);
             // Remove the '> ' from each line and convert to paragraphs
             const lines = match.split('\n').map(line => line.replace(/^> /, '')).filter(line => line.trim());
             const content = lines.join('<br>');
-            console.log('Converting blockquote to:', content);
             
             // Blockquotes should behave like media and be displayed in sidebar
             return `<blockquote class="media-block" data-media>
@@ -195,23 +192,76 @@ export class ContentService {
             return `<p>${paragraph}</p>`;
         }).join('\n');
         
+        // Remove standalone media blocks that appear before the first header to prevent layout issues
+        html = this.filterPreHeaderMedia(html);
+        
         // Create sections based on H1 headlines (like in About section)
         html = this.createSections(html);
-        
-        console.log('Final HTML output length:', html.length);
-        console.log('Final HTML contains media blocks:', html.includes('media-block'));
-        console.log('Final HTML contains data-media:', html.includes('data-media'));
         
         return html;
     }
 
-    // Create sections based on H1 and standalone H2 headlines (matching About section structure)
+    // Parse chart blocks (```chart or ```chart-type)
+    parseChartBlocks(markdown) {
+        // Match chart blocks: ```chart, ```chart-bar, ```chart-line, etc.
+        return markdown.replace(/```chart(?:-(\w+))?\n([\s\S]*?)```/g, (match, chartType, content) => {
+            try {
+                // Parse JSON configuration
+                const config = JSON.parse(content.trim());
+                
+                // Determine chart type from block or config
+                const type = chartType || config.type || 'bar';
+                
+                // Generate unique ID for this chart
+                const chartId = `chart-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+                
+                // Create chart as single media block (like images and blockquotes)
+                return `<figure class="chart-block media-block" data-media data-chart-type="${type}" data-chart-config='${JSON.stringify(config)}' data-chart-id="${chartId}">
+                    <canvas id="${chartId}" class="chart-canvas"></canvas>
+                    ${config.title ? `<figcaption class="chart-title">${config.title}</figcaption>` : ''}
+                </figure>`;
+            } catch (error) {
+                console.error('Failed to parse chart configuration:', error);
+                // Return error block that won't break layout
+                return `<div class="chart-error">
+                    <p>Chart configuration error: ${error.message}</p>
+                    <pre><code>${content}</code></pre>
+                </div>`;
+            }
+        });
+    }
+
+    // Remove standalone media blocks before first header to prevent layout issues on desktop
+    filterPreHeaderMedia(html) {
+        // Find the first H1 or H2 tag
+        const firstHeaderMatch = html.match(/<h[12]>/);
+        if (!firstHeaderMatch) {
+            // No headers found, return as is
+            return html;
+        }
+        
+        const firstHeaderIndex = firstHeaderMatch.index;
+        const beforeHeader = html.substring(0, firstHeaderIndex);
+        const fromHeader = html.substring(firstHeaderIndex);
+        
+        // Remove standalone media blocks from the pre-header content
+        const filteredBeforeHeader = beforeHeader.replace(
+            /<figure[^>]*class="[^"]*media-block[^"]*"[^>]*>.*?<\/figure>/gs, 
+            ''
+        ).replace(
+            /<blockquote[^>]*class="[^"]*media-block[^"]*"[^>]*>.*?<\/blockquote>/gs, 
+            ''
+        );
+        
+        return filteredBeforeHeader + fromHeader;
+    }
+
+    // Create sections based on H1 and H2 headlines - each gets its own section
     createSections(html) {
         // Split content by H1 and H2 tags to create sections
         const parts = html.split(/(<h[12]>.*?<\/h[12]>)/);
         let result = '';
         let currentSection = '';
-        let hasH1InSection = false;
         
         for (let i = 0; i < parts.length; i++) {
             const part = parts[i].trim();
@@ -221,28 +271,14 @@ export class ContentService {
             const isH1 = part.match(/^<h1>.*<\/h1>$/);
             const isH2 = part.match(/^<h2>.*<\/h2>$/);
             
-            if (isH1) {
-                // H1 always starts a new section
+            if (isH1 || isH2) {
+                // Both H1 and H2 start new sections
                 if (currentSection) {
                     result += `<section>\n${currentSection}\n</section>\n`;
                     currentSection = '';
                 }
+                // Start new section with this heading
                 currentSection = part;
-                hasH1InSection = true;
-            } else if (isH2) {
-                // H2 starts a new section only if there's no H1 in current section
-                if (!hasH1InSection && currentSection) {
-                    result += `<section>\n${currentSection}\n</section>\n`;
-                    currentSection = part;
-                    hasH1InSection = false;
-                } else if (!hasH1InSection) {
-                    // No current section, start new one with H2
-                    currentSection = part;
-                    hasH1InSection = false;
-                } else {
-                    // H2 within H1 section, just add to current section
-                    currentSection += (currentSection ? '\n' : '') + part;
-                }
             } else {
                 // Regular content, add to current section
                 currentSection += (currentSection ? '\n' : '') + part;
@@ -256,6 +292,12 @@ export class ContentService {
         
         // If no H1 or H2 tags were found, return original content
         return result || html;
+    }
+
+
+    // Utility function to redact text by replacing letters with 'X' while preserving spacing
+    redactText(text) {
+        return text.replace(/\S/g, 'X');
     }
 
     // Clear cache

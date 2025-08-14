@@ -6,9 +6,10 @@ date:
     published: 2024-12-22
     updated: 2024-12-22
 status: archived
-author:
-    name: Gabriel Baude
-    avatar: /content/media/authors/gabriel_baude.jpg
+contributors:
+    - role: author
+      name: Gabriel Baude
+      avatar: /content/media/avatars/gabriel_baude.jpg
 category: application
 subcategories:
     - design

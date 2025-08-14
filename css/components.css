@@ -700,3 +700,168 @@ html[data-theme="dark"] .theme-toggle::after {
         transform: none;
     }
 }
+
+/* Author bylines and metadata display */
+
+/* Override project-header to use vertical layout when bylines are present */
+.project-header:has(.author-byline) {
+    flex-direction: column;
+    align-items: flex-start;
+    height: auto;
+    min-height: 80px;
+}
+
+/* Author byline styling */
+.header-enhancement.author-byline,
+.header-enhancement.date-byline {
+    margin: 0.5rem 0 0 0;
+    padding: 0;
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Semantic author styling within paragraph */
+.article-author {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-style: normal; /* Override address default italic */
+    vertical-align: middle;
+}
+
+.author-avatar-header {
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid var(--color-border);
+    transition: all 0.3s ease;
+    vertical-align: middle;
+}
+
+.author-name-header {
+    font-weight: 500;
+    color: var(--color-text-light);
+    transition: all 0.3s ease;
+}
+
+/* Time element styling */
+.publication-date-header {
+    font-weight: 500;
+    color: var(--color-text-light);
+    transition: all 0.3s ease;
+}
+
+/* Scroll-based shrinking animation */
+.author-byline.scroll-shrunk,
+.date-byline.scroll-shrunk {
+    transform: scale(0.9);
+    opacity: 0.7;
+    font-size: 0.8rem;
+}
+
+.author-byline.scroll-shrunk .author-avatar-header {
+    width: 20px;
+    height: 20px;
+}
+
+/* Mobile adjustments */
+@media (max-width: 767px) {
+    .article-author {
+        gap: 0.4rem;
+    }
+    
+    .author-avatar-header {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .author-byline.scroll-shrunk,
+    .date-byline.scroll-shrunk {
+        transform: scale(0.95);
+        font-size: 0.85rem;
+    }
+    
+    .author-byline.scroll-shrunk .author-avatar-header {
+        width: 18px;
+        height: 18px;
+    }
+}
+
+/* Manual acknowledgements section styling (for user-written sections) */
+section h2:contains("Acknowledgements") + *,
+.acknowledgements-section {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-border);
+}
+
+/* Chart blocks - unified styling like other media blocks */
+.chart-block {
+    margin: 2rem 0;
+    position: relative;
+}
+
+.chart-canvas {
+    width: 100% !important;
+    height: 300px !important;
+}
+
+.chart-title {
+    font-family: var(--font-headlines);
+    text-align: center;
+    margin-top: 0.5rem;
+    color: var(--color-text);
+}
+
+/* Charts in sidebar - better proportions for narrow sidebar */
+@media (min-width: 768px) {
+    .project-media .chart-container {
+        width: 100%;
+        min-width: 280px; /* Minimum width for readability */
+    }
+    
+    .project-media .chart-canvas {
+        height: 350px !important; /* Taller in sidebar for better proportions */
+        min-width: 280px;
+    }
+}
+
+/* Mobile responsive behavior */
+@media (max-width: 767px) {
+    .chart-canvas {
+        height: 250px !important; /* Slightly shorter on mobile */
+    }
+    
+    .chart-title {
+        font-size: 0.9rem;
+    }
+}
+
+/* Extra small screens */
+@media (max-width: 480px) {
+    .chart-canvas {
+        height: 220px !important;
+    }
+    
+    .chart-title {
+        font-size: 0.85rem;
+    }
+}
+
+/* Chart error styling */
+.chart-error {
+    background: var(--color-border);
+    padding: 1rem;
+    border-radius: 4px;
+    margin: 1rem 0;
+    color: var(--color-text);
+}
+
+.chart-error pre {
+    background: var(--color-background);
+    padding: 0.5rem;
+    border-radius: 4px;
+    margin-top: 0.5rem;
+    overflow-x: auto;
+    font-size: 0.8rem;
+}

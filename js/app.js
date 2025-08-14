@@ -2,8 +2,9 @@
 import { ContentService } from './services/contentService.js';
 import { SearchService } from './services/searchService.js';
 import { StorageService } from './services/storageService.js';
+import { ChartService } from './services/chartService.js';
 import { MediaManager } from './ui/mediaManager.js';
-import { IntersectionManager } from './ui/intersectionManager.js';
+import { IntelligentMediaSync } from './ui/intelligentMediaSync.js';
 import { ProjectGrid } from './ui/projectGrid.js';
 import { SettingsDrawer } from './ui/settingsDrawer.js';
 import { Navigation } from './ui/navigation.js';
@@ -11,12 +12,15 @@ import { MetaManager } from './core/metaManager.js';
 import { Router } from './core/router.js';
 // ResponsiveLayout functionality integrated directly
 import { dom } from './utils/dom.js';
+import { ResizeManager } from './utils/resizeManager.js';
 
 class App {
     constructor() {
         // Core services
         this.contentService = new ContentService();
         this.storageService = new StorageService();
+        this.resizeManager = new ResizeManager();
+        this.chartService = new ChartService(this.resizeManager);
         this.metaManager = new MetaManager();
         
         // Core elements
@@ -82,14 +86,10 @@ class App {
     }
 
     setupDesktopLayout() {
-        console.log('Setting up desktop layout, isDesktop:', this.isDesktop);
-        console.log('Media container:', this.mediaContainer);
-        
         if (this.isDesktop) {
             // PRESERVE: Your core innovation
-            this.mediaManager = new MediaManager(this.mediaContainer);
-            this.intersectionManager = new IntersectionManager(this.mediaManager);
-            console.log('Created MediaManager and IntersectionManager');
+            this.mediaManager = new MediaManager(this.mediaContainer, { chartService: this.chartService });
+            this.intelligentMediaSync = new IntelligentMediaSync(this.mediaManager);
         }
         
         // Responsive layout handling integrated directly in resize handler
@@ -191,7 +191,7 @@ class App {
 
     setupMediaHandlers() {
         // Media intersection handling (for desktop magazine layout)
-        // The IntersectionManager will call MediaManager directly (no EventBus)
+        // The IntelligentMediaSync will call MediaManager directly (no EventBus)
     }
 
     async handleInitialRoute() {
@@ -206,7 +206,10 @@ class App {
         // Clear content service cache to ensure fresh parsing
         this.contentService.clearCache();
         
-        // Clear media manager immediately to prevent persistence from previous project
+        // Clear media manager and disconnect scroll observer to prevent persistence from previous project
+        if (this.intelligentMediaSync) {
+            this.intelligentMediaSync.disconnect();
+        }
         if (this.mediaManager) {
             this.mediaManager.clear();
         }
@@ -225,11 +228,15 @@ class App {
             if (projectTitle) {
                 projectTitle.textContent = project.metadata.title || '';
             }
+            
+            // EXPERIMENTAL: Header enhancements - easily removable
+            this.updateProjectHeaderMetadata(project.metadata);
     
             if (this.projectDetailsContent) {
-                console.log('Setting project HTML:', project.html.substring(0, 500) + '...');
                 this.projectDetailsContent.innerHTML = project.html;
-                console.log('Project content after setting HTML:', this.projectDetailsContent.innerHTML.substring(0, 500) + '...');
+                
+                // Initialize charts after content is rendered
+                this.initializeCharts();
             }
             
             const cleanPath = this.router.cleanPath(path);
@@ -245,38 +252,13 @@ class App {
                 this.router.updateProjectURL(cleanPath);
             }
     
-            // Setup magazine layout for desktop
-            if (this.isDesktop) {
-                // Reinitialize MediaManager and IntersectionManager for new project
-                this.mediaManager = new MediaManager(this.mediaContainer);
-                this.intersectionManager = new IntersectionManager(this.mediaManager);
-                
-                // Small delay to ensure DOM is updated
+            // Setup media observation for desktop layout
+            if (this.isDesktop && this.intelligentMediaSync && this.mediaManager) {
+                // Small delay to ensure DOM is fully rendered
                 setTimeout(() => {
-                    // Try multiple selectors to find media elements (images and blockquotes)
-                    let mediaElements = document.querySelectorAll('[data-media]');
-                    console.log('Found [data-media] elements:', mediaElements.length);
-                    
-                    if (mediaElements.length === 0) {
-                        mediaElements = document.querySelectorAll('.media-block');
-                        console.log('Found .media-block elements:', mediaElements.length);
-                    }
-                    
-                    if (mediaElements.length === 0) {
-                        mediaElements = document.querySelectorAll('blockquote, figure');
-                        console.log('Found blockquote/figure elements:', mediaElements.length);
-                    }
-                    
-                    console.log('Media elements:', mediaElements);
+                    const mediaElements = this.projectDetailsContent.querySelectorAll('[data-media]');
                     if (mediaElements.length > 0) {
-                        console.log('Initializing with first media element:', mediaElements[0]);
-                        // Force immediate update of the first media element
-                        this.mediaManager.updateMedia({ element: mediaElements[0] });
-                        this.intersectionManager.observe(mediaElements);
-                    } else {
-                        console.warn('No media elements found in project content');
-                        // Let's also check what's actually in the DOM
-                        console.log('Current project content HTML:', this.projectDetailsContent.innerHTML);
+                        this.intelligentMediaSync.observe(Array.from(mediaElements));
                     }
                 }, 100);
             }
@@ -294,7 +276,6 @@ class App {
     navigateToSection(section, isPopState = false) {
         // Prevent navigation to project-details if no project is open
         if (section === 'project-details' && !this.state.isProjectOpen) {
-            console.warn('Attempted to navigate to project details with no project loaded');
             return;
         }
         
@@ -333,8 +314,8 @@ class App {
         this.isDesktop = !isMobile;
         
         if (isMobile) {
-            if (this.intersectionManager) {
-                this.intersectionManager.disconnect();
+            if (this.intelligentMediaSync) {
+                this.intelligentMediaSync.disconnect();
             }
             if (this.mediaManager) {
                 this.mediaManager.destroy();
@@ -342,16 +323,16 @@ class App {
         } else if (this.state.isProjectOpen) {
             // Reinitialize desktop layout
             if (!this.mediaManager) {
-                this.mediaManager = new MediaManager(this.mediaContainer);
+                this.mediaManager = new MediaManager(this.mediaContainer, { chartService: this.chartService });
             }
-            if (!this.intersectionManager) {
-                this.intersectionManager = new IntersectionManager(this.mediaManager);
+            if (!this.intelligentMediaSync) {
+                this.intelligentMediaSync = new IntelligentMediaSync(this.mediaManager);
             }
             
             const mediaElements = document.querySelectorAll('[data-media]');
             if (mediaElements.length > 0) {
                 this.mediaManager.updateMedia({ element: mediaElements[0] });
-                this.intersectionManager.observe(mediaElements);
+                this.intelligentMediaSync.observe(Array.from(mediaElements));
             }
         }
     }
@@ -359,6 +340,111 @@ class App {
     setupResponsiveHandling() {
         // Initial setup based on screen size
         this.handleLayoutChange(window.innerWidth < 768);
+    }
+    
+    // Header metadata display with scroll behavior
+    updateProjectHeaderMetadata(metadata) {
+        const authorByline = document.querySelector('.author-byline');
+        const dateByline = document.querySelector('.date-byline');
+        
+        if (!authorByline || !dateByline) {
+            return;
+        }
+        
+        // Find primary author from contributors array
+        const primaryAuthor = metadata.contributors?.find(c => c.role === 'author') || metadata.contributors?.[0];
+        const authorName = primaryAuthor?.name || 'Gabriel Baude';
+        let authorAvatar = primaryAuthor?.avatar || './content/media/avatars/gabriel_baude.jpg';
+        
+        // Fix avatar path - ensure it includes content/ folder
+        if (authorAvatar && !authorAvatar.startsWith('http') && !authorAvatar.startsWith('./content/')) {
+            if (authorAvatar.startsWith('./media/')) {
+                authorAvatar = authorAvatar.replace('./media/', './content/media/');
+            } else if (authorAvatar.startsWith('media/')) {
+                authorAvatar = './content/' + authorAvatar;
+            }
+        }
+        
+        const avatar = authorByline.querySelector('.author-avatar-header');
+        const name = authorByline.querySelector('.author-name-header');
+        const dateElement = dateByline.querySelector('.publication-date-header');
+        
+        // Set author info
+        if (avatar && authorAvatar) {
+            avatar.src = authorAvatar;
+            avatar.alt = authorName;
+        }
+        
+        if (name && authorName) {
+            name.textContent = authorName;
+        }
+        
+        // Publication date - check multiple possible locations
+        const publishedDate = metadata.date?.published || metadata.published || metadata['date.published'];
+        
+        if (publishedDate && dateElement) {
+            const date = new Date(publishedDate);
+            const formattedDate = date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            dateElement.textContent = formattedDate;
+            dateElement.setAttribute('datetime', publishedDate);
+        }
+        
+        // Show both bylines
+        authorByline.style.display = 'block';
+        dateByline.style.display = 'block';
+        
+        // Setup scroll-based shrinking
+        this.setupBylineScrollBehavior();
+    }
+    
+    // Scroll-based byline shrinking
+    setupBylineScrollBehavior() {
+        const contentScroll = document.querySelector('.content-scroll');
+        const authorByline = document.querySelector('.author-byline');
+        const dateByline = document.querySelector('.date-byline');
+        
+        if (!contentScroll || !authorByline || !dateByline) return;
+        
+        let ticking = false;
+        
+        const updateBylines = () => {
+            const scrollTop = contentScroll.scrollTop;
+            const threshold = 100; // Start shrinking after 100px scroll
+            
+            if (scrollTop > threshold) {
+                authorByline.classList.add('scroll-shrunk');
+                dateByline.classList.add('scroll-shrunk');
+            } else {
+                authorByline.classList.remove('scroll-shrunk');
+                dateByline.classList.remove('scroll-shrunk');
+            }
+            ticking = false;
+        };
+        
+        const onScroll = () => {
+            if (!ticking) {
+                requestAnimationFrame(updateBylines);
+                ticking = true;
+            }
+        };
+        
+        // Remove existing listener if any
+        contentScroll.removeEventListener('scroll', onScroll);
+        // Add new listener
+        contentScroll.addEventListener('scroll', onScroll, { passive: true });
+    }
+
+    async initializeCharts() {
+        try {
+            // Initialize all charts in the project content container
+            await this.chartService.initializeChartsInContainer(this.projectDetailsContent);
+        } catch (error) {
+            console.error('Failed to initialize charts:', error);
+        }
     }
 
     showErrorMessage(message) {
@@ -372,12 +458,18 @@ class App {
     }
 
     destroy() {
-        if (this.intersectionManager) {
-            this.intersectionManager.disconnect();
+        if (this.intelligentMediaSync) {
+            this.intelligentMediaSync.disconnect();
         }
         // Layout cleanup handled in resize handler
         if (this.mediaManager) {
             this.mediaManager.destroy();
+        }
+        if (this.chartService) {
+            this.chartService.destroy();
+        }
+        if (this.resizeManager) {
+            this.resizeManager.destroy();
         }
         if (this.router) {
             this.router.destroy();

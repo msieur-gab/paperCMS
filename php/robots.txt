@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://msieur-gab.github.io/paperCMS/sitemap.xml
+
+# Specific allowances for important content
+Allow: /static/
+Allow: /content/
+Allow: /public/api/
+
+# Crawl delay (optional - prevents overwhelming your server)
+Crawl-delay: 1

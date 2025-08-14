@@ -35,8 +35,9 @@ export class MetaManager {
         this.setMetaTag('twitter:image', this.resolveImageUrl(image));
         
         // Article specific meta
-        if (metadata.author && metadata.author.name) {
-            this.setMetaTag('article:author', metadata.author.name);
+        if (metadata.contributors && metadata.contributors.length > 0) {
+            const primaryAuthor = metadata.contributors.find(c => c.role === 'author') || metadata.contributors[0];
+            this.setMetaTag('article:author', primaryAuthor.name);
         }
         
         if (metadata.date && metadata.date.published) {
@@ -164,7 +165,7 @@ export class MetaManager {
             "description": metadata.description,
             "author": {
                 "@type": "Person",
-                "name": metadata.author?.name || "Gabriel Baude"
+                "name": (metadata.contributors?.find(c => c.role === 'author') || metadata.contributors?.[0])?.name || "Gabriel Baude"
             },
             "datePublished": metadata.date?.published,
             "image": this.resolveImageUrl(metadata.thumbnail),

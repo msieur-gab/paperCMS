@@ -7,9 +7,10 @@ date:
     updated: 2024-12-22
 thumbnail: /content/media/tsugi3.jpg
 status: published
-author:
-    name: Gabriel Baude
-    avatar: /content/media/authors/gabriel_baude.jpg
+contributors:
+    - role: author
+      name: Gabriel Baude
+      avatar: /content/media/avatars/gabriel_baude.jpg
 category: exploration
 subcategories:
     - design

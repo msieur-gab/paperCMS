@@ -47,18 +47,20 @@ EOT;
 echo $styles;
 
 try {
+    $baseDir = dirname(__DIR__);
+    
     // Process JSON files
-    $converter = new MarkdownConverter();
+    $converter = new MarkdownConverter($baseDir);
     $count = $converter->processFiles();
     $stats = $converter->getProcessingStats();
 
     // Generate static HTML pages for social media
-    $staticGenerator = new StaticPageGenerator();
+    $staticGenerator = new StaticPageGenerator($baseDir);
     $staticResults = $staticGenerator->generateAllPages();
     $staticStats = $staticGenerator->getGenerationStats();
 
     // Generate sitemap
-    $sitemapGenerator = new SitemapGenerator();
+    $sitemapGenerator = new SitemapGenerator(null, $baseDir);
     $sitemapResult = $sitemapGenerator->generateSitemap();
     if ($sitemapResult['success']) {
         $sitemapStats = ['generated' => 1, 'entries' => $sitemapResult['entries']];
@@ -162,7 +164,7 @@ try {
     echo "</div>"; // Close grid
 
     // Sitemap Preview
-    if ($sitemapStats['generated'] > 0 && file_exists('sitemap.xml')) {
+    if ($sitemapStats['generated'] > 0 && file_exists($baseDir . '/sitemap.xml')) {
         echo "<h2>Sitemap Preview</h2>";
         echo "<div style='background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 4px; padding: 1rem; margin: 1rem 0;'>";
         echo "<div style='display: grid; grid-template-columns: 1fr auto auto auto; gap: 0.5rem; font-size: 0.9rem;'>";
@@ -172,7 +174,7 @@ try {
         echo "<div style='font-weight: 600; padding: 0.5rem; background: #e9ecef; border-radius: 2px; text-align: center;'>Last Modified</div>";
         
         // Parse sitemap XML to show URLs
-        $sitemapContent = file_get_contents('sitemap.xml');
+        $sitemapContent = file_get_contents($baseDir . '/sitemap.xml');
         if (preg_match_all('/<url>\s*<loc>(.*?)<\/loc>\s*<lastmod>(.*?)<\/lastmod>\s*<changefreq>(.*?)<\/changefreq>\s*<priority>(.*?)<\/priority>\s*<\/url>/s', $sitemapContent, $matches, PREG_SET_ORDER)) {
             foreach ($matches as $match) {
                 $url = htmlspecialchars($match[1]);
@@ -208,7 +210,7 @@ try {
 
     // Generated Static Pages List
     if ($staticResults['generated'] > 0) {
-        $staticFiles = glob('static/*.html');
+        $staticFiles = glob($baseDir . '/static/*.html');
         if (!empty($staticFiles)) {
             echo "<h2>Generated Static Pages</h2>";
             echo "<div style='display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;'>";

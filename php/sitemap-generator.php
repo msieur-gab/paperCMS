@@ -10,13 +10,15 @@ class SitemapGenerator {
     
     private $baseUrl;
     private $stats;
+    private $baseDir;
     
-    public function __construct($baseUrl = null) {
+    public function __construct($baseUrl = null, $baseDir = null) {
         // Use config-based URL if no URL provided
         if ($baseUrl === null) {
             $baseUrl = Config::getBaseUrl();
         }
         $this->baseUrl = rtrim($baseUrl, '/');
+        $this->baseDir = $baseDir ?: dirname(dirname(__FILE__));
         $this->stats = [
             'generated' => 0,
             'errors' => [],
@@ -30,7 +32,7 @@ class SitemapGenerator {
     public function generateSitemap() {
         try {
             // Load publications data
-            $publicationsFile = 'public/api/publications.json';
+            $publicationsFile = $this->baseDir . '/public/api/publications.json';
             if (!file_exists($publicationsFile)) {
                 throw new Exception('Publications file not found');
             }
@@ -44,7 +46,7 @@ class SitemapGenerator {
             $xml = $this->generateSitemapXML($json['publications']);
             
             // Write sitemap to file
-            if (file_put_contents('sitemap.xml', $xml) === false) {
+            if (file_put_contents($this->baseDir . '/sitemap.xml', $xml) === false) {
                 throw new Exception('Failed to write sitemap file');
             }
             
@@ -120,7 +122,7 @@ class SitemapGenerator {
         $robotsContent .= "# Crawl delay (optional - prevents overwhelming your server)\n";
         $robotsContent .= "Crawl-delay: 1\n";
         
-        file_put_contents('robots.txt', $robotsContent);
+        file_put_contents($this->baseDir . '/robots.txt', $robotsContent);
     }
     
     /**

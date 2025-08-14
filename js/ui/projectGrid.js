@@ -28,7 +28,6 @@ export class ProjectGrid {
     setupSearchUI() {
         // PRESERVE: All current search UI elements
         if (!this.searchContainer) {
-            console.warn('Search container not found in DOM');
             return;
         }
 
@@ -69,7 +68,6 @@ export class ProjectGrid {
 
     setupSortUI() {
         if (!this.sortContainer) {
-            console.warn('Sort container not found in DOM');
             return;
         }
 

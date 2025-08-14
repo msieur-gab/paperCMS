@@ -7,9 +7,10 @@ date:
     updated: 2024-12-22
 thumbnail: /content/media/dao1.jpg
 status: published
-author:
-    name: Gabriel Baude
-    avatar: /content/media/authors/gabriel_baude.jpg
+contributors:
+    - role: author
+      name: Gabriel Baude
+      avatar: /content/media/avatars/gabriel_baude.jpg
 category: exploration
 subcategories:
     - design
@@ -30,11 +31,15 @@ project:
     client: Personal Project
 ---
 
+
+
 # Embracing Slow Design: Ancient Wisdom in Modern Practice
+
+![Contemplative Design Practice](media/dao1.jpg "cover")
 
 In contemporary design practice, we often equate progress with speed, innovation with disruption, and success with rapid iteration. Yet the most profound design solutions sometimes emerge not from acceleration, but from purposeful deceleration. This exploration delves into how the ancient Taoist concept of Wu Wei (effortless action) offers a compelling alternative to our culture of perpetual acceleration. By examining design through this philosophical lens, we uncover how deliberate slowness can lead to more thoughtful, sustainable, and meaningful solutions. The principles of slow design challenge us to reconsider our relationship with time, process, and innovation - suggesting that the path to breakthrough design thinking might not lie in moving faster, but in learning when to move slowly and deliberately.
 
-![Contemplative Design Practice](media/dao1.jpg)
+
 
 ## The Paradox of Modern Design
 

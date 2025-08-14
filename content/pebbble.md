@@ -7,9 +7,10 @@ date:
     updated: 2025-08-12
 thumbnail: /content/media/pebbles.jpg
 status: published
-author:
-    name: Gabriel Baude
-    avatar: /content/media/authors/gabriel_baude.jpg
+contributors:
+    - role: author
+      name: Gabriel Baude
+      avatar: /content/media/avatars/gabriel_baude.jpg
 category: exploration
 subcategories:
     - design
@@ -93,4 +94,4 @@ Refactoring the code into modular services (`finalizationService.js`, `audioServ
 
 Pebbble proves that design can address deeply emotional challenges, reinforcing my belief that our greatest strength is to connect across impossible distances [cite: Pebbble, 34, 151].
 
-![Pebbble prototype and joinery inspiration](media/pebbble_and_joinery.jpg)
+![Pebbble prototype and joinery inspiration](media/pebbles.jpg)

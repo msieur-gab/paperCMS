@@ -11,7 +11,7 @@ class StaticPageGenerator
     
     public function __construct($baseDir = null)
     {
-        $this->baseDir = $baseDir ?: dirname(__FILE__);
+        $this->baseDir = $baseDir ?: dirname(dirname(__FILE__));
         $this->contentDir = $this->baseDir . '/content';
         $this->staticDir = $this->baseDir . '/static';
         $this->baseUrl = Config::getBaseUrlWithSlash();

@@ -27,9 +27,10 @@ tags:
     - wood
 
 # Author
-author:
-    name: Gabriel Baude
-    avatar: /content/media/authors/gabriel_baude.jpg
+contributors:
+    - role: author
+      name: Gabriel Baude
+      avatar: /content/media/avatars/gabriel_baude.jpg
 
 # Related content (optional)
 related:

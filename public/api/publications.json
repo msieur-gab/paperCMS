@@ -22,10 +22,23 @@
                 "craftsmanship",
                 "wood"
             ],
-            "author": {
-                "name": "Gabriel Baude",
-                "avatar": "./media/authors/gabriel_baude.jpg"
-            },
+            "contributors": [
+                {
+                    "role": "author",
+                    "name": "Gabriel Baude",
+                    "avatar": "./media/avatars/gabriel_baude.jpg"
+                },
+                {
+                    "role": "reviewer",
+                    "name": "Dr. Evelyn Reed",
+                    "avatar": "./media/avatars/sven_martinov.jpg"
+                },
+                {
+                    "role": "editor",
+                    "name": "Alex Chen",
+                    "avatar": "./media/avatars/olivier_gonthier.jpg"
+                }
+            ],
             "related": [
                 "content/hako-kakushi.md",
                 "content/daimochi.md"
@@ -86,10 +99,13 @@
                 "craftsmanship",
                 "wood"
             ],
-            "author": {
-                "name": "Gabriel Baude",
-                "avatar": "./media/authors/gabriel_baude.jpg"
-            },
+            "contributors": [
+                {
+                    "role": "author",
+                    "name": "Gabriel Baude",
+                    "avatar": "./media/avatars/gabriel_baude.jpg"
+                }
+            ],
             "related": [
                 "content/kanawa.md",
                 "content/hako-kakushi.md"
@@ -148,10 +164,13 @@
                 "machine-learning",
                 "soft-skills"
             ],
-            "author": {
-                "name": "Gabriel Baude",
-                "avatar": "./media/authors/gabriel_baude.jpg"
-            },
+            "contributors": [
+                {
+                    "role": "author",
+                    "name": "Gabriel Baude",
+                    "avatar": "./media/avatars/gabriel_baude.jpg"
+                }
+            ],
             "related": [
                 "content/ai-ethics.md",
                 "content/team-development.md"
@@ -209,10 +228,13 @@
                 "design-thinking",
                 "sustainability"
             ],
-            "author": {
-                "name": "Gabriel Baude",
-                "avatar": "./media/authors/gabriel_baude.jpg"
-            },
+            "contributors": [
+                {
+                    "role": "author",
+                    "name": "Gabriel Baude",
+                    "avatar": "./media/avatars/gabriel_baude.jpg"
+                }
+            ],
             "related": [
                 "content/kanawa.md",
                 "content/daimochi.md"
@@ -256,10 +278,13 @@
                 "cost-optimization",
                 "compliance"
             ],
-            "author": {
-                "name": "Gabriel Baude",
-                "avatar": "./media/authors/gabriel_baude.jpg"
-            },
+            "contributors": [
+                {
+                    "role": "author",
+                    "name": "Gabriel Baude",
+                    "avatar": "./media/avatars/gabriel_baude.jpg"
+                }
+            ],
             "related": [
                 "content/machine-learning-basics.md",
                 "content/ai-compliance.md",
@@ -334,10 +359,13 @@
                 "mobile development",
                 "kanawa-tsugi"
             ],
-            "author": {
-                "name": "Gabriel Baude",
-                "avatar": "./media/authors/gabriel_baude.jpg"
-            },
+            "contributors": [
+                {
+                    "role": "author",
+                    "name": "Gabriel Baude",
+                    "avatar": "./media/avatars/gabriel_baude.jpg"
+                }
+            ],
             "related": [
                 "content/kanawa-tsugite.md"
             ],
@@ -394,10 +422,13 @@
                 "craftsmanship",
                 "wood"
             ],
-            "author": {
-                "name": "Gabriel Baude",
-                "avatar": "./media/authors/gabriel_baude.jpg"
-            },
+            "contributors": [
+                {
+                    "role": "author",
+                    "name": "Gabriel Baude",
+                    "avatar": "./media/avatars/gabriel_baude.jpg"
+                }
+            ],
             "related": [
                 "content/kanawa.md",
                 "content/daimochi.md",
