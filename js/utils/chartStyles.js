@@ -169,10 +169,11 @@ export class ChartStyleManager {
         const {
             colorStyle = 'standard',
             colorIndex = 0,
-            multiDataset = false
+            multiDataset = false,
+            totalDatasets = 1
         } = options;
 
-        const colors = this.getColorPalette(multiDataset ? 1 : data.length, colorStyle);
+        const colors = this.getColorPalette(multiDataset ? totalDatasets : data.length, colorStyle);
         
         const dataset = {
             label: label,
@@ -190,6 +191,12 @@ export class ChartStyleManager {
             case 'pie':
             case 'doughnut':
                 return this.stylePieDataset(dataset, colors);
+            case 'radar':
+                return this.styleRadarDataset(dataset, colors, multiDataset, colorIndex);
+            case 'polarArea':
+                return this.stylePolarAreaDataset(dataset, colors);
+            case 'bubble':
+                return this.styleBubbleDataset(dataset, colors, multiDataset, colorIndex);
             default:
                 return dataset;
         }
@@ -240,13 +247,147 @@ export class ChartStyleManager {
         return dataset;
     }
 
+    styleRadarDataset(dataset, colors, multiDataset, colorIndex) {
+        if (multiDataset) {
+            const color = colors[colorIndex % colors.length];
+            dataset.backgroundColor = color + this.chartDefaults.transparency.fill;
+            dataset.borderColor = color + this.chartDefaults.transparency.solid;
+            dataset.fill = true;
+        } else {
+            dataset.backgroundColor = colors[0] + this.chartDefaults.transparency.fill;
+            dataset.borderColor = colors[0] + this.chartDefaults.transparency.solid;
+            dataset.fill = true;
+        }
+        
+        dataset.borderWidth = this.chartDefaults.borderWidth;
+        dataset.pointBackgroundColor = dataset.borderColor;
+        dataset.pointBorderColor = this.colors.background;
+        dataset.pointBorderWidth = 2;
+        dataset.pointRadius = 4;
+        dataset.pointHoverRadius = 6;
+        dataset.tension = 0; // Radar charts typically use straight lines
+        
+        return dataset;
+    }
+
+    stylePolarAreaDataset(dataset, colors) {
+        dataset.backgroundColor = colors.map(color => color + this.chartDefaults.transparency.bar);
+        dataset.borderColor = colors.map(color => color + this.chartDefaults.transparency.solid);
+        dataset.borderWidth = 1;
+        dataset.hoverBackgroundColor = colors.map(color => color + this.chartDefaults.transparency.solid);
+        
+        return dataset;
+    }
+
+    styleBubbleDataset(dataset, colors, multiDataset, colorIndex) {
+        if (multiDataset) {
+            const color = colors[colorIndex % colors.length];
+            dataset.backgroundColor = color + this.chartDefaults.transparency.bar;
+            dataset.borderColor = color + this.chartDefaults.transparency.solid;
+        } else {
+            // For single dataset, use different colors for each bubble if data length allows
+            if (Array.isArray(dataset.data) && dataset.data.length <= colors.length) {
+                dataset.backgroundColor = colors.slice(0, dataset.data.length).map(color => color + this.chartDefaults.transparency.bar);
+                dataset.borderColor = colors.slice(0, dataset.data.length).map(color => color + this.chartDefaults.transparency.solid);
+            } else {
+                dataset.backgroundColor = colors[0] + this.chartDefaults.transparency.bar;
+                dataset.borderColor = colors[0] + this.chartDefaults.transparency.solid;
+            }
+        }
+        
+        dataset.borderWidth = this.chartDefaults.borderWidth;
+        dataset.hoverBackgroundColor = Array.isArray(dataset.backgroundColor) 
+            ? dataset.backgroundColor.map(color => color.replace(this.chartDefaults.transparency.bar, this.chartDefaults.transparency.solid))
+            : dataset.backgroundColor.replace(this.chartDefaults.transparency.bar, this.chartDefaults.transparency.solid);
+        
+        return dataset;
+    }
+
     // Merge custom options with defaults
     mergeOptions(customOptions = {}, chartType = null) {
         let options = Chart.helpers.merge({}, this.defaultOptions, customOptions);
         
-        // Remove scales for pie/doughnut charts
+        
+        // Remove or modify scales based on chart type
         if (chartType === 'pie' || chartType === 'doughnut') {
             delete options.scales;
+        } else if (chartType === 'polarArea') {
+            // Polar area charts need radial scale for concentric rings
+            options.scales = {
+                r: {
+                    beginAtZero: true,
+                    ticks: {
+                        display: false // Hide tick labels but keep grid lines
+                    },
+                    grid: {
+                        color: this.colors.border,
+                        lineWidth: 1
+                    },
+                    pointLabels: {
+                        display: false // Hide point labels for cleaner look
+                    }
+                }
+            };
+        } else if (chartType === 'radar') {
+            // Radar charts use radial scales
+            options.scales = {
+                r: {
+                    beginAtZero: true,
+                    ticks: {
+                        color: this.colors.textLight,
+                        font: {
+                            family: this.chartDefaults.fontFamily,
+                            size: this.chartDefaults.fontSize - 1
+                        },
+                        backdropColor: 'transparent', // Remove ugly background
+                        showLabelBackdrop: false // Disable backdrop completely
+                    },
+                    grid: {
+                        color: this.colors.border,
+                        lineWidth: 0.5
+                    },
+                    pointLabels: {
+                        color: this.colors.text,
+                        font: {
+                            family: this.chartDefaults.fontFamily,
+                            size: this.chartDefaults.fontSize
+                        }
+                    }
+                }
+            };
+        } else if (chartType === 'bubble') {
+            // Bubble charts need x and y scales
+            options.scales = Chart.helpers.merge({}, this.defaultOptions.scales, {
+                x: {
+                    type: 'linear',
+                    position: 'bottom',
+                    ticks: {
+                        color: this.colors.textLight,
+                        font: {
+                            family: this.chartDefaults.fontFamily,
+                            size: this.chartDefaults.fontSize - 1
+                        }
+                    },
+                    grid: {
+                        color: this.colors.border,
+                        lineWidth: 0.5
+                    }
+                },
+                y: {
+                    type: 'linear',
+                    ticks: {
+                        color: this.colors.textLight,
+                        font: {
+                            family: this.chartDefaults.fontFamily,
+                            size: this.chartDefaults.fontSize - 1
+                        }
+                    },
+                    grid: {
+                        color: this.colors.border,
+                        lineWidth: 0.5
+                    }
+                }
+            });
         }
         
         return options;

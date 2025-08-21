@@ -11,7 +11,7 @@ contributors:
     - role: author
       name: Gabriel Baude
       avatar: /content/media/avatars/gabriel_baude.jpg
-category: exploration
+category: project
 subcategories:
     - design
     - user-experience
@@ -50,13 +50,74 @@ My work on the Pebbble project is not a mere technical exercise; it is a persona
 
 Pebbble addresses the *liminal agony of vanishment* felt by parents separated from their children — a pain without ritual or closure [cite: Pebbble, 9]. The challenge was to preserve the bond of a parent's voice when digital tools are hostile, compromised, or inadequate to carry the weight of interrupted love [cite: Pebbble, 11]. This project is my tangible response to that need.
 
----
+```chart-bar
+{
+  "title": "Reported International Parental Child Abduction Cases (2020-2023)",
+  "data": {
+    "labels": ["2020", "2021", "2022", "2023"],
+    "datasets": [
+      {
+        "label": "USA",
+        "data": [700, 700, 982, 982]
+      },
+      {
+        "label": "France",
+        "data": [540, 544, 544, 661]
+      },
+      {
+        "label": "Germany",
+        "data": [604, 650, 599, 527]
+      },
+      {
+        "label": "United Kingdom",
+        "data": [239, 243, 258, 243]
+      },
+      {
+        "label": "Canada",
+        "data": [122, 199, 199, 199]
+      }
+    ]
+  }
+}
+```
 
 ## The Craft: From Ancient Wisdom to Tangible Presence
 
 To bridge this emotional and physical distance, I drew inspiration from ancient craftsmanship, believing that technology should feel less like surveillance and more like love made tangible [cite: Pebbble, 31].  
 
 I looked to the centuries-old Japanese joinery technique *Kanawa-tsugite*, achieving structural elegance and integrity without nails [cite: kanawa.md]. This principle — that complexity can arise from simple, elegant rules — became Pebbble’s guiding design philosophy.
+
+it represente almost 1 million reported missing childrens only for the selected countries in 2023
+
+```chart-bar
+{
+  "title": "Annually Reported Missing Children (2020-2023)",
+  "data": {
+    "labels": ["2020", "2021", "2022", "2023"],
+    "datasets": [
+      {
+        "label": "USA",
+        "data": [421000, 421000, 359094, 344813]
+      },
+      {
+        "label": "France",
+        "data": [43456, 45958, 43202, 40989]
+      },
+      {
+        "label": "Germany",
+        "data": [100000, 100000, 100000, 100000]
+      },
+      {
+        "label": "United Kingdom",
+        "data": [239343, 250069, 278105, 312901]
+      },
+      {
+        "label": "Canada",
+        "data": [35463, 39268, 39268, 34437]
+      }
+    ]
+  }
+}```
 
 The triple 'b' in "Pebbble" represents the bounce of a stone across water, creating ripples that reach distant shores [cite: Pebbble, 30]. Like Hop-o’-My-Thumb scattering white pebbles to find his way home, Pebbble stones guide children back to the sound of a parent's voice, serving as tactile, secure anchors across impossible distances [cite: Pebbble, 20, 37].  
 
@@ -68,7 +129,7 @@ Holding, scanning, and listening to a Pebbble mirrors ancient prayer practices, 
 > — *The Tale of Hop-o'-My-Thumb*  
 
 
----
+
 
 ## The Solution: Security Rooted in Ritual
 
@@ -77,7 +138,18 @@ This design philosophy shaped the technical architecture. The stone itself becam
 ### Physical Key Derivation
 
 Each Pebbble contains an embedded NFC chip, acting as a physical token [cite: Pebbble, 16]. More secure than software keys, it uses the stone’s unique serial number with a timestamp to derive an unreproducible encryption key [cite: Pebbble, 24].
-
+```chart-bar
+{
+  "title": "Single Dataset Test",
+            "data": {
+                "labels": ["Apple", "Banana", "Orange", "Grape", "Kiwi"],
+                "datasets": [{
+                    "label": "Fruits",
+                    "data": [12, 19, 8, 15, 7]
+                }]
+            }
+}
+```
 ### Zero-Knowledge Privacy
 
 Messages are encrypted client-side using AES-256 [cite: Pebbble, 23, 82]. No secrets are stored in URLs or the cloud — only possession of the correct stone enables decryption [cite: Pebbble, 18, 87].

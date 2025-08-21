@@ -3,7 +3,7 @@ export class Navigation {
     constructor(app) {
         this.app = app;
         this.mainNav = document.querySelector('.main-nav');
-        this.sections = ['about', 'work', 'project-details'];
+        this.sections = ['story', 'projects', 'project-details'];
         
         this.setupEventListeners();
     }

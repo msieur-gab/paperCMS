@@ -185,7 +185,7 @@ class MarkdownConverter
     private function shouldInclude($metadata)
     {
         return isset($metadata['status']) &&
-            in_array($metadata['status'], ['published', 'archived']);
+            in_array($metadata['status'], ['published', 'archived', 'draft']);
     }
 
     private function getMarkdownFiles($dir)
@@ -323,7 +323,7 @@ class MarkdownConverter
             ));
         }
 
-        $validCategories = ['exploration', 'reflexion', 'application'];
+        $validCategories = ['project', 'making-of', 'article'];
         if (!in_array($metadata['category'], $validCategories)) {
             throw new Exception(sprintf(
                 "Invalid category value '%s' in file: %s\nExpected one of: %s",

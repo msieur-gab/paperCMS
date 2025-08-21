@@ -86,10 +86,14 @@ export class MediaManager {
         // Remove media-block class from clone
         clone.classList.remove('media-block');
         
-        // Move fit mode to image if present
+        // Move fit mode to image or video if present
         const img = clone.querySelector('img');
+        const video = clone.querySelector('video');
         if (img && element.dataset.fit) {
             img.dataset.fit = element.dataset.fit;
+        }
+        if (video && element.dataset.fit) {
+            video.dataset.fit = element.dataset.fit;
         }
         
         // Add content to container
@@ -100,6 +104,10 @@ export class MediaManager {
         let mediaDescription;
         if (element.querySelector('img')) {
             mediaDescription = element.querySelector('img').alt || 'Image';
+        } else if (element.querySelector('video')) {
+            const videoSrc = element.querySelector('video source')?.src || element.querySelector('video')?.src || '';
+            const filename = videoSrc.split('/').pop() || 'Video';
+            mediaDescription = filename;
         } else if (element.tagName === 'BLOCKQUOTE') {
             const quoteText = element.querySelector('p')?.textContent || element.textContent;
             mediaDescription = quoteText.substring(0, 50) + (quoteText.length > 50 ? '...' : '');

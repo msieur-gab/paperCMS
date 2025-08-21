@@ -129,18 +129,84 @@ export class ContentService {
             </figure>`;
         });
         
-        // PRESERVE: Standard images as media blocks (for magazine layout)
-        html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (match, alt, src) => {
+        // PRESERVE: Standard images and videos as media blocks (for magazine layout)
+        html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (match, alt, srcWithArgs) => {
+            // Parse source and arguments (support both quoted and space-separated)
+            let src, args;
+            
+            // Check for quoted arguments: file.webm "arg1 arg2 arg3"
+            const quotedMatch = srcWithArgs.match(/^([^\s"]+)\s+"([^"]+)"$/);
+            if (quotedMatch) {
+                src = quotedMatch[1];
+                args = quotedMatch[2].split(/\s+/);
+            } else {
+                // Fall back to space-separated: file.webm arg1 arg2 arg3
+                const parts = srcWithArgs.split(/\s+/);
+                src = parts[0];
+                args = parts.slice(1);
+            }
+            
             // Fix path: media/ should be content/media/
             let resolvedSrc = src;
             if (src.startsWith('media/')) {
                 resolvedSrc = 'content/' + src;
             }
             
-            // All images should be media blocks for the magazine layout to work
-            return `<figure class="media-block" data-media>
-                <img src="${resolvedSrc}" alt="${alt}" />
-            </figure>`;
+            // Check if it's a video file
+            const videoExtensions = ['.webm', '.mp4', '.mov', '.avi'];
+            const isVideo = videoExtensions.some(ext => src.toLowerCase().endsWith(ext));
+            
+            if (isVideo) {
+                // Parse video arguments
+                let videoAttrs = ['controls']; // Default controls
+                let figureAttrs = '';
+                let playbackRate = '1';
+                
+                args.forEach(arg => {
+                    const lowerArg = arg.toLowerCase();
+                    if (lowerArg === 'autoplay') {
+                        videoAttrs.push('autoplay');
+                    } else if (lowerArg === 'loop') {
+                        videoAttrs.push('loop');
+                    } else if (lowerArg === 'mute' || lowerArg === 'muted') {
+                        videoAttrs.push('muted');
+                    } else if (lowerArg === 'nocontrols') {
+                        videoAttrs = videoAttrs.filter(attr => attr !== 'controls');
+                    } else if (lowerArg.match(/^\d+(\.\d+)?x$/)) {
+                        playbackRate = lowerArg.replace('x', '');
+                    } else if (lowerArg === 'cover') {
+                        figureAttrs = ' data-fit="cover"';
+                    } else if (lowerArg === 'contain') {
+                        figureAttrs = ' data-fit="contain"';
+                    }
+                });
+                
+                const videoAttrString = videoAttrs.join(' ');
+                const playbackScript = playbackRate !== '1' ? 
+                    `<script>document.currentScript.previousElementSibling.querySelector('video').playbackRate = ${playbackRate};</script>` : '';
+                
+                return `<figure class="media-block" data-media${figureAttrs}>
+                    <video ${videoAttrString}>
+                        <source src="${resolvedSrc}" type="video/${src.split('.').pop()}">
+                        Your browser does not support the video tag.
+                    </video>
+                    ${playbackScript}
+                </figure>`;
+            } else {
+                // Parse image arguments
+                let figureAttrs = '';
+                args.forEach(arg => {
+                    const lowerArg = arg.toLowerCase();
+                    if (lowerArg === 'cover' || lowerArg === 'contain') {
+                        figureAttrs = ` data-fit="${lowerArg}"`;
+                    }
+                });
+                
+                // All images should be media blocks for the magazine layout to work
+                return `<figure class="media-block" data-media${figureAttrs}>
+                    <img src="${resolvedSrc}" alt="${alt}" />
+                </figure>`;
+            }
         });
         
         // Links

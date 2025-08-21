@@ -10,7 +10,7 @@ contributors:
     - role: author
       name: Gabriel Baude
       avatar: /content/media/avatars/gabriel_baude.jpg
-category: reflexion
+category: article
 subcategories:
     - artificial-intelligence
     - machine-learning

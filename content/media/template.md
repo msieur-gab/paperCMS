@@ -14,9 +14,9 @@ date:
     published: 2024-12-22
     updated: 2024-12-22 #(optional)
 
-# Categorization should match exploration/reflexion/application but might be extended in future 
-category: exploration  
-#exploration/reflexion/application
+# Categorization should match project/making-of/article but might be extended in future 
+category: project  
+#project/making-of/article
 subcategories: #(optional)
     - design
     - japanese-craft

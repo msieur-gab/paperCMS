@@ -1,8 +1,8 @@
 export class Router {
     constructor(config) {
         this.app = config.app;
-        this.sections = config.sections || ['about', 'work', 'project-details'];
-        this.defaultSection = config.defaultSection || 'about';
+        this.sections = config.sections || ['story', 'projects', 'project-details'];
+        this.defaultSection = config.defaultSection || 'story';
         
         // Bind methods
         this.handlePopState = this.handlePopState.bind(this);

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chart Theming Test</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/themes.css">
+    <style>
+        body {
+            padding: 20px;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+        .chart-container {
+            width: 400px;
+            height: 300px;
+            margin: 20px 0;
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 20px;
+        }
+        .theme-switcher {
+            margin: 20px 0;
+            padding: 10px;
+            background: var(--color-background-alt);
+            border-radius: 8px;
+        }
+        .theme-switcher button {
+            margin: 5px;
+            padding: 8px 16px;
+            border: 1px solid var(--color-border);
+            background: var(--color-background);
+            color: var(--color-text);
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .theme-switcher button:hover {
+            background: var(--color-background-alt);
+        }
+    </style>
+</head>
+<body data-theme="light">
+    <h1>Chart Theming Test</h1>
+    
+    <div class="theme-switcher">
+        <strong>Theme:</strong>
+        <button onclick="setTheme('light')">Light</button>
+        <button onclick="setTheme('dark')">Dark</button>
+    </div>
+
+    <h2>Single Dataset (Different colors per bar)</h2>
+    <div class="chart-container">
+        <canvas id="singleChart"></canvas>
+    </div>
+
+    <h2>Multiple Datasets (Different colors per dataset)</h2>
+    <div class="chart-container">
+        <canvas id="multiChart"></canvas>
+    </div>
+
+    <script type="module">
+        import { ChartService } from './js/services/chartService.js';
+
+        // Initialize chart service
+        const chartService = new ChartService();
+
+        // Wait for initialization
+        await chartService.initializeDependencies();
+
+        // Single dataset chart
+        const singleConfig = {
+            title: "Single Dataset Test",
+            data: {
+                labels: ["Apple", "Banana", "Orange", "Grape", "Kiwi"],
+                datasets: [{
+                    label: "Fruits",
+                    data: [12, 19, 8, 15, 7]
+                }]
+            }
+        };
+
+        // Multiple datasets chart (your Pebbble data)
+        const multiConfig = {
+            title: "Multiple Datasets Test",
+            data: {
+                labels: ["2020", "2021", "2022", "2023"],
+                datasets: [
+                    {
+                        label: "USA",
+                        data: [421000, 421000, 359094, 344813]
+                    },
+                    {
+                        label: "France", 
+                        data: [43456, 45958, 43202, 40989]
+                    },
+                    {
+                        label: "Germany",
+                        data: [100000, 100000, 100000, 100000]
+                    },
+                    {
+                        label: "United Kingdom",
+                        data: [239343, 250069, 278105, 312901]
+                    },
+                    {
+                        label: "Canada",
+                        data: [35463, 39268, 39268, 34437]
+                    }
+                ]
+            }
+        };
+
+        // Create charts
+        await chartService.createChart({
+            element: document.body,
+            canvas: document.getElementById('singleChart'),
+            chartType: 'bar',
+            config: singleConfig,
+            chartId: 'single-test'
+        });
+
+        await chartService.createChart({
+            element: document.body, 
+            canvas: document.getElementById('multiChart'),
+            chartType: 'bar',
+            config: multiConfig,
+            chartId: 'multi-test'
+        });
+
+        // Theme switcher
+        window.setTheme = function(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+        };
+    </script>
+</body>
+</html>

@@ -162,6 +162,8 @@ export class ChartService {
         }
     }
 
+
+
     // Style chart data using ChartStyleManager
     styleChartData(data, chartType) {
         return {
@@ -174,7 +176,8 @@ export class ChartService {
                     chartType, 
                     { 
                         multiDataset,
-                        colorIndex: index 
+                        colorIndex: index,
+                        totalDatasets: data.datasets.length
                     }
                 );
             })

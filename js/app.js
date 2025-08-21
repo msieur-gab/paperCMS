@@ -30,10 +30,10 @@ class App {
         
         // State
         this.state = {
-            currentSection: 'about',
+            currentSection: 'story',
             isProjectOpen: false,
             isLoading: false,
-            sections: ['about', 'work', 'project-details']
+            sections: ['story', 'projects', 'project-details']
         };
         
         this.isDesktop = window.innerWidth >= 768;
@@ -81,7 +81,7 @@ class App {
         this.router = new Router({
             app: this,
             sections: this.state.sections,
-            defaultSection: 'about'
+            defaultSection: 'story'
         });
     }
 
@@ -170,9 +170,9 @@ class App {
                         
                         // Prevent scrolling to project-details if no project is loaded
                         if (section === 'project-details' && !this.state.isProjectOpen) {
-                            const workIndex = this.state.sections.indexOf('work');
+                            const projectsIndex = this.state.sections.indexOf('projects');
                             this.mainElement.scrollTo({
-                                left: workIndex * this.mainElement.clientWidth,
+                                left: projectsIndex * this.mainElement.clientWidth,
                                 behavior: 'smooth'
                             });
                             return;

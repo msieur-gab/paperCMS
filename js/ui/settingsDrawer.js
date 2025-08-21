@@ -190,6 +190,15 @@ export class SettingsDrawer {
     
     openDrawer() {
         this.isOpen = true;
+        
+        // Restore focusability to all elements inside the drawer
+        const focusableElements = this.drawer.querySelectorAll(
+            'button, [href], input, select, textarea, [tabindex="-1"]'
+        );
+        focusableElements.forEach(element => {
+            element.removeAttribute('tabindex');
+        });
+        
         this.drawer.setAttribute('aria-hidden', 'false');
         document.body.classList.add('settings-open');
         this.toggleButton.setAttribute('aria-expanded', 'true');
@@ -197,6 +206,20 @@ export class SettingsDrawer {
     
     closeDrawer() {
         this.isOpen = false;
+        
+        // Fix accessibility: Remove focus from any element inside the drawer before hiding it
+        if (this.drawer.contains(document.activeElement)) {
+            document.activeElement.blur();
+        }
+        
+        // Make all focusable elements inside the drawer non-focusable when hidden
+        const focusableElements = this.drawer.querySelectorAll(
+            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        focusableElements.forEach(element => {
+            element.setAttribute('tabindex', '-1');
+        });
+        
         this.drawer.setAttribute('aria-hidden', 'true');
         document.body.classList.remove('settings-open');
         this.toggleButton.setAttribute('aria-expanded', 'false');

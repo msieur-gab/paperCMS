@@ -59,12 +59,12 @@ export class MetaManager {
         let title, description;
         
         switch (section) {
-            case 'about':
-                title = 'About - Gabriel Baude';
+            case 'story':
+                title = 'Story - Gabriel Baude';
                 description = 'Learn about Gabriel Baude - Designer and technologist with over two decades of experience bridging Eastern and Western design principles.';
                 break;
-            case 'work':
-                title = 'Work - Gabriel Baude';
+            case 'projects':
+                title = 'Projects - Gabriel Baude';
                 description = 'Explore the portfolio of Gabriel Baude - Projects spanning design, technology, and cultural understanding.';
                 break;
             default:
@@ -185,6 +185,6 @@ export class MetaManager {
     
     // Reset to default meta
     resetToDefault() {
-        this.updateForSection('about');
+        this.updateForSection('story');
     }
 }

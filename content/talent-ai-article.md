@@ -11,7 +11,7 @@ contributors:
     - role: author
       name: Gabriel Baude
       avatar: /content/media/avatars/gabriel_baude.jpg
-category: exploration
+category: project
 subcategories:
     - artificial-intelligence
     - talent-management

@@ -17,7 +17,7 @@ contributors:
     - role: editor
       name: Alex Chen
       avatar: /content/media/avatars/olivier_gonthier.jpg
-category: exploration
+category: project
 subcategories:
     - design
     - japanese-craft

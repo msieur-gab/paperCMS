@@ -16,6 +16,11 @@ export class SearchService {
         
         let filtered = [...this.allProjects];
         
+        // Default: Only show published projects unless specifically searching for status
+        if (!this.currentFilters.search || !this.isSearchingForStatus(this.currentFilters.search)) {
+            filtered = filtered.filter(p => p.status === 'published');
+        }
+        
         // Category filter
         if (this.currentFilters.category !== 'all') {
             filtered = filtered.filter(p => p.category === this.currentFilters.category);
