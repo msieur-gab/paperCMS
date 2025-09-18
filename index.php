@@ -3,13 +3,19 @@
 require_once 'php/config.php';
 require_once 'php/markdown-to-json.php';
 
-// Get the request path
-$requestPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$basePath = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
-if ($basePath !== '/') {
-    $requestPath = substr($requestPath, strlen($basePath));
+// Get the request path - handle CLI and web server environments
+if (php_sapi_name() === 'cli') {
+    // CLI mode - default to homepage for testing
+    $requestPath = '/';
+} else {
+    // Web server mode - get actual request path
+    $requestPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
+    $basePath = rtrim(dirname($_SERVER['SCRIPT_NAME'] ?? ''), '/');
+    if ($basePath !== '/' && $basePath !== '') {
+        $requestPath = substr($requestPath, strlen($basePath));
+    }
+    $requestPath = rtrim($requestPath, '/') ?: '/';
 }
-$requestPath = rtrim($requestPath, '/') ?: '/';
 
 // Route detection
 if (preg_match('#^/project/([^/]+)/?$#', $requestPath, $matches)) {
