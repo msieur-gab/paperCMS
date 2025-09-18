@@ -152,7 +152,7 @@ export class MetaManager {
         if (imagePath.startsWith('http')) return imagePath;
         
         // Convert relative path to absolute
-        const baseUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname.replace('/index.html', '')}`;
+        const baseUrl = `${window.location.protocol}//${window.location.host}`;
         return `${baseUrl}/${imagePath.replace(/^\.\//, '')}`;
     }
     

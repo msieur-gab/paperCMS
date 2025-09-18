@@ -134,7 +134,7 @@ class MarkdownConverter
             }, $metadata['related']);
         }
 
-        $canonicalUrl = $this->baseUrl . 'index.html#project/' . pathinfo($relativePath, PATHINFO_FILENAME);
+        $canonicalUrl = $this->baseUrl . 'project/' . pathinfo($relativePath, PATHINFO_FILENAME);
 
         return array(
             'reference' => $metadata['reference'],

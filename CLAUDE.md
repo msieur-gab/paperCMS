@@ -9,18 +9,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 # Generate JSON API and static pages from markdown content
 php php/generate.php
 
-# Access the generation script via web browser (alternative)
-# Open index.html and click "Generate Content" or visit generate.php directly
+# View generation results via web browser
+# Visit generate.php directly to see processing stats
 ```
 
 ### Development Server
 ```bash
-# Serve the application locally (any HTTP server)
-python -m http.server 8000
-# or
+# Serve the application locally (PHP required for hybrid routing)
 php -S localhost:8000
-# or
-npx serve .
+
+# Test URLs:
+# http://localhost:8000/                    # Homepage (SPA shell)
+# http://localhost:8000/projects            # Projects page (SPA shell)  
+# http://localhost:8000/project/kanawa      # Article (pre-rendered HTML + SPA)
 ```
 
 ### File Structure Validation
@@ -31,42 +32,50 @@ find content/ -name "*.md" -exec head -10 {} \;
 
 ## Architecture Overview
 
-PaperCMS is a PHP-based static site generator that creates a JavaScript SPA from Markdown content. The architecture follows a content-first approach with automatic JSON API generation.
+PaperCMS is a **hybrid PHP + JavaScript system** that solves the SPA vs SEO dilemma through intelligent routing. Content is processed from Markdown files into both JSON APIs (for SPA functionality) and pre-rendered HTML (for perfect SEO).
 
 ### Core Components
 
+**Hybrid Routing System (index.php)**
+- **Route Detection**: Analyzes URLs to determine content vs navigation
+- **Article Routes**: `/project/slug` → Pre-rendered HTML with perfect SEO
+- **Navigation Routes**: `/`, `/projects` → SPA shell with JavaScript enhancement
+- **Progressive Enhancement**: Works without JS, amazing with JS
+
 **Content Processing Pipeline (PHP)**
-- `php/markdown-to-json.php`: Converts markdown files to JSON API
-- `php/static-page-generator.php`: Generates SEO-friendly static HTML pages
+- `php/markdown-to-json.php`: Converts markdown files to JSON API + HTML parsing
+- `php/static-page-generator.php`: Generates SEO-friendly static HTML pages  
 - `php/sitemap-generator.php`: Creates XML sitemaps for search engines
 - `php/generate.php`: Main orchestration script with web UI
 
-**Frontend Application (JavaScript)**
-- `js/app.js`: Main application entry point
-- `js/core/`: Core application logic and routing
-- `js/services/`: API communication and data services
-- `js/ui/`: UI components and interaction handlers
-- `js/utils/`: Utility functions and helpers
+**Frontend Application (JavaScript) - Simplified Architecture**
+- `js/app.js`: Main application coordinator (simplified from 15+ files)
+- `js/core/`: Core routing and meta management
+- `js/services/`: Content, search, and chart services
+- `js/ui/`: UI components (magazine layout, project grid, settings)
+- `js/utils/`: Simple utility functions (storage, resize handling)
 
 **Styling System (CSS)**
-- `css/base.css`: Base styles and CSS variables
-- `css/theme.css`: Theme system (light/night modes)
-- `css/typography.css`: Typography and reading experience
-- `css/layouts.css`: Layout-specific styles
+- `css/main.css`: Imports all CSS modules
+- `css/theme.css`: Advanced theme system (light/night modes with image processing)
+- `css/layouts.css`: Magazine-style desktop layouts with media synchronization  
 - `css/components.css`: Component-specific styles
 
 ### Key Architectural Patterns
 
-**Content-Driven Architecture**: All content lives in `content/` as Markdown files with YAML frontmatter. The PHP processor converts these into a JSON API (`public/api/publications.json`) that feeds the JavaScript application.
+**Hybrid Routing Strategy**: 
+- **SEO Routes** (`/project/slug`): Pre-rendered HTML with full content, meta tags, and structured data
+- **SPA Routes** (`/`, `/projects`): Interactive shell with JavaScript enhancements
+- **Single Codebase**: One set of templates serves both crawlers and users
 
-**Dual Rendering Strategy**: 
-- SPA for interactive reading experience
-- Static HTML pages in `static/` for SEO and social media sharing
-- Both use the same content source but different rendering approaches
+**Content-Driven Architecture**: All content lives in `content/` as Markdown files with YAML frontmatter. The system generates both JSON APIs (for SPA) and HTML (for SEO) from the same source.
 
-**Progressive Enhancement**: The application works as static HTML pages even without JavaScript, with the SPA layer enhancing the experience.
+**Progressive Enhancement**: 
+- **Without JavaScript**: Articles are readable as static HTML with proper SEO
+- **With JavaScript**: Full magazine-style experience with media synchronization
+- **Backwards Compatible**: Legacy hash URLs automatically redirect
 
-**Theme-Aware Media**: Images automatically adapt to theme (grayscale in night mode) and sync with reading progress on desktop layouts.
+**Simplified State Management**: Eliminated complex service classes in favor of direct function calls and consolidated state in the main app.
 
 ### Content Structure
 
@@ -112,12 +121,19 @@ contributors:
 
 ## Development Workflow
 
-1. Create/edit markdown files in `content/` directory
-2. Run `php php/generate.php` to process content into JSON API and static pages  
-3. Test changes by serving the application locally
-4. Deploy by updating base URL in config and uploading to web server
+1. **Create/edit markdown** files in `content/` directory
+2. **Run `php php/generate.php`** to process content into JSON API and static pages  
+3. **Test locally**: `php -S localhost:8000` (PHP required for routing)
+4. **Deploy**: Update base URL in `php/config.php` and upload to web server
 
-The generate script provides a web interface showing processing statistics, error details, and generated file information.
+### Key Benefits of This Architecture
+
+- ✅ **Zero Build Steps**: Content processed on-demand
+- ✅ **Perfect SEO**: Pre-rendered HTML for crawlers
+- ✅ **Progressive Enhancement**: Works without JS, enhanced with JS
+- ✅ **Clean URLs**: `/project/article-name` instead of `/#project/article-name`
+- ✅ **Social Media Ready**: Rich previews with proper meta tags
+- ✅ **Simplified Codebase**: 400+ lines of complexity eliminated
 
 ## File Organization
 
