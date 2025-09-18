@@ -1,7 +1,8 @@
 // UPDATED: ui/settingsDrawer.js - Consolidated settings management
+import { getTheme, setTheme, getFontSize, setFontSize, resetFontSize, onSystemThemeChange } from '../utils/storage.js';
+
 export class SettingsDrawer {
-    constructor(storageService) {
-        this.storageService = storageService;
+    constructor() {
         this.drawer = document.querySelector('.settings-drawer');
         this.toggleButton = document.querySelector('.settings-toggle');
         this.closeButton = document.querySelector('.close-settings');
@@ -57,9 +58,9 @@ export class SettingsDrawer {
         });
         
         // Handle system theme changes
-        const unsubscribe = this.storageService.onSystemThemeChange(() => {
-            if (this.storageService.getTheme() === 'system') {
-                this.storageService.applyTheme('system');
+        const unsubscribe = onSystemThemeChange(() => {
+            if (getTheme() === 'system') {
+                setTheme('system');
                 this.updateThemeToggleButtons();
             }
         });
@@ -72,15 +73,20 @@ export class SettingsDrawer {
     }
     
     toggleTheme() {
-        const currentTheme = this.storageService.getEffectiveTheme();
+        const currentTheme = getTheme() === 'system' 
+            ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+            : getTheme();
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        this.storageService.setTheme(newTheme);
+        setTheme(newTheme);
         this.updateThemeToggleButtons();
     }
     
     updateThemeToggleButtons() {
         const themeToggles = document.querySelectorAll('.theme-toggle');
-        const effectiveTheme = this.storageService.getEffectiveTheme();
+        const theme = getTheme();
+        const effectiveTheme = theme === 'system' 
+            ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+            : theme;
         
         themeToggles.forEach(toggle => {
             toggle.setAttribute('aria-label', 
@@ -104,11 +110,11 @@ export class SettingsDrawer {
     }
     
     changeFontSize(direction) {
-        const currentSize = this.storageService.getFontSize();
+        const currentSize = getFontSize();
         const newSize = currentSize + (direction * this.fontSizes.step);
         const clampedSize = Math.max(this.fontSizes.min, Math.min(this.fontSizes.max, newSize));
         
-        this.storageService.setFontSize(clampedSize);
+        setFontSize(clampedSize);
         this.fontSizes.current = clampedSize;
         
         // Update button states
@@ -116,7 +122,7 @@ export class SettingsDrawer {
     }
     
     resetFontSize() {
-        this.storageService.resetFontSize();
+        resetFontSize();
         this.fontSizes.current = this.fontSizes.default;
         this.updateFontControlButtons();
     }
@@ -174,7 +180,7 @@ export class SettingsDrawer {
     }
     
     loadSavedSettings() {
-        const settings = this.storageService.loadSavedSettings();
+        const settings = loadSavedSettings();
         this.fontSizes.current = settings.fontSize;
         this.updateFontControlButtons();
         this.updateThemeToggleButtons();
@@ -231,9 +237,11 @@ export class SettingsDrawer {
     // Get current settings
     getCurrentSettings() {
         return {
-            theme: this.storageService.getTheme(),
-            effectiveTheme: this.storageService.getEffectiveTheme(),
-            fontSize: this.storageService.getFontSize(),
+            theme: getTheme(),
+            effectiveTheme: getTheme() === 'system' 
+                ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+                : getTheme(),
+            fontSize: getFontSize(),
             isOpen: this.isOpen
         };
     }

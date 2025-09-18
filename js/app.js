@@ -1,7 +1,7 @@
 // NEW: app.js - Simplified main coordinator
 import { ContentService } from './services/contentService.js';
 import { SearchService } from './services/searchService.js';
-import { StorageService } from './services/storageService.js';
+import { loadSavedSettings } from './utils/storage.js';
 import { ChartService } from './services/chartService.js';
 import { MediaManager } from './ui/mediaManager.js';
 import { IntelligentMediaSync } from './ui/intelligentMediaSync.js';
@@ -12,15 +12,13 @@ import { MetaManager } from './core/metaManager.js';
 import { Router } from './core/router.js';
 // ResponsiveLayout functionality integrated directly
 import { dom } from './utils/dom.js';
-import { ResizeManager } from './utils/resizeManager.js';
+import { isDesktopViewport, onBreakpointChange } from './utils/resize.js';
 
 class App {
     constructor() {
         // Core services
         this.contentService = new ContentService();
-        this.storageService = new StorageService();
-        this.resizeManager = new ResizeManager();
-        this.chartService = new ChartService(this.resizeManager);
+        this.chartService = new ChartService();
         this.metaManager = new MetaManager();
         
         // Core elements
@@ -36,7 +34,7 @@ class App {
             sections: ['story', 'projects', 'project-details']
         };
         
-        this.isDesktop = window.innerWidth >= 768;
+        this.isDesktop = isDesktopViewport();
         
         // Debounce timeouts
         this.scrollTimeout = null;
@@ -112,7 +110,7 @@ class App {
     
     setupSettings() {
         // PRESERVE: Settings drawer functionality
-        this.settingsDrawer = new SettingsDrawer(this.storageService);
+        this.settingsDrawer = new SettingsDrawer();
     }
 
     setupEventListeners() {
@@ -146,7 +144,7 @@ class App {
                 });
                 
                 // Update desktop state
-                this.isDesktop = window.innerWidth >= 768;
+                this.isDesktop = isDesktopViewport();
                 
                 // Remove resizing class after a brief delay
                 setTimeout(() => {
@@ -339,7 +337,12 @@ class App {
 
     setupResponsiveHandling() {
         // Initial setup based on screen size
-        this.handleLayoutChange(window.innerWidth < 768);
+        this.handleLayoutChange(!isDesktopViewport());
+        
+        // Listen for breakpoint changes
+        onBreakpointChange((isDesktop) => {
+            this.handleLayoutChange(!isDesktop);
+        });
     }
     
     // Header metadata display with scroll behavior
@@ -468,9 +471,7 @@ class App {
         if (this.chartService) {
             this.chartService.destroy();
         }
-        if (this.resizeManager) {
-            this.resizeManager.destroy();
-        }
+        // Resize handling now uses simple event listeners (no cleanup needed)
         if (this.router) {
             this.router.destroy();
         }

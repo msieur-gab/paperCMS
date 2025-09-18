@@ -1,12 +1,10 @@
 // ChartService - Centralized chart management for PaperCMS
 export class ChartService {
-    constructor(resizeManager = null) {
+    constructor() {
         this.charts = new Map(); // Track all chart instances
         this.chartStyles = null;
         this.isInitialized = false;
         this.pendingCharts = []; // Charts waiting for dependencies to load
-        this.resizeManager = resizeManager;
-        this.resizeUnsubscribe = null;
         
         // Load dependencies
         this.initializeDependencies();
@@ -85,20 +83,14 @@ export class ChartService {
     }
 
     setupResizeHandling() {
-        if (!this.resizeManager) return;
-        
-        // Subscribe to resize events
-        this.resizeUnsubscribe = this.resizeManager.subscribe('chartService', (resizeData) => {
-            this.handleResize(resizeData);
+        // Simple resize handling - Chart.js handles most responsive behavior automatically
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                this.refreshChartsForResize();
+            }, 250);
         });
-    }
-
-    handleResize(resizeData) {
-        // Charts now use responsive CSS, so we just need to trigger a resize
-        // Chart.js handles responsive behavior automatically with responsive: true
-        if (resizeData.breakpointChanged) {
-            this.refreshChartsForResize();
-        }
     }
 
     async refreshChartsForResize() {
@@ -355,10 +347,7 @@ export class ChartService {
         }
         
         // Clean up resize subscription
-        if (this.resizeUnsubscribe) {
-            this.resizeUnsubscribe();
-            this.resizeUnsubscribe = null;
-        }
+        // Resize handling is now handled by simple event listener (no cleanup needed)
         
         this.pendingCharts = [];
         this.isInitialized = false;
