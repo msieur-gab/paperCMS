@@ -11,7 +11,7 @@ import { Navigation } from './ui/navigation.js';
 import { MetaManager } from './core/metaManager.js';
 import { Router } from './core/router.js';
 // ResponsiveLayout functionality integrated directly
-import { dom } from './utils/dom.js';
+// Removed unused dom utility import
 import { isDesktopViewport, onBreakpointChange } from './utils/resize.js';
 
 class App {

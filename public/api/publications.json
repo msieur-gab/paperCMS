@@ -579,6 +579,55 @@
             }
         },
         {
+            "reference": "34",
+            "path": "senz.md",
+            "title": "Chart Type Demonstrations",
+            "description": "Complete guide to all supported chart types in PaperCMS, showcasing both single and multi-dataset configurations across bar, line, pie, doughnut, radar, polar area, and bubble charts.",
+            "thumbnail": "./content/media/chart.png",
+            "status": "published",
+            "date": {
+                "published": "2025-08-14",
+                "updated": "2025-08-14"
+            },
+            "category": "making-of",
+            "subcategories": [
+                "charts",
+                "visualization",
+                "development"
+            ],
+            "tags": [
+                "charts",
+                "visualization",
+                "data",
+                "documentation",
+                "demo"
+            ],
+            "contributors": [
+                {
+                    "role": "author",
+                    "name": "Gabriel Baude",
+                    "avatar": "./media/avatars/gabriel_baude.jpg"
+                }
+            ],
+            "related": [],
+            "documents": [],
+            "links": [],
+            "seo": {
+                "title": "Chart Type Demonstrations",
+                "description": "Complete guide to all supported chart types in PaperCMS, showcasing both single and multi-dataset configurations across bar, line, pie, doughnut, radar, polar area, and bubble charts.",
+                "keywords": "charts, visualization, data, documentation, demo, charts, visualization, development",
+                "canonical": "https://msieur-gab.github.io/paperCMS/index.html#project/senz",
+                "og": {
+                    "title": "Chart Type Demonstrations",
+                    "description": "Complete guide to all supported chart types in PaperCMS, showcasing both single and multi-dataset configurations across bar, line, pie, doughnut, radar, polar area, and bubble charts.",
+                    "image": "./content/media/chart.png",
+                    "type": "making-of",
+                    "url": "https://msieur-gab.github.io/paperCMS/index.html#project/senz"
+                },
+                "alternates": []
+            }
+        },
+        {
             "reference": "35",
             "path": "senz-making-of.md",
             "title": "Building an ML Generator from Zero",
