@@ -50,7 +50,7 @@ class MarkdownConverter
         $markdownBody = trim($matches[2]);
         
         // Parse YAML frontmatter (simple parser for basic needs)
-        $metadata = $this->parseYaml($frontmatter);
+        $metadata = $this->parseSimpleYaml($frontmatter);
         
         // Convert markdown to HTML (simple implementation)
         $html = $this->markdownToHtml($markdownBody);
@@ -205,7 +205,7 @@ class MarkdownConverter
     }
 
     // Helper methods for the new parseMarkdown function
-    private function parseYaml($yamlString) {
+    private function parseSimpleYaml($yamlString) {
         // Simple YAML parser for basic key-value pairs
         $metadata = [];
         $lines = explode("\n", $yamlString);
