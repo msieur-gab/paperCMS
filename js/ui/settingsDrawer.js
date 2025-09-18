@@ -8,14 +8,6 @@ export class SettingsDrawer {
         this.closeButton = document.querySelector('.close-settings');
         this.isOpen = false;
         
-        this.fontSizes = {
-            min: 14,
-            max: 20,
-            default: 16,
-            current: 16,
-            step: 1
-        };
-        
         if (!this.drawer || !this.toggleButton) {
             return;
         }
@@ -111,32 +103,30 @@ export class SettingsDrawer {
     
     changeFontSize(direction) {
         const currentSize = getFontSize();
-        const newSize = currentSize + (direction * this.fontSizes.step);
-        const clampedSize = Math.max(this.fontSizes.min, Math.min(this.fontSizes.max, newSize));
+        const newSize = currentSize + direction; // step = 1
+        const clampedSize = Math.max(14, Math.min(20, newSize)); // min/max constants
         
         setFontSize(clampedSize);
-        this.fontSizes.current = clampedSize;
         
         // Update button states
         this.updateFontControlButtons();
     }
     
     resetFontSize() {
-        resetFontSize();
-        this.fontSizes.current = this.fontSizes.default;
+        resetFontSize(); // resets to 16 (default)
         this.updateFontControlButtons();
     }
     
     updateFontControlButtons() {
-        const currentSize = this.fontSizes.current;
+        const currentSize = getFontSize(); // Get actual current size
         const increaseBtn = document.querySelector('.font-size-increase');
         const decreaseBtn = document.querySelector('.font-size-decrease');
         
         if (increaseBtn) {
-            increaseBtn.disabled = currentSize >= this.fontSizes.max;
+            increaseBtn.disabled = currentSize >= 20; // max
         }
         if (decreaseBtn) {
-            decreaseBtn.disabled = currentSize <= this.fontSizes.min;
+            decreaseBtn.disabled = currentSize <= 14; // min
         }
     }
     
@@ -181,7 +171,7 @@ export class SettingsDrawer {
     
     loadSavedSettings() {
         const settings = loadSavedSettings();
-        this.fontSizes.current = settings.fontSize;
+        // Font size is now managed by storage functions directly
         this.updateFontControlButtons();
         this.updateThemeToggleButtons();
     }
