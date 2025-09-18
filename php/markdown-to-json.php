@@ -39,6 +39,28 @@ class MarkdownConverter
         return $path;
     }
 
+    public function parseMarkdown($content) {
+        // Parse markdown content for routing system
+        $match = preg_match('/^---\n(.*?)\n---\n(.*)$/s', $content, $matches);
+        if (!$match) {
+            throw new Exception('Invalid markdown format - missing YAML frontmatter');
+        }
+        
+        $frontmatter = $matches[1];
+        $markdownBody = trim($matches[2]);
+        
+        // Parse YAML frontmatter (simple parser for basic needs)
+        $metadata = $this->parseYaml($frontmatter);
+        
+        // Convert markdown to HTML (simple implementation)
+        $html = $this->markdownToHtml($markdownBody);
+        
+        return [
+            'metadata' => $metadata,
+            'html' => $html
+        ];
+    }
+
     public function processFiles()
     {
         $publications = array();
@@ -180,6 +202,66 @@ class MarkdownConverter
             'missing' => $this->processingStats['missingFields'],
             'errorDetails' => $this->processingStats['errors']
         ];
+    }
+
+    // Helper methods for the new parseMarkdown function
+    private function parseYaml($yamlString) {
+        // Simple YAML parser for basic key-value pairs
+        $metadata = [];
+        $lines = explode("\n", $yamlString);
+        
+        foreach ($lines as $line) {
+            $line = trim($line);
+            if (empty($line) || strpos($line, '#') === 0) continue;
+            
+            if (preg_match('/^([^:]+):\s*(.*)$/', $line, $matches)) {
+                $key = trim($matches[1]);
+                $value = trim($matches[2]);
+                
+                // Handle quoted values
+                if ((substr($value, 0, 1) === '"' && substr($value, -1) === '"') ||
+                    (substr($value, 0, 1) === "'" && substr($value, -1) === "'")) {
+                    $value = substr($value, 1, -1);
+                }
+                
+                $metadata[$key] = $value;
+            }
+        }
+        
+        return $metadata;
+    }
+    
+    private function markdownToHtml($markdown) {
+        // Simple markdown to HTML converter for basic needs
+        $html = $markdown;
+        
+        // Convert headers
+        $html = preg_replace('/^### (.*$)/m', '<h3>$1</h3>', $html);
+        $html = preg_replace('/^## (.*$)/m', '<h2>$1</h2>', $html);
+        $html = preg_replace('/^# (.*$)/m', '<h1>$1</h1>', $html);
+        
+        // Convert paragraphs
+        $html = preg_replace('/\n\n/', '</p><p>', $html);
+        $html = '<p>' . $html . '</p>';
+        
+        // Convert line breaks
+        $html = preg_replace('/\n/', '<br>', $html);
+        
+        // Convert bold and italic
+        $html = preg_replace('/\*\*(.*?)\*\*/', '<strong>$1</strong>', $html);
+        $html = preg_replace('/\*(.*?)\*/', '<em>$1</em>', $html);
+        
+        // Convert links
+        $html = preg_replace('/\[([^\]]+)\]\(([^)]+)\)/', '<a href="$2">$1</a>', $html);
+        
+        // Convert images
+        $html = preg_replace('/!\[([^\]]*)\]\(([^)]+)\)/', '<img src="$2" alt="$1" data-media="image">', $html);
+        
+        // Clean up empty paragraphs
+        $html = preg_replace('/<p><\/p>/', '', $html);
+        $html = preg_replace('/<p>\s*<\/p>/', '', $html);
+        
+        return $html;
     }
 
     private function shouldInclude($metadata)

@@ -16,8 +16,28 @@ export class Router {
     }
 
     async handleInitialURL() {
+        // Handle both hash-based URLs (legacy) and clean URLs (new)
         const hash = window.location.hash.slice(1);
+        const pathname = window.location.pathname;
         
+        // Check for clean URL structure first
+        if (pathname.startsWith('/project/')) {
+            const projectSlug = pathname.replace('/project/', '').replace('/', '');
+            await this.app.openProject(projectSlug, true);
+            return;
+        }
+        
+        if (pathname === '/projects') {
+            this.app.navigateToSection('projects', true);
+            return;
+        }
+        
+        if (pathname === '/story' || pathname === '/') {
+            this.app.navigateToSection('story', true);
+            return;
+        }
+        
+        // Fallback to hash-based routing for legacy support
         if (hash) {
             if (hash.startsWith('project/')) {
                 const projectPath = this.cleanPath(hash.replace('project/', ''));
@@ -45,19 +65,21 @@ export class Router {
     }
 
     updateURL(section) {
+        const url = section === 'story' ? '/' : `/${section}`;
         history.pushState(
             { section }, 
             '', 
-            `#${section}`
+            url
         );
     }
 
     updateProjectURL(path) {
         const cleanPath = this.cleanPath(path);
+        const url = `/project/${cleanPath}`;
         history.pushState(
             { type: 'project', path: cleanPath }, 
             '', 
-            `#project/${cleanPath}`
+            url
         );
     }
 
