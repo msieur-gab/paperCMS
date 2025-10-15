@@ -62,48 +62,124 @@ export class ContentService {
         };
     }
 
-    // Simpler YAML parsing since PHP ensures valid structure
+    // Basic YAML parser that supports nested objects and arrays
     parseYAML(yaml) {
-        const lines = yaml.trim().split('\n');
-        const result = {};
-        let currentKey = null;
-        let currentArray = null;
-        
-        for (const line of lines) {
-            if (!line.trim()) continue;
-            
-            const trimmed = line.trim();
-            
-            // Handle array items
+        const lines = yaml.replace(/\t/g, '    ').split('\n');
+        const root = {};
+        const stack = [{ indent: -1, value: root }];
+
+        const getNextMeaningfulLine = (startIndex) => {
+            for (let j = startIndex + 1; j < lines.length; j++) {
+                const candidate = lines[j];
+                if (!candidate.trim()) continue;
+                const indent = candidate.match(/^(\s*)/)[1].length;
+                return {
+                    indent,
+                    trimmed: candidate.trim()
+                };
+            }
+            return null;
+        };
+
+        for (let i = 0; i < lines.length; i++) {
+            const rawLine = lines[i];
+            if (!rawLine.trim()) continue;
+
+            const indentMatch = rawLine.match(/^(\s*)/);
+            const indent = indentMatch ? indentMatch[1].length : 0;
+            const trimmed = rawLine.trim();
+
+            while (stack.length > 1 && indent <= stack[stack.length - 1].indent) {
+                stack.pop();
+            }
+
+            const parent = stack[stack.length - 1].value;
+
             if (trimmed.startsWith('- ')) {
-                const value = trimmed.slice(2).trim();
-                if (currentArray && currentKey) {
-                    result[currentKey].push(value);
+                if (!Array.isArray(parent)) {
+                    throw new Error('Invalid YAML structure: array item without parent array');
                 }
+
+                const itemContent = trimmed.slice(2).trim();
+
+                if (!itemContent) {
+                    const newItem = {};
+                    parent.push(newItem);
+                    stack.push({ indent, value: newItem });
+                    continue;
+                }
+
+                if (itemContent.includes(':')) {
+                    const colonIndex = itemContent.indexOf(':');
+                    const itemKey = itemContent.slice(0, colonIndex).trim();
+                    const valuePart = itemContent.slice(colonIndex + 1).trim();
+
+                    const newItem = {};
+                    parent.push(newItem);
+                    stack.push({ indent, value: newItem });
+
+                    if (valuePart) {
+                        newItem[itemKey] = this.coerceYAMLValue(valuePart);
+                    } else {
+                        const next = getNextMeaningfulLine(i);
+                        if (next && next.indent > indent && next.trimmed.startsWith('- ')) {
+                            newItem[itemKey] = [];
+                            stack.push({ indent: indent + 1, value: newItem[itemKey] });
+                        } else if (next && next.indent > indent) {
+                            newItem[itemKey] = {};
+                            stack.push({ indent: indent + 1, value: newItem[itemKey] });
+                        } else {
+                            newItem[itemKey] = null;
+                        }
+                    }
+                } else {
+                    parent.push(this.coerceYAMLValue(itemContent));
+                }
+
                 continue;
             }
-            
-            // Handle key-value pairs
-            if (trimmed.includes(':')) {
-                const [key, ...valueParts] = trimmed.split(':');
-                const value = valueParts.join(':').trim();
-                const cleanKey = key.trim();
-                
-                if (value === '') {
-                    // Start of array or object
-                    result[cleanKey] = [];
-                    currentKey = cleanKey;
-                    currentArray = result[cleanKey];
+
+            const colonIndex = trimmed.indexOf(':');
+            if (colonIndex === -1) continue;
+
+            const key = trimmed.slice(0, colonIndex).trim();
+            const valuePart = trimmed.slice(colonIndex + 1).trim();
+
+            if (!valuePart) {
+                const next = getNextMeaningfulLine(i);
+                if (next && next.indent > indent && next.trimmed.startsWith('- ')) {
+                    parent[key] = [];
+                    stack.push({ indent, value: parent[key] });
+                } else if (next && next.indent > indent) {
+                    parent[key] = {};
+                    stack.push({ indent, value: parent[key] });
                 } else {
-                    // Simple key-value
-                    result[cleanKey] = value;
-                    currentKey = null;
-                    currentArray = null;
+                    parent[key] = null;
                 }
+            } else {
+                parent[key] = this.coerceYAMLValue(valuePart);
             }
         }
+
+        return root;
+    }
+
+    coerceYAMLValue(value) {
+        let trimmed = value.trim();
         
-        return result;
+        if (!trimmed) return '';
+        
+        if ((trimmed.startsWith('"') && trimmed.endsWith('"')) || 
+            (trimmed.startsWith("'") && trimmed.endsWith("'"))) {
+            trimmed = trimmed.slice(1, -1);
+        }
+
+        const lower = trimmed.toLowerCase();
+        if (lower === 'true') return true;
+        if (lower === 'false') return false;
+        if (lower === 'null') return null;
+
+        return trimmed;
     }
     
     // Basic markdown to HTML focusing on media elements preservation
@@ -183,7 +259,7 @@ export class ContentService {
                 
                 const videoAttrString = videoAttrs.join(' ');
                 const playbackScript = playbackRate !== '1' ? 
-                    `<script>document.currentScript.previousElementSibling.querySelector('video').playbackRate = ${playbackRate};</script>` : '';
+                    `<script>(function(){const video=document.currentScript.previousElementSibling; if(video){video.playbackRate=${playbackRate};}})();</script>` : '';
                 
                 return `<figure class="media-block" data-media${figureAttrs}>
                     <video ${videoAttrString}>
@@ -282,7 +358,9 @@ export class ContentService {
                 const chartId = `chart-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
                 
                 // Create chart as single media block (like images and blockquotes)
-                return `<figure class="chart-block media-block" data-media data-chart-type="${type}" data-chart-config='${JSON.stringify(config)}' data-chart-id="${chartId}">
+                const configAttr = JSON.stringify(config).replace(/"/g, '&quot;');
+
+                return `<figure class="chart-block media-block" data-media data-chart-type="${type}" data-chart-config="${configAttr}" data-chart-id="${chartId}">
                     <canvas id="${chartId}" class="chart-canvas"></canvas>
                     ${config.title ? `<figcaption class="chart-title">${config.title}</figcaption>` : ''}
                 </figure>`;

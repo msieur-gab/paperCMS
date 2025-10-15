@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intelligent Media Sync Demo – Kanawa Tsugite</title>
+    <style>
+        :root {
+            color-scheme: light dark;
+            --bg: #0f1117;
+            --fg: #f5f7fb;
+            --muted: #8d94a5;
+            --accent: #f3c969;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+        /* section {min-height: 100vh;} */
+
+        body {
+            margin: 0;
+            font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: #f6f7fb;
+            color: #1b1f2c;
+            min-height: 100vh;
+        }
+
+        .layout {
+            display: block;
+            min-height: 100vh;
+        }
+
+        .content-column {
+            overflow-y: auto;
+            padding: 3rem clamp(1.5rem, 5vw, 4rem);
+            background: #ffffff;
+            height: 100vh;
+        }
+
+        .content-column h1 {
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            margin-bottom: 0.4em;
+        }
+
+        .content-column h2 {
+            margin-top: 2.4rem;
+            font-size: clamp(1.6rem, 3vw, 2.2rem);
+        }
+
+        .content-column p,
+        .content-column li {
+            line-height: 1.7;
+            font-size: 1rem;
+            max-width: 60ch;
+        }
+
+        .content-column figure {
+            margin: 2rem 0;
+            border: 1px solid rgba(15, 17, 23, 0.08);
+            border-radius: 14px;
+            overflow: hidden;
+            background: #fafbff;
+        }
+
+        .content-column figure img,
+        .content-column figure video {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        .content-column figure figcaption {
+            padding: 0.75rem 1.2rem;
+            font-size: 0.875rem;
+            color: #616779;
+        }
+
+        .media-rail {
+            background: var(--bg);
+            color: var(--fg);
+            display: grid;
+            grid-template-rows: auto 1fr;
+            padding: 2.5rem;
+            gap: 1.5rem;
+        }
+
+        .media-rail__label {
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 0.24em;
+            font-size: 0.75rem;
+            color: var(--muted);
+        }
+
+        .media-rail__title {
+            margin: 0.35rem 0 0;
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        .media-rail__stage {
+            position: relative;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 320px;
+            box-shadow: 0 20px 40px rgba(15, 17, 23, 0.35);
+        }
+
+        .media-rail__stage figure {
+            margin: 0;
+            width: 100%;
+        }
+
+        .media-rail__stage img,
+        .media-rail__stage video {
+            display: block;
+            width: 100%;
+            border-radius: 12px;
+            object-fit: cover;
+        }
+
+        .media-rail__stage figcaption {
+            margin-top: 0.8rem;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            color: rgba(245, 247, 251, 0.78);
+        }
+
+        .media-rail__placeholder {
+            color: var(--muted);
+            text-align: center;
+            max-width: 22ch;
+        }
+
+        .media-rail__slot {
+            width: 100%;
+        }
+
+        .media-rail-layout {
+            display: grid;
+            height: 100vh;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+        }
+
+        /* article [data-media]  {
+            visibility: hidden;
+            height: 0;
+            opacity: 0;} */
+
+        blockquote[data-media] {
+            margin: 2.2rem 0;
+            padding: 1.6rem 2rem;
+            border-left: 4px solid var(--accent);
+            background: #fff4d7;
+            color: #30270a;
+            border-radius: 12px;
+        
+            font-style: italic;
+        }
+
+        @media (max-width: 1040px) {
+            .media-rail-layout {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="layout" id="demo-layout">
+        <article class="content-column content-scroll" id="demo-scroll">
+            <header>
+                <span>Craft & Process</span>
+                <h1>Kanawa Tsugite – Interlocking Strength</h1>
+                <p>
+                    Kanawa-tsugite is a masterful Japanese timber joint used to connect beams along their length.
+                    Its interlocking geometry delivers strength, elegance, and the uncanny feeling that wood can be
+                    woven like cloth.
+                </p>
+            </header>
+
+            <figure data-media>
+                <img src="content/media/tsugi3.jpg" alt="Kanawa tsugite joinery components laid out on a workbench">
+                <figcaption>The Kanawa joint relies on interlocking wedges that translate compression into stability.</figcaption>
+            </figure>
+
+            <section>
+                <h2>Understanding the Geometry</h2>
+                <p>
+                    The joint is composed of three interlocking wedges. Two outer cheeks capture a central spline, while
+                    angled shoulders lock the assembly when force is applied. Because the pieces slide together along a
+                    single axis, the craftsman must work with millimetre precision—any deviation and the joint binds.
+                </p>
+                <figure data-media>
+                    <img src="content/media/tsugi.jpg" alt="Diagram of the Kanawa tsugite joint showing intersecting cuts">
+                    <figcaption>Exploded axonometric of the Kanawa tsugite highlighting the dovetail shoulders.</figcaption>
+                </figure>
+            </section>
+
+            <section>
+                <h2>Cutting Sequence</h2>
+                <p>
+                    Traditionally the Kanawa-tsugite was cut entirely by hand using marked reference faces. Contemporary
+                    luthiers and joiners increasingly rely on CNC templates, but the logic remains the same: cut the
+                    housings first, refine the tails, then incise the locking wedges.
+                </p>
+                <figure data-media>
+                    <video controls preload="metadata" poster="content/media/tsugi2.jpg">
+                        <source src="content/media/senz.webm" type="video/webm">
+                        Your browser does not support the video tag.
+                    </video>
+                    <figcaption>Demonstration: aligning the spline before the locking cheeks slide home.</figcaption>
+                </figure>
+            </section>
+
+            <section>
+                <h2>Material Considerations</h2>
+                <p>
+                    Density and grain direction dictate how forgiving the joint will be. Hinoki cedar was historically
+                    favoured: its straight fibres resist splitting, and its springiness absorbs seasonal movement. Modern
+                    makers experimenting with maple or ash often reinforce the joint with concealed dowels.
+                </p>
+                <figure data-media>
+                    <img src="content/media/tsugi2.jpg" alt="Close-up of the Kanawa joint showing compressed fibers">
+                    <figcaption>Compression marks reveal the pressure gradient once the wedges are seated.</figcaption>
+                </figure>
+            </section>
+
+            <section>
+                <h2>Lessons for Designers</h2>
+                <p>
+                    The Kanawa-tsugite is more than a woodworking curiosity—it’s a study in constraint-driven design.
+                    Every surface nests against another, and the entire form communicates how it wants to be assembled.
+                </p>
+                <blockquote data-media>
+                    “When you pare away everything that doesn’t serve the structure, you’re left with poetry:
+                    a joint that only fits together one way, and rewards patience with permanence.”
+                </blockquote>
+            </section>
+
+            <section>
+                <h2>Further Reading</h2>
+                <ul>
+                    <li>Wood Joints in Classical Japanese Architecture – Nakahara</li>
+                    <li>Crafting Modular Connections – Contemporary Timber Guild Journal</li>
+                    <li>Beyond Dovetails: Parametric joinery explorations</li>
+                </ul>
+            </section>
+        </article>
+
+    </main>
+
+    <script type="module">
+        import { createResponsiveMediaRail } from './js/ui/mediaRailV2.js';
+
+        const scrollContainer = document.getElementById('demo-scroll');
+        const mediaElements = Array.from(scrollContainer.querySelectorAll('[data-media]'));
+        const layout = document.getElementById('demo-layout');
+
+        const rail = createResponsiveMediaRail({
+            scrollContainer,
+            mediaElements,
+            options: {
+                breakpoint: 1040,
+                position: 'left'
+            }
+        });
+
+        rail.init();
+
+        window.mediaRailDemo = rail;
+    </script>
+</body>
+</html>

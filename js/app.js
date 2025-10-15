@@ -316,9 +316,11 @@ class App {
         if (isMobile) {
             if (this.intelligentMediaSync) {
                 this.intelligentMediaSync.disconnect();
+                this.intelligentMediaSync = null;
             }
             if (this.mediaManager) {
                 this.mediaManager.destroy();
+                this.mediaManager = null;
             }
         } else if (this.state.isProjectOpen) {
             // Reinitialize desktop layout

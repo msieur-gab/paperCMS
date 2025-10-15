@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intelligent Media Sync API - Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+
+        .demo-container {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            height: 100vh;
+        }
+
+        .content-area {
+            background: white;
+            border-radius: 12px;
+            padding: 3rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .content-scroll {
+            height: calc(100vh - 4rem);
+            overflow-y: auto;
+            padding-right: 1rem;
+        }
+
+        .content-scroll::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .content-scroll::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .content-scroll::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        .content-scroll::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #1a1a1a;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            margin: 3rem 0 1rem;
+            color: #2a2a2a;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            max-width: 70ch;
+            font-size: 1.1rem;
+        }
+
+        .media-element {
+            margin: 2rem 0;
+            padding: 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            color: white;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .media-element.chart {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .media-element.quote {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            font-style: italic;
+            padding: 2.5rem;
+        }
+
+        .media-element:last-of-type {
+            margin-bottom: 60vh; /* Allow scrolling last media into full view */
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 2rem;
+            height: fit-content;
+        }
+
+        .media-panel {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .media-panel.active {
+            transform: scale(1.02);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+        }
+
+        .active-media {
+            width: 100%;
+            text-align: center;
+        }
+
+        .active-media h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #1a1a1a;
+        }
+
+        .media-preview {
+            width: 100%;
+            height: 250px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .debug-panel {
+            background: #2d2d2d;
+            color: #00ff00;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        .debug-panel h4 {
+            color: #ffff00;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .debug-line {
+            margin: 0.25rem 0;
+        }
+
+        .controls {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .controls h4 {
+            margin-bottom: 1rem;
+            color: #1a1a1a;
+        }
+
+        .control-group {
+            margin-bottom: 1rem;
+        }
+
+        .control-group label {
+            display: block;
+            margin-bottom: 0.25rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .control-group input[type="range"] {
+            width: 100%;
+        }
+
+        .control-group .value-display {
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        @media (max-width: 1024px) {
+            .demo-container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: relative;
+                top: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <div class="content-area">
+            <div class="content-scroll">
+                <h1>Intelligent Media Sync Demo</h1>
+                <p>
+                    This demo showcases the Intelligent Media Synchronization API.
+                    Scroll through this content and watch how the sidebar automatically
+                    updates to show the most relevant media element based on your reading position and scroll velocity.
+                </p>
+
+                <h2>Section 1: Understanding the Basics</h2>
+                <p>
+                    The API uses IntersectionObserver to track element visibility with 21
+                    different threshold levels (0%, 5%, 10%...100%). This provides fine-grained
+                    visibility scores for each element.
+                </p>
+                <p>
+                    As you scroll, the system calculates velocity using Exponential Moving Average (EMA)
+                    smoothing, which filters out noise and provides natural-feeling tracking.
+                </p>
+
+                <div class="media-element" data-media-id="1">
+                    📊 Media Element #1: Visibility Tracking
+                </div>
+
+                <p>
+                    Notice how the sidebar shows this media element? The API determined it's
+                    the most relevant based on your current scroll position and the element's visibility.
+                </p>
+
+                <h2>Section 2: Velocity-Adaptive Behavior</h2>
+                <p>
+                    The system adapts to different scroll speeds. Try scrolling very slowly through
+                    this section - the media will stay stable, respecting your focused reading.
+                </p>
+                <p>
+                    Now try scrolling quickly. The system will switch to predictive mode, looking
+                    ahead 200ms to show you what's coming next, not what just passed.
+                </p>
+
+                <div class="media-element chart" data-media-id="2">
+                    📈 Media Element #2: Velocity Adaptation
+                </div>
+
+                <p>
+                    The API recognizes four distinct scroll modes:
+                </p>
+                <ul style="margin: 1rem 0; padding-left: 2rem; max-width: 70ch;">
+                    <li><strong>Slow scroll</strong> (&lt;0.02 px/ms): Conservative switching for careful reading</li>
+                    <li><strong>Medium scroll</strong> (0.02-0.2 px/ms): Progressive switching with reading direction</li>
+                    <li><strong>Responsive scroll</strong> (0.2-0.4 px/ms): More eager switching to prevent missing content</li>
+                    <li><strong>Fast scroll</strong> (&gt;0.4 px/ms): Predictive lookahead mode</li>
+                </ul>
+
+                <h2>Section 3: Hysteresis Prevents Flickering</h2>
+                <p>
+                    Without hysteresis, elements with similar visibility scores (like 30% each)
+                    would fight for active status, causing annoying flickering.
+                </p>
+
+                <div class="media-element quote" data-media-id="3">
+                    💬 Media Element #3: Hysteresis System
+                </div>
+
+                <p>
+                    The API uses asymmetric thresholds: an element needs 40% visibility to <em>become</em>
+                    active, but the current element only loses active status below 15% visibility.
+                </p>
+                <p>
+                    This creates a "sticky" effect that prevents rapid switching while still
+                    responding appropriately to significant changes in scroll position.
+                </p>
+
+                <h2>Section 4: Performance Optimization</h2>
+                <p>
+                    Instead of debouncing, the API uses requestAnimationFrame to sync updates
+                    with the browser's paint cycle. This provides smooth 60fps performance while
+                    avoiding redundant calculations within a single frame.
+                </p>
+
+                <div class="media-element" data-media-id="4">
+                    ⚡ Media Element #4: Performance
+                </div>
+
+                <p>
+                    All DOM measurements are batched together to prevent layout thrashing.
+                    The IntersectionObserver API runs off the main thread, keeping the
+                    interface responsive even with many elements.
+                </p>
+
+                <h2>Section 5: Configurable Behavior</h2>
+                <p>
+                    Try adjusting the controls in the sidebar to see how different options
+                    affect the synchronization behavior. You can tune the system for your
+                    specific use case without modifying any code.
+                </p>
+
+                <div class="media-element chart" data-media-id="5">
+                    ⚙️ Media Element #5: Configuration
+                </div>
+
+                <p>
+                    The API is completely framework-agnostic and has zero dependencies.
+                    It works with vanilla JavaScript, React, Vue, or any other framework.
+                </p>
+
+                <h2>Section 6: Real-World Applications</h2>
+                <p>
+                    This technology is perfect for:
+                </p>
+                <ul style="margin: 1rem 0; padding-left: 2rem; max-width: 70ch;">
+                    <li>Long-form articles with contextual media</li>
+                    <li>Documentation with synchronized code examples</li>
+                    <li>Educational content with step-by-step visuals</li>
+                    <li>Data journalism with chart-text synchronization</li>
+                    <li>Photo essays with narrative-driven imagery</li>
+                </ul>
+
+                <div class="media-element quote" data-media-id="6">
+                    🌐 Media Element #6: Applications
+                </div>
+
+                <p>
+                    The system respects the 70-character line length constraint for optimal
+                    readability while making productive use of the resulting whitespace on larger screens.
+                </p>
+
+                <h2>Conclusion</h2>
+                <p>
+                    Scroll back up to see how the system handles bidirectional scrolling.
+                    Notice how it smoothly updates the sidebar regardless of scroll direction.
+                </p>
+                <p>
+                    This demo illustrates the core principles of velocity-adaptive, hysteresis-based
+                    synchronization that reduces cognitive load and enhances reading comprehension.
+                </p>
+
+                <div class="media-element" data-media-id="7">
+                    ✅ Media Element #7: Summary
+                </div>
+
+                <p style="margin-top: 2rem; padding: 1.5rem; background: #f0f0f0; border-radius: 8px;">
+                    <strong>Next steps:</strong> Check out the source code in
+                    <code>demo.js</code> to see how easy it is to integrate the API
+                    into your own projects. The entire setup is less than 50 lines of code!
+                </p>
+            </div>
+        </div>
+
+        <div class="sidebar">
+            <div class="controls">
+                <h4>Live Controls</h4>
+                <div class="control-group">
+                    <label>
+                        EMA Alpha: <span class="value-display" id="ema-value">0.25</span>
+                    </label>
+                    <input type="range" id="ema-alpha" min="0.1" max="0.5" step="0.05" value="0.25">
+                </div>
+                <div class="control-group">
+                    <label>
+                        Min Switch Interval: <span class="value-display" id="interval-value">120</span>ms
+                    </label>
+                    <input type="range" id="min-interval" min="0" max="300" step="20" value="120">
+                </div>
+                <div class="control-group">
+                    <label>
+                        Fast Scroll Threshold: <span class="value-display" id="threshold-value">0.4</span>
+                    </label>
+                    <input type="range" id="velocity-threshold" min="0.2" max="0.8" step="0.1" value="0.4">
+                </div>
+            </div>
+
+            <div class="media-panel" id="media-panel">
+                <div class="active-media">
+                    <h3>Active Media</h3>
+                    <div class="media-preview" id="media-preview" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        Scroll to begin
+                    </div>
+                    <p id="media-description">Start scrolling through the article to see the synchronization in action.</p>
+                </div>
+            </div>
+
+            <div class="debug-panel">
+                <h4>Debug Info</h4>
+                <div class="debug-line">Index: <span id="debug-index">-</span></div>
+                <div class="debug-line">Velocity: <span id="debug-velocity">0.0000</span> px/ms</div>
+                <div class="debug-line">Direction: <span id="debug-direction">-</span></div>
+                <div class="debug-line">Visible: <span id="debug-visible">0</span> elements</div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="./demo.js"></script>
+</body>
+</html>

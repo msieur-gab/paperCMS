@@ -105,9 +105,17 @@ export class ChartService {
         // Trigger Chart.js resize for all charts
         for (const [chartId, chartData] of this.charts) {
             try {
-                if (chartData.chart && chartData.chart.resize) {
-                    chartData.chart.resize();
+                const canvas = chartData?.canvas;
+                const element = chartData?.element;
+                const isAttached =
+                    (canvas && canvas.ownerDocument && canvas.isConnected) ||
+                    (element && element.ownerDocument && element.isConnected);
+
+                if (!isAttached) {
+                    continue;
                 }
+
+                chartData.chart?.resize?.();
             } catch (error) {
                 console.error('Failed to resize chart:', chartId, error);
             }
