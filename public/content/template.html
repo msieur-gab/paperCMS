@@ -1,3 +1,120 @@
-<section>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Kanawa tsugite - Gabriel Baude</title>
+    <meta name="description" content="An exploration of Kanawa-tsugi, a traditional Japanese woodworking technique">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="http://127.0.0.1:5500/public/content/template.html">
+    <meta property="og:title" content="Kanawa tsugite - Gabriel Baude">
+    <meta property="og:description" content="An exploration of Kanawa-tsugi, a traditional Japanese woodworking technique">
+    <meta property="og:image" content="http://127.0.0.1:5500/content/media/tsugi3.jpg">
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="http://127.0.0.1:5500/public/content/template.html">
+    <meta property="twitter:title" content="Kanawa tsugite - Gabriel Baude">
+    <meta property="twitter:description" content="An exploration of Kanawa-tsugi, a traditional Japanese woodworking technique">
+    <meta property="twitter:image" content="http://127.0.0.1:5500/content/media/tsugi3.jpg">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="http://127.0.0.1:5500/public/content/template.html">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Kanawa tsugite - Gabriel Baude",
+    "description": "An exploration of Kanawa-tsugi, a traditional Japanese woodworking technique",
+    "url": "http://127.0.0.1:5500/public/content/template.html",
+    "image": "http://127.0.0.1:5500/content/media/tsugi3.jpg",
+    "author": {
+        "@type": "Person",
+        "name": "Gabriel Baude"
+    },
+    "publisher": {
+        "@type": "Person",
+        "name": "Gabriel Baude"
+    },
+    "datePublished": "",
+    "dateModified": ""
+}
+    </script>
+
+    <!-- Link to SPA styles -->
+    <link rel="stylesheet" href="http://127.0.0.1:5500/css/base.css">
+    <link rel="stylesheet" href="http://127.0.0.1:5500/css/theme.css">
+    <link rel="stylesheet" href="http://127.0.0.1:5500/css/typography.css">
+    <link rel="stylesheet" href="http://127.0.0.1:5500/css/layouts.css">
+    <link rel="stylesheet" href="http://127.0.0.1:5500/css/components.css">
+
+    <!-- Minimal standalone styles -->
+    <style>
+        body {
+            background: var(--bg-primary, #fafafa);
+            color: var(--text-primary, #333);
+        }
+        /* Override SPA horizontal layout for standalone viewing */
+        main {
+            display: block !important;
+            height: auto !important;
+            overflow-x: visible !important;
+            scroll-snap-type: none !important;
+        }
+        section {
+            display: block !important;
+            min-width: auto !important;
+            width: 100% !important;
+            height: auto !important;
+            min-height: auto !important;
+        }
+        .content-wrapper {
+            max-width: 70ch;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .spa-redirect {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.5rem 1rem;
+            background: var(--accent, #007bff);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <a href="../../#project/template" class="spa-redirect">View Interactive Version →</a>
+
+    <main class="content-wrapper" id="article-content">
+        <section>
 <h1>Kanawa tsugite - Joinery in design</h1>
 </section>
+
+    </main>
+
+    <script>
+        // Add Chart.js support if needed
+        if (document.querySelector('[data-chart-type]')) {
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js';
+            document.head.appendChild(script);
+
+            script.onload = function() {
+                document.querySelectorAll('[data-chart-type]').forEach(function(figure) {
+                    const canvas = figure.querySelector('canvas');
+                    const config = JSON.parse(figure.getAttribute('data-chart-config'));
+                    new Chart(canvas, config);
+                });
+            };
+        }
+    </script>
+</body>
+</html>

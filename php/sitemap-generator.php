@@ -76,13 +76,13 @@ class SitemapGenerator {
         $xml .= $this->createURLEntry($this->baseUrl . '/#about', date('Y-m-d'), 'monthly', '0.9');
         $xml .= $this->createURLEntry($this->baseUrl . '/#work', date('Y-m-d'), 'daily', '0.9');
         
-        // Add static pages for published articles
+        // Add content pages for published articles
         foreach ($publications as $pub) {
             if ($pub['status'] === 'published') {
                 $filename = pathinfo($pub['path'], PATHINFO_FILENAME);
-                $staticUrl = $this->baseUrl . '/static/' . $filename . '.html';
+                $contentUrl = $this->baseUrl . '/public/content/' . $filename . '.html';
                 $lastmod = $pub['date']['updated'];
-                $xml .= $this->createURLEntry($staticUrl, $lastmod, 'monthly', '0.8');
+                $xml .= $this->createURLEntry($contentUrl, $lastmod, 'monthly', '0.8');
             }
         }
         
@@ -116,12 +116,12 @@ class SitemapGenerator {
         $robotsContent .= "# Sitemap location\n";
         $robotsContent .= "Sitemap: " . $this->baseUrl . "/sitemap.xml\n\n";
         $robotsContent .= "# Specific allowances for important content\n";
-        $robotsContent .= "Allow: /static/\n";
-        $robotsContent .= "Allow: /content/\n";
+        $robotsContent .= "Allow: /public/content/\n";
+        $robotsContent .= "Allow: /content/media/\n";
         $robotsContent .= "Allow: /public/api/\n\n";
         $robotsContent .= "# Crawl delay (optional - prevents overwhelming your server)\n";
         $robotsContent .= "Crawl-delay: 1\n";
-        
+
         file_put_contents($this->baseDir . '/robots.txt', $robotsContent);
     }
     

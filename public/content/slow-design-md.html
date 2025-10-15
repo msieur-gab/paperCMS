@@ -1,6 +1,102 @@
-<section>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Embracing slow design - Gabriel Baude</title>
+    <meta name="description" content="Exploring how Taoist principles offer a revolutionary perspective on contemporary innovation and creation. This exploration challenges our rapid-paced approach through the lens of Wu Wei, revealing how intentional slowness leads to more meaningful and sustainable design solutions.">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="http://127.0.0.1:5500/public/content/slow-design-md.html">
+    <meta property="og:title" content="Embracing slow design - Gabriel Baude">
+    <meta property="og:description" content="Exploring how Taoist principles offer a revolutionary perspective on contemporary innovation and creation. This exploration challenges our rapid-paced approach through the lens of Wu Wei, revealing how intentional slowness leads to more meaningful and sustainable design solutions.">
+    <meta property="og:image" content="http://127.0.0.1:5500/content/media/dao1.jpg">
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="http://127.0.0.1:5500/public/content/slow-design-md.html">
+    <meta property="twitter:title" content="Embracing slow design - Gabriel Baude">
+    <meta property="twitter:description" content="Exploring how Taoist principles offer a revolutionary perspective on contemporary innovation and creation. This exploration challenges our rapid-paced approach through the lens of Wu Wei, revealing how intentional slowness leads to more meaningful and sustainable design solutions.">
+    <meta property="twitter:image" content="http://127.0.0.1:5500/content/media/dao1.jpg">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="http://127.0.0.1:5500/public/content/slow-design-md.html">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Embracing slow design - Gabriel Baude",
+    "description": "Exploring how Taoist principles offer a revolutionary perspective on contemporary innovation and creation. This exploration challenges our rapid-paced approach through the lens of Wu Wei, revealing how intentional slowness leads to more meaningful and sustainable design solutions.",
+    "url": "http://127.0.0.1:5500/public/content/slow-design-md.html",
+    "image": "http://127.0.0.1:5500/content/media/dao1.jpg",
+    "author": {
+        "@type": "Person",
+        "name": "Gabriel Baude"
+    },
+    "publisher": {
+        "@type": "Person",
+        "name": "Gabriel Baude"
+    },
+    "datePublished": "",
+    "dateModified": ""
+}
+    </script>
+
+    <!-- Link to SPA styles -->
+    <link rel="stylesheet" href="http://127.0.0.1:5500/css/base.css">
+    <link rel="stylesheet" href="http://127.0.0.1:5500/css/theme.css">
+    <link rel="stylesheet" href="http://127.0.0.1:5500/css/typography.css">
+    <link rel="stylesheet" href="http://127.0.0.1:5500/css/layouts.css">
+    <link rel="stylesheet" href="http://127.0.0.1:5500/css/components.css">
+
+    <!-- Minimal standalone styles -->
+    <style>
+        body {
+            background: var(--bg-primary, #fafafa);
+            color: var(--text-primary, #333);
+        }
+        /* Override SPA horizontal layout for standalone viewing */
+        main {
+            display: block !important;
+            height: auto !important;
+            overflow-x: visible !important;
+            scroll-snap-type: none !important;
+        }
+        section {
+            display: block !important;
+            min-width: auto !important;
+            width: 100% !important;
+            height: auto !important;
+            min-height: auto !important;
+        }
+        .content-wrapper {
+            max-width: 70ch;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .spa-redirect {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.5rem 1rem;
+            background: var(--accent, #007bff);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <a href="../../#project/slow-design-md" class="spa-redirect">View Interactive Version →</a>
+
+    <main class="content-wrapper" id="article-content">
+        <section>
 <h1>Embracing Slow Design: Ancient Wisdom in Modern Practice</h1>
-<figure class="media-block" data-media data-fit="cover"><img src="content/media/dao1.jpg" alt="Contemplative Design Practice" /></figure>
+<figure class="media-block" data-media data-fit="cover"><img src="../../content/media/dao1.jpg" alt="Contemplative Design Practice" /></figure>
 <p>In contemporary design practice, we often equate progress with speed, innovation with disruption, and success with rapid iteration. Yet the most profound design solutions sometimes emerge not from acceleration, but from purposeful deceleration. This exploration delves into how the ancient Taoist concept of Wu Wei (effortless action) offers a compelling alternative to our culture of perpetual acceleration. By examining design through this philosophical lens, we uncover how deliberate slowness can lead to more thoughtful, sustainable, and meaningful solutions. The principles of slow design challenge us to reconsider our relationship with time, process, and innovation - suggesting that the path to breakthrough design thinking might not lie in moving faster, but in learning when to move slowly and deliberately.</p>
 </section>
 <section>
@@ -63,3 +159,24 @@
 <p>As we face increasingly complex design challenges in our rapidly changing world, the wisdom of Wu Wei and the practice of slow design offer valuable guidance. They remind us that lasting innovation often emerges not from rushing forward, but from moving deliberately and thoughtfully, in harmony with the natural rhythms of both human needs and environmental systems.</p>
 <p>The path forward for design may not lie in moving ever faster, but in learning when to move slowly, when to pause, and when to allow solutions to emerge naturally from deep understanding and careful consideration.</p>
 </section>
+
+    </main>
+
+    <script>
+        // Add Chart.js support if needed
+        if (document.querySelector('[data-chart-type]')) {
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js';
+            document.head.appendChild(script);
+
+            script.onload = function() {
+                document.querySelectorAll('[data-chart-type]').forEach(function(figure) {
+                    const canvas = figure.querySelector('canvas');
+                    const config = JSON.parse(figure.getAttribute('data-chart-config'));
+                    new Chart(canvas, config);
+                });
+            };
+        }
+    </script>
+</body>
+</html>

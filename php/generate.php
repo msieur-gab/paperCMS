@@ -1,6 +1,5 @@
 <?php
 require_once 'markdown-to-json.php';
-require_once 'static-page-generator.php';
 require_once 'sitemap-generator.php';
 require_once 'html-content-generator.php';
 
@@ -49,18 +48,21 @@ echo $styles;
 
 try {
     $baseDir = dirname(__DIR__);
-    
-    // Process JSON files
+
+    echo "<h2>🚀 PaperCMS Content Generation</h2>";
+    echo "<p style='color: #666; margin-bottom: 2rem;'>Processing markdown files and generating outputs...</p>";
+
+    // 1. Process JSON API (metadata for SPA)
     $converter = new MarkdownConverter($baseDir);
     $count = $converter->processFiles();
     $stats = $converter->getProcessingStats();
 
-    // Generate static HTML pages for social media
-    $staticGenerator = new StaticPageGenerator($baseDir);
-    $staticResults = $staticGenerator->generateAllPages();
-    $staticStats = $staticGenerator->getGenerationStats();
+    // 2. Generate HTML content files (SEO-ready pages + SPA content)
+    $htmlGenerator = new HTMLContentGenerator($baseDir);
+    $htmlResults = $htmlGenerator->generateAllHTML();
+    $htmlStats = $htmlGenerator->getStats();
 
-    // Generate sitemap
+    // 3. Generate sitemap (SEO)
     $sitemapGenerator = new SitemapGenerator(null, $baseDir);
     $sitemapResult = $sitemapGenerator->generateSitemap();
     if ($sitemapResult['success']) {
@@ -68,11 +70,6 @@ try {
     } else {
         $sitemapStats = ['generated' => 0, 'error' => $sitemapResult['error']];
     }
-
-    // Generate HTML content files
-    $htmlGenerator = new HTMLContentGenerator($baseDir);
-    $htmlResults = $htmlGenerator->generateAllHTML();
-    $htmlStats = $htmlGenerator->getStats();
 
     echo "<h2>Content Processing Summary</h2>";
     echo "<div class='grid'>";
@@ -129,26 +126,28 @@ try {
         echo "</table></div>";
     }
 
-    // Static Page Generation Stats
+    // HTML Content Generation Stats (SEO + SPA)
     echo "<div><table>
-            <tr><th colspan='2'>Static Page Generation</th></tr>
+            <tr><th colspan='2'>📄 HTML Pages (SEO + SPA)</th></tr>
             <tr>
-                <td>Pages Generated</td>
-                <td class='count success'>{$staticResults['generated']}</td>
+                <td>Full HTML Pages</td>
+                <td class='count success'>{$htmlResults['generated']}</td>
             </tr>
             <tr>
-                <td>Generation Errors</td>
-                <td class='count " . (count($staticResults['errors']) > 0 ? 'error' : '') . "'>" . count($staticResults['errors']) . "</td>
+                <td>Errors</td>
+                <td class='count " . (count($htmlResults['errors']) > 0 ? 'error' : '') . "'>" . count($htmlResults['errors']) . "</td>
             </tr>
             <tr>
-                <td>Total Static Files</td>
-                <td class='count'>{$staticStats['static_pages_count']}</td>
+                <td style='font-size: 0.8rem; color: #666;' colspan='2'>→ public/content/*.html</td>
+            </tr>
+            <tr>
+                <td style='font-size: 0.8rem; color: #888;' colspan='2'>✓ SEO meta tags<br>✓ Social media cards<br>✓ SPA content extraction</td>
             </tr>
           </table></div>";
 
     // Sitemap Generation Stats
     echo "<div><table>
-            <tr><th colspan='2'>Sitemap Generation</th></tr>
+            <tr><th colspan='2'>🗺️ Sitemap (SEO)</th></tr>
             <tr>
                 <td>Sitemap Created</td>
                 <td class='count " . ($sitemapStats['generated'] > 0 ? 'success' : 'error') . "'>" . ($sitemapStats['generated'] > 0 ? 'Yes' : 'No') . "</td>
@@ -165,20 +164,10 @@ try {
                 <td class='error'>{$sitemapStats['error']}</td>
               </tr>";
     }
+    echo "<tr>
+            <td style='font-size: 0.8rem; color: #666;' colspan='2'>→ sitemap.xml</td>
+          </tr>";
     echo "</table></div>";
-
-    // HTML Content Generation Stats
-    echo "<div><table>
-            <tr><th colspan='2'>HTML Content Generation</th></tr>
-            <tr>
-                <td>HTML Files Generated</td>
-                <td class='count success'>{$htmlResults['generated']}</td>
-            </tr>
-            <tr>
-                <td>Generation Errors</td>
-                <td class='count " . (count($htmlResults['errors']) > 0 ? 'error' : '') . "'>" . count($htmlResults['errors']) . "</td>
-            </tr>
-          </table></div>";
 
     echo "</div>"; // Close grid
 
@@ -227,18 +216,18 @@ try {
         echo "</div>";
     }
 
-    // Generated Static Pages List
-    if ($staticResults['generated'] > 0) {
-        $staticFiles = glob($baseDir . '/static/*.html');
-        if (!empty($staticFiles)) {
-            echo "<h2>Generated Static Pages</h2>";
+    // Generated HTML Pages List
+    if ($htmlResults['generated'] > 0) {
+        $htmlFiles = glob($baseDir . '/public/content/*.html');
+        if (!empty($htmlFiles)) {
+            echo "<h2>Generated HTML Pages</h2>";
             echo "<div style='display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;'>";
-            foreach ($staticFiles as $file) {
+            foreach ($htmlFiles as $file) {
                 $filename = basename($file);
-                $fileUrl = './static/' . $filename;
+                $fileUrl = '../public/content/' . $filename;
                 $fileSize = round(filesize($file) / 1024, 1);
                 $modTime = date('Y-m-d H:i:s', filemtime($file));
-                
+
                 echo "<div style='border: 1px solid #ddd; border-radius: 4px; padding: 1rem;'>";
                 echo "<h3 style='margin: 0 0 0.5rem; font-size: 1rem;'><a href='$fileUrl' target='_blank'>$filename</a></h3>";
                 echo "<div style='font-size: 0.8rem; color: #666;'>";
@@ -249,23 +238,6 @@ try {
             }
             echo "</div>";
         }
-    }
-
-    // Static Generation Error Details (if any)
-    if (!empty($staticResults['errors'])) {
-        echo "<h2>Static Generation Errors</h2>
-              <table>
-                <tr>
-                    <th>File</th>
-                    <th>Error Message</th>
-                </tr>";
-        foreach ($staticResults['errors'] as $error) {
-            echo "<tr>
-                    <td>{$error['file']}</td>
-                    <td class='error'>{$error['error']}</td>
-                  </tr>";
-        }
-        echo "</table>";
     }
 
     // Error Details Section (if any)

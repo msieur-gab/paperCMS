@@ -1,6 +1,102 @@
-<section>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Building an ML Generator from Zero - Gabriel Baude</title>
+    <meta name="description" content="The complete journey of building Senz, an AI/ML sketch-to-MVP generator. From initial paper sketches to production-ready models, this chronicles our path through dataset creation, labeling pipelines, training services, and the countless challenges we overcame to transform simple pen-and-paper drawings into working AI systems.">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="http://127.0.0.1:5500/public/content/senz-making-of.html">
+    <meta property="og:title" content="Building an ML Generator from Zero - Gabriel Baude">
+    <meta property="og:description" content="The complete journey of building Senz, an AI/ML sketch-to-MVP generator. From initial paper sketches to production-ready models, this chronicles our path through dataset creation, labeling pipelines, training services, and the countless challenges we overcame to transform simple pen-and-paper drawings into working AI systems.">
+    <meta property="og:image" content="http://127.0.0.1:5500/content/media/senz-sketches.jpg">
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="http://127.0.0.1:5500/public/content/senz-making-of.html">
+    <meta property="twitter:title" content="Building an ML Generator from Zero - Gabriel Baude">
+    <meta property="twitter:description" content="The complete journey of building Senz, an AI/ML sketch-to-MVP generator. From initial paper sketches to production-ready models, this chronicles our path through dataset creation, labeling pipelines, training services, and the countless challenges we overcame to transform simple pen-and-paper drawings into working AI systems.">
+    <meta property="twitter:image" content="http://127.0.0.1:5500/content/media/senz-sketches.jpg">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="http://127.0.0.1:5500/public/content/senz-making-of.html">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Building an ML Generator from Zero - Gabriel Baude",
+    "description": "The complete journey of building Senz, an AI/ML sketch-to-MVP generator. From initial paper sketches to production-ready models, this chronicles our path through dataset creation, labeling pipelines, training services, and the countless challenges we overcame to transform simple pen-and-paper drawings into working AI systems.",
+    "url": "http://127.0.0.1:5500/public/content/senz-making-of.html",
+    "image": "http://127.0.0.1:5500/content/media/senz-sketches.jpg",
+    "author": {
+        "@type": "Person",
+        "name": "Gabriel Baude"
+    },
+    "publisher": {
+        "@type": "Person",
+        "name": "Gabriel Baude"
+    },
+    "datePublished": "",
+    "dateModified": ""
+}
+    </script>
+
+    <!-- Link to SPA styles -->
+    <link rel="stylesheet" href="http://127.0.0.1:5500/css/base.css">
+    <link rel="stylesheet" href="http://127.0.0.1:5500/css/theme.css">
+    <link rel="stylesheet" href="http://127.0.0.1:5500/css/typography.css">
+    <link rel="stylesheet" href="http://127.0.0.1:5500/css/layouts.css">
+    <link rel="stylesheet" href="http://127.0.0.1:5500/css/components.css">
+
+    <!-- Minimal standalone styles -->
+    <style>
+        body {
+            background: var(--bg-primary, #fafafa);
+            color: var(--text-primary, #333);
+        }
+        /* Override SPA horizontal layout for standalone viewing */
+        main {
+            display: block !important;
+            height: auto !important;
+            overflow-x: visible !important;
+            scroll-snap-type: none !important;
+        }
+        section {
+            display: block !important;
+            min-width: auto !important;
+            width: 100% !important;
+            height: auto !important;
+            min-height: auto !important;
+        }
+        .content-wrapper {
+            max-width: 70ch;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .spa-redirect {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.5rem 1rem;
+            background: var(--accent, #007bff);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <a href="../../#project/senz-making-of" class="spa-redirect">View Interactive Version →</a>
+
+    <main class="content-wrapper" id="article-content">
+        <section>
 <h1>Senz: From Sketches to AI</h1>
-<figure class="media-block" data-media><video autoplay muted><source src="content/media/senz.webm" type="video/webm">Your browser does not support the video tag.</video><script>(function(){const video=document.currentScript.previousElementSibling; if(video){video.playbackRate=2;}})();</script></figure>
+<figure class="media-block" data-media><video autoplay muted><source src="../../content/media/senz.webm" type="video/webm">Your browser does not support the video tag.</video><script>(function(){const video=document.currentScript.previousElementSibling; if(video){video.playbackRate=2;}})();</script></figure>
 <em>The making of an AI/ML generator that transforms simple sketches into working MVPs</em>
 </section>
 <section>
@@ -103,7 +199,7 @@ The same visual element could serve different functions depending on context. A 
 - Introduced confidence-based quality metrics</p>
 <h3>Model Confidence Evolution</h3>
 <p>The journey wasn't smooth. Our model confidence fluctuated significantly as we experimented with different approaches, data quality issues, and architectural changes. After nearly a year of iterations, a breakthrough in our neural architecture finally brought us to consistent 89% accuracy.</p>
-<figure class="chart-block media-block" data-media data-chart-type="bar" data-chart-config="{&quot;type&quot;:&quot;line&quot;,&quot;title&quot;:&quot;Senz Model Confidence &amp; Team Mood Over Time&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Jan&quot;,&quot;Feb&quot;,&quot;Mar&quot;,&quot;Apr&quot;,&quot;May&quot;,&quot;Jun&quot;,&quot;Jul&quot;,&quot;Aug&quot;,&quot;Sep&quot;,&quot;Oct&quot;,&quot;Nov&quot;,&quot;Dec&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Model Accuracy (%)&quot;,&quot;data&quot;:[45,52,48,61,58,65,59,62,71,73,68,89]},{&quot;label&quot;:&quot;Team Mood (1-10)&quot;,&quot;data&quot;:[95,75,35,70,45,75,50,65,80,85,60,95]}]}}" data-chart-id="chart-1760510683-776f63070"><canvas id="chart-1760510683-776f63070" class="chart-canvas"></canvas><figcaption class="chart-title">Senz Model Confidence &amp; Team Mood Over Time</figcaption></figure>
+<figure class="chart-block media-block" data-media data-chart-type="bar" data-chart-config="{&quot;type&quot;:&quot;line&quot;,&quot;title&quot;:&quot;Senz Model Confidence &amp; Team Mood Over Time&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Jan&quot;,&quot;Feb&quot;,&quot;Mar&quot;,&quot;Apr&quot;,&quot;May&quot;,&quot;Jun&quot;,&quot;Jul&quot;,&quot;Aug&quot;,&quot;Sep&quot;,&quot;Oct&quot;,&quot;Nov&quot;,&quot;Dec&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Model Accuracy (%)&quot;,&quot;data&quot;:[45,52,48,61,58,65,59,62,71,73,68,89]},{&quot;label&quot;:&quot;Team Mood (1-10)&quot;,&quot;data&quot;:[95,75,35,70,45,75,50,65,80,85,60,95]}]}}" data-chart-id="chart-1760518911-b22aa340e"><canvas id="chart-1760518911-b22aa340e" class="chart-canvas"></canvas><figcaption class="chart-title">Senz Model Confidence &amp; Team Mood Over Time</figcaption></figure>
 <p>The chart reveals two intertwined stories: our model's technical evolution and our team's emotional journey. We started with sky-high enthusiasm (95% mood) in January, but by March, when our model accuracy dropped to 48%, our spirits plummeted to 35% - a classic case of overreacting to technical setbacks.</p>
 <p>What's fascinating is how we learned to calibrate our expectations. By mid-year, we'd developed resilience, maintaining steady optimism (75-85% mood) even during model plateaus. Our mood became less reactive to individual drops, though we still couldn't help the slight dip in November when accuracy dropped to 68%.</p>
 <p>The December breakthrough brought both lines to euphoric peaks - 89% accuracy met with 95% team mood. We'd learned that building AI systems is as much about emotional endurance as technical prowess.</p>
@@ -166,3 +262,24 @@ The same visual element could serve different functions depending on context. A 
 <p>---</p>
 <p><em>Building Senz from zero required more than technical expertise—it demanded deep empathy for the creative process and relentless focus on human-centered design. Every dataset annotation, every model architecture decision, and every user interface choice was guided by one principle: amplify human creativity, don't replace it.</em></p>
 </section>
+
+    </main>
+
+    <script>
+        // Add Chart.js support if needed
+        if (document.querySelector('[data-chart-type]')) {
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js';
+            document.head.appendChild(script);
+
+            script.onload = function() {
+                document.querySelectorAll('[data-chart-type]').forEach(function(figure) {
+                    const canvas = figure.querySelector('canvas');
+                    const config = JSON.parse(figure.getAttribute('data-chart-config'));
+                    new Chart(canvas, config);
+                });
+            };
+        }
+    </script>
+</body>
+</html>

@@ -59,24 +59,262 @@ class HTMLContentGenerator
             throw new Exception('Invalid document format: No frontmatter found');
         }
 
+        $frontmatter = $matches[1];
         $markdown = $matches[2];
 
-        // Convert markdown to HTML
-        $html = $this->markdownToHTML($markdown);
+        // Parse frontmatter metadata
+        $metadata = $this->parseFrontmatter($frontmatter);
 
-        // Generate output filename
+        // Convert markdown to HTML
+        $bodyHtml = $this->markdownToHTML($markdown);
+
+        // Generate output filename and slug
         $relativePath = str_replace($this->contentDir . '/', '', $markdownFile);
         $slug = pathinfo($relativePath, PATHINFO_FILENAME);
+
+        // Generate full HTML page with meta tags
+        $fullHtml = $this->buildFullHtmlPage($metadata, $bodyHtml, $slug);
+
         $outputFile = $this->outputDir . '/' . $slug . '.html';
 
         // Write HTML file
-        file_put_contents($outputFile, $html);
+        file_put_contents($outputFile, $fullHtml);
 
         $this->generatedFiles[] = [
             'source' => basename($markdownFile),
             'output' => basename($outputFile),
-            'size' => strlen($html)
+            'size' => strlen($fullHtml)
         ];
+    }
+
+    /**
+     * Parse YAML frontmatter into associative array
+     */
+    private function parseFrontmatter($frontmatter)
+    {
+        $metadata = [];
+        $lines = explode("\n", $frontmatter);
+
+        foreach ($lines as $line) {
+            $line = trim($line);
+            if (empty($line)) continue;
+
+            // Simple key: value parsing
+            if (strpos($line, ':') !== false) {
+                list($key, $value) = explode(':', $line, 2);
+                $key = trim($key);
+                $value = trim($value);
+
+                // Remove quotes if present
+                $value = trim($value, '"\'');
+
+                $metadata[$key] = $value;
+            }
+        }
+
+        return $metadata;
+    }
+
+    /**
+     * Build full HTML page with meta tags
+     */
+    private function buildFullHtmlPage($metadata, $bodyHtml, $slug)
+    {
+        $baseUrl = Config::getBaseUrlWithSlash();
+        $pageUrl = $baseUrl . 'public/content/' . $slug . '.html';
+
+        // Use relative URL for SPA redirect so it works on any host
+        $spaUrl = '../../#project/' . $slug;
+
+        $title = isset($metadata['title']) ? htmlspecialchars($metadata['title']) . ' - Gabriel Baude' : 'Gabriel Baude';
+        $description = isset($metadata['description']) ? htmlspecialchars($metadata['description']) : 'Portfolio of Gabriel Baude - Designer and technologist';
+        $image = isset($metadata['thumbnail']) ? $this->resolveImageUrl($metadata['thumbnail'], $baseUrl) : $baseUrl . 'content/media/og-default.jpg';
+
+        // Add noindex meta tag for non-published content
+        $robotsMeta = '';
+        $status = isset($metadata['status']) ? $metadata['status'] : 'published';
+        if ($status !== 'published') {
+            $robotsMeta = '<meta name="robots" content="noindex, nofollow">';
+        }
+
+        $ogTags = $this->buildOpenGraphTags($metadata, $pageUrl, $title, $description, $image);
+        $twitterTags = $this->buildTwitterTags($metadata, $pageUrl, $title, $description, $image);
+        $structuredData = $this->buildStructuredData($metadata, $pageUrl, $title, $description, $image);
+
+        return <<<HTML
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {$robotsMeta}
+    <title>{$title}</title>
+    <meta name="description" content="{$description}">
+
+    {$ogTags}
+    {$twitterTags}
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{$pageUrl}">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {$structuredData}
+    </script>
+
+    <!-- Link to SPA styles -->
+    <link rel="stylesheet" href="{$baseUrl}css/base.css">
+    <link rel="stylesheet" href="{$baseUrl}css/theme.css">
+    <link rel="stylesheet" href="{$baseUrl}css/typography.css">
+    <link rel="stylesheet" href="{$baseUrl}css/layouts.css">
+    <link rel="stylesheet" href="{$baseUrl}css/components.css">
+
+    <!-- Minimal standalone styles -->
+    <style>
+        body {
+            background: var(--bg-primary, #fafafa);
+            color: var(--text-primary, #333);
+        }
+        /* Override SPA horizontal layout for standalone viewing */
+        main {
+            display: block !important;
+            height: auto !important;
+            overflow-x: visible !important;
+            scroll-snap-type: none !important;
+        }
+        section {
+            display: block !important;
+            min-width: auto !important;
+            width: 100% !important;
+            height: auto !important;
+            min-height: auto !important;
+        }
+        .content-wrapper {
+            max-width: 70ch;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .spa-redirect {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.5rem 1rem;
+            background: var(--accent, #007bff);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <a href="{$spaUrl}" class="spa-redirect">View Interactive Version →</a>
+
+    <main class="content-wrapper" id="article-content">
+        {$bodyHtml}
+    </main>
+
+    <script>
+        // Add Chart.js support if needed
+        if (document.querySelector('[data-chart-type]')) {
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js';
+            document.head.appendChild(script);
+
+            script.onload = function() {
+                document.querySelectorAll('[data-chart-type]').forEach(function(figure) {
+                    const canvas = figure.querySelector('canvas');
+                    const config = JSON.parse(figure.getAttribute('data-chart-config'));
+                    new Chart(canvas, config);
+                });
+            };
+        }
+    </script>
+</body>
+</html>
+HTML;
+    }
+
+    /**
+     * Build Open Graph meta tags
+     */
+    private function buildOpenGraphTags($metadata, $url, $title, $description, $image)
+    {
+        return <<<HTML
+<!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="{$url}">
+    <meta property="og:title" content="{$title}">
+    <meta property="og:description" content="{$description}">
+    <meta property="og:image" content="{$image}">
+HTML;
+    }
+
+    /**
+     * Build Twitter Card meta tags
+     */
+    private function buildTwitterTags($metadata, $url, $title, $description, $image)
+    {
+        return <<<HTML
+<!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{$url}">
+    <meta property="twitter:title" content="{$title}">
+    <meta property="twitter:description" content="{$description}">
+    <meta property="twitter:image" content="{$image}">
+HTML;
+    }
+
+    /**
+     * Build Schema.org structured data
+     */
+    private function buildStructuredData($metadata, $url, $title, $description, $image)
+    {
+        $data = [
+            "@context" => "https://schema.org",
+            "@type" => "Article",
+            "headline" => strip_tags($title),
+            "description" => strip_tags($description),
+            "url" => $url,
+            "image" => $image,
+            "author" => [
+                "@type" => "Person",
+                "name" => "Gabriel Baude"
+            ],
+            "publisher" => [
+                "@type" => "Person",
+                "name" => "Gabriel Baude"
+            ]
+        ];
+
+        if (isset($metadata['date'])) {
+            $data["datePublished"] = $metadata['date'];
+            $data["dateModified"] = $metadata['date'];
+        }
+
+        return json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+    }
+
+    /**
+     * Resolve image path to full URL
+     */
+    private function resolveImageUrl($imagePath, $baseUrl)
+    {
+        if (strpos($imagePath, 'http') === 0) {
+            return $imagePath;
+        }
+
+        $imagePath = ltrim($imagePath, './');
+
+        if (strpos($imagePath, 'media/') === 0) {
+            return $baseUrl . 'content/' . $imagePath;
+        }
+
+        if (strpos($imagePath, 'content/') === 0) {
+            return $baseUrl . $imagePath;
+        }
+
+        return $baseUrl . 'content/media/' . $imagePath;
     }
 
     /**
@@ -385,15 +623,19 @@ class HTMLContentGenerator
 
         $path = ltrim($path, './');
 
+        // Since generated HTML is at /public/content/*.html
+        // and media is at /content/media/
+        // we need to go up two levels: ../../content/media/
+
         if (strpos($path, 'media/') === 0) {
-            return 'content/' . $path;
+            return '../../content/' . $path;
         }
 
         if (strpos($path, 'content/') === 0) {
-            return $path;
+            return '../../' . $path;
         }
 
-        return 'content/media/' . $path;
+        return '../../content/media/' . $path;
     }
 
     private function redactText($text)

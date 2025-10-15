@@ -10,7 +10,7 @@ status: draft
 contributors:
     - role: author
       name: Gabriel Baude
-      avatar: ./media/avatars/gabriel_baude.jpg
+      avatar: /content/media/avatars/gabriel_baude.jpg
 category: making-of
 subcategories:
     - artificial-intelligence

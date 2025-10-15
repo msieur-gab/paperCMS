@@ -1,4 +1,100 @@
-<section>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Chart Type Demonstrations - Gabriel Baude</title>
+    <meta name="description" content="Complete guide to all supported chart types in PaperCMS, showcasing both single and multi-dataset configurations across bar, line, pie, doughnut, radar, polar area, and bubble charts.">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="http://127.0.0.1:5500/public/content/chart-demo.html">
+    <meta property="og:title" content="Chart Type Demonstrations - Gabriel Baude">
+    <meta property="og:description" content="Complete guide to all supported chart types in PaperCMS, showcasing both single and multi-dataset configurations across bar, line, pie, doughnut, radar, polar area, and bubble charts.">
+    <meta property="og:image" content="http://127.0.0.1:5500/content/media/chart.png">
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="http://127.0.0.1:5500/public/content/chart-demo.html">
+    <meta property="twitter:title" content="Chart Type Demonstrations - Gabriel Baude">
+    <meta property="twitter:description" content="Complete guide to all supported chart types in PaperCMS, showcasing both single and multi-dataset configurations across bar, line, pie, doughnut, radar, polar area, and bubble charts.">
+    <meta property="twitter:image" content="http://127.0.0.1:5500/content/media/chart.png">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="http://127.0.0.1:5500/public/content/chart-demo.html">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Chart Type Demonstrations - Gabriel Baude",
+    "description": "Complete guide to all supported chart types in PaperCMS, showcasing both single and multi-dataset configurations across bar, line, pie, doughnut, radar, polar area, and bubble charts.",
+    "url": "http://127.0.0.1:5500/public/content/chart-demo.html",
+    "image": "http://127.0.0.1:5500/content/media/chart.png",
+    "author": {
+        "@type": "Person",
+        "name": "Gabriel Baude"
+    },
+    "publisher": {
+        "@type": "Person",
+        "name": "Gabriel Baude"
+    },
+    "datePublished": "",
+    "dateModified": ""
+}
+    </script>
+
+    <!-- Link to SPA styles -->
+    <link rel="stylesheet" href="http://127.0.0.1:5500/css/base.css">
+    <link rel="stylesheet" href="http://127.0.0.1:5500/css/theme.css">
+    <link rel="stylesheet" href="http://127.0.0.1:5500/css/typography.css">
+    <link rel="stylesheet" href="http://127.0.0.1:5500/css/layouts.css">
+    <link rel="stylesheet" href="http://127.0.0.1:5500/css/components.css">
+
+    <!-- Minimal standalone styles -->
+    <style>
+        body {
+            background: var(--bg-primary, #fafafa);
+            color: var(--text-primary, #333);
+        }
+        /* Override SPA horizontal layout for standalone viewing */
+        main {
+            display: block !important;
+            height: auto !important;
+            overflow-x: visible !important;
+            scroll-snap-type: none !important;
+        }
+        section {
+            display: block !important;
+            min-width: auto !important;
+            width: 100% !important;
+            height: auto !important;
+            min-height: auto !important;
+        }
+        .content-wrapper {
+            max-width: 70ch;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .spa-redirect {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.5rem 1rem;
+            background: var(--accent, #007bff);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <a href="../../#project/chart-demo" class="spa-redirect">View Interactive Version →</a>
+
+    <main class="content-wrapper" id="article-content">
+        <section>
 <h1>Chart Type Demonstrations</h1>
 <p>This document demonstrates all supported chart types in PaperCMS, showcasing both single and multi-dataset configurations.</p>
 </section>
@@ -6,58 +102,58 @@
 <h2>Bar Charts</h2>
 <h3>Single Dataset Bar Chart</h3>
 Different colors for each bar category.
-<figure class="chart-block media-block" data-media data-chart-type="bar" data-chart-config="{&quot;type&quot;:&quot;bar&quot;,&quot;title&quot;:&quot;Fruit Sales - Single Dataset&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Apples&quot;,&quot;Oranges&quot;,&quot;Bananas&quot;,&quot;Grapes&quot;,&quot;Strawberries&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Units Sold&quot;,&quot;data&quot;:[45,32,28,15,22]}]}}" data-chart-id="chart-1760510683-9fc93f3e7"><canvas id="chart-1760510683-9fc93f3e7" class="chart-canvas"></canvas><figcaption class="chart-title">Fruit Sales - Single Dataset</figcaption></figure>
+<figure class="chart-block media-block" data-media data-chart-type="bar" data-chart-config="{&quot;type&quot;:&quot;bar&quot;,&quot;title&quot;:&quot;Fruit Sales - Single Dataset&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Apples&quot;,&quot;Oranges&quot;,&quot;Bananas&quot;,&quot;Grapes&quot;,&quot;Strawberries&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Units Sold&quot;,&quot;data&quot;:[45,32,28,15,22]}]}}" data-chart-id="chart-1760518911-6be429043"><canvas id="chart-1760518911-6be429043" class="chart-canvas"></canvas><figcaption class="chart-title">Fruit Sales - Single Dataset</figcaption></figure>
 <h3>Multi-Dataset Bar Chart</h3>
 Different colors for each dataset, same color per dataset across all bars.
-<figure class="chart-block media-block" data-media data-chart-type="bar" data-chart-config="{&quot;type&quot;:&quot;bar&quot;,&quot;title&quot;:&quot;Quarterly Sales Comparison&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Q1&quot;,&quot;Q2&quot;,&quot;Q3&quot;,&quot;Q4&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;2023&quot;,&quot;data&quot;:[120,150,180,200]},{&quot;label&quot;:&quot;2024&quot;,&quot;data&quot;:[140,170,190,220]},{&quot;label&quot;:&quot;Projected 2025&quot;,&quot;data&quot;:[160,185,210,240]}]}}" data-chart-id="chart-1760510683-78273e38b"><canvas id="chart-1760510683-78273e38b" class="chart-canvas"></canvas><figcaption class="chart-title">Quarterly Sales Comparison</figcaption></figure>
+<figure class="chart-block media-block" data-media data-chart-type="bar" data-chart-config="{&quot;type&quot;:&quot;bar&quot;,&quot;title&quot;:&quot;Quarterly Sales Comparison&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Q1&quot;,&quot;Q2&quot;,&quot;Q3&quot;,&quot;Q4&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;2023&quot;,&quot;data&quot;:[120,150,180,200]},{&quot;label&quot;:&quot;2024&quot;,&quot;data&quot;:[140,170,190,220]},{&quot;label&quot;:&quot;Projected 2025&quot;,&quot;data&quot;:[160,185,210,240]}]}}" data-chart-id="chart-1760518911-dec567170"><canvas id="chart-1760518911-dec567170" class="chart-canvas"></canvas><figcaption class="chart-title">Quarterly Sales Comparison</figcaption></figure>
 </section>
 <section>
 <h2>Line Charts</h2>
 <h3>Single Dataset Line Chart</h3>
 Filled area under the line with gradient effect.
-<figure class="chart-block media-block" data-media data-chart-type="bar" data-chart-config="{&quot;type&quot;:&quot;line&quot;,&quot;title&quot;:&quot;Website Traffic Over Time&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Jan&quot;,&quot;Feb&quot;,&quot;Mar&quot;,&quot;Apr&quot;,&quot;May&quot;,&quot;Jun&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Visitors&quot;,&quot;data&quot;:[1200,1900,3000,5000,4200,6000]}]}}" data-chart-id="chart-1760510683-e4b7ad93d"><canvas id="chart-1760510683-e4b7ad93d" class="chart-canvas"></canvas><figcaption class="chart-title">Website Traffic Over Time</figcaption></figure>
+<figure class="chart-block media-block" data-media data-chart-type="bar" data-chart-config="{&quot;type&quot;:&quot;line&quot;,&quot;title&quot;:&quot;Website Traffic Over Time&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Jan&quot;,&quot;Feb&quot;,&quot;Mar&quot;,&quot;Apr&quot;,&quot;May&quot;,&quot;Jun&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Visitors&quot;,&quot;data&quot;:[1200,1900,3000,5000,4200,6000]}]}}" data-chart-id="chart-1760518911-8e4623666"><canvas id="chart-1760518911-8e4623666" class="chart-canvas"></canvas><figcaption class="chart-title">Website Traffic Over Time</figcaption></figure>
 <h3>Multi-Dataset Line Chart</h3>
 Multiple lines without fill, each with distinct colors.
-<figure class="chart-block media-block" data-media data-chart-type="bar" data-chart-config="{&quot;type&quot;:&quot;line&quot;,&quot;title&quot;:&quot;Performance Metrics Comparison&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Week 1&quot;,&quot;Week 2&quot;,&quot;Week 3&quot;,&quot;Week 4&quot;,&quot;Week 5&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Load Time (ms)&quot;,&quot;data&quot;:[850,720,650,580,520]},{&quot;label&quot;:&quot;Memory Usage (MB)&quot;,&quot;data&quot;:[245,230,220,210,195]},{&quot;label&quot;:&quot;CPU Usage (%)&quot;,&quot;data&quot;:[65,58,52,48,45]}]}}" data-chart-id="chart-1760510683-59a82ffaf"><canvas id="chart-1760510683-59a82ffaf" class="chart-canvas"></canvas><figcaption class="chart-title">Performance Metrics Comparison</figcaption></figure>
+<figure class="chart-block media-block" data-media data-chart-type="bar" data-chart-config="{&quot;type&quot;:&quot;line&quot;,&quot;title&quot;:&quot;Performance Metrics Comparison&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Week 1&quot;,&quot;Week 2&quot;,&quot;Week 3&quot;,&quot;Week 4&quot;,&quot;Week 5&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Load Time (ms)&quot;,&quot;data&quot;:[850,720,650,580,520]},{&quot;label&quot;:&quot;Memory Usage (MB)&quot;,&quot;data&quot;:[245,230,220,210,195]},{&quot;label&quot;:&quot;CPU Usage (%)&quot;,&quot;data&quot;:[65,58,52,48,45]}]}}" data-chart-id="chart-1760518911-a3cbf4081"><canvas id="chart-1760518911-a3cbf4081" class="chart-canvas"></canvas><figcaption class="chart-title">Performance Metrics Comparison</figcaption></figure>
 </section>
 <section>
 <h2>Pie Charts</h2>
 <h3>Single Dataset Pie Chart</h3>
 Classic pie chart with different colors for each slice.
-<figure class="chart-block media-block" data-media data-chart-type="bar" data-chart-config="{&quot;type&quot;:&quot;pie&quot;,&quot;title&quot;:&quot;Market Share Distribution&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Chrome&quot;,&quot;Safari&quot;,&quot;Firefox&quot;,&quot;Edge&quot;,&quot;Others&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Browser Usage&quot;,&quot;data&quot;:[65.2,19.1,9.2,4.1,2.4]}]}}" data-chart-id="chart-1760510683-5807eece9"><canvas id="chart-1760510683-5807eece9" class="chart-canvas"></canvas><figcaption class="chart-title">Market Share Distribution</figcaption></figure>
+<figure class="chart-block media-block" data-media data-chart-type="bar" data-chart-config="{&quot;type&quot;:&quot;pie&quot;,&quot;title&quot;:&quot;Market Share Distribution&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Chrome&quot;,&quot;Safari&quot;,&quot;Firefox&quot;,&quot;Edge&quot;,&quot;Others&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Browser Usage&quot;,&quot;data&quot;:[65.2,19.1,9.2,4.1,2.4]}]}}" data-chart-id="chart-1760518911-26ebb0837"><canvas id="chart-1760518911-26ebb0837" class="chart-canvas"></canvas><figcaption class="chart-title">Market Share Distribution</figcaption></figure>
 </section>
 <section>
 <h2>Doughnut Charts</h2>
 <h3>Single Dataset Doughnut Chart</h3>
 Similar to pie but with center hollow.
-<figure class="chart-block media-block" data-media data-chart-type="bar" data-chart-config="{&quot;type&quot;:&quot;doughnut&quot;,&quot;title&quot;:&quot;Project Time Allocation&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Development&quot;,&quot;Testing&quot;,&quot;Design&quot;,&quot;Documentation&quot;,&quot;Meetings&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Hours Spent&quot;,&quot;data&quot;:[40,15,20,10,15]}]}}" data-chart-id="chart-1760510683-536c6e7b0"><canvas id="chart-1760510683-536c6e7b0" class="chart-canvas"></canvas><figcaption class="chart-title">Project Time Allocation</figcaption></figure>
+<figure class="chart-block media-block" data-media data-chart-type="bar" data-chart-config="{&quot;type&quot;:&quot;doughnut&quot;,&quot;title&quot;:&quot;Project Time Allocation&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Development&quot;,&quot;Testing&quot;,&quot;Design&quot;,&quot;Documentation&quot;,&quot;Meetings&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Hours Spent&quot;,&quot;data&quot;:[40,15,20,10,15]}]}}" data-chart-id="chart-1760518911-8c25fbf7a"><canvas id="chart-1760518911-8c25fbf7a" class="chart-canvas"></canvas><figcaption class="chart-title">Project Time Allocation</figcaption></figure>
 </section>
 <section>
 <h2>Radar Charts</h2>
 <h3>Single Dataset Radar Chart</h3>
 Shows data across multiple axes in a circular format.
-<figure class="chart-block media-block" data-media data-chart-type="bar" data-chart-config="{&quot;type&quot;:&quot;radar&quot;,&quot;title&quot;:&quot;Skill Assessment - Individual&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;JavaScript&quot;,&quot;CSS&quot;,&quot;HTML&quot;,&quot;React&quot;,&quot;Node.js&quot;,&quot;Design&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Current Level&quot;,&quot;data&quot;:[8,7,9,6,5,4]}]}}" data-chart-id="chart-1760510683-b0de93ec9"><canvas id="chart-1760510683-b0de93ec9" class="chart-canvas"></canvas><figcaption class="chart-title">Skill Assessment - Individual</figcaption></figure>
+<figure class="chart-block media-block" data-media data-chart-type="bar" data-chart-config="{&quot;type&quot;:&quot;radar&quot;,&quot;title&quot;:&quot;Skill Assessment - Individual&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;JavaScript&quot;,&quot;CSS&quot;,&quot;HTML&quot;,&quot;React&quot;,&quot;Node.js&quot;,&quot;Design&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Current Level&quot;,&quot;data&quot;:[8,7,9,6,5,4]}]}}" data-chart-id="chart-1760518911-c908e755e"><canvas id="chart-1760518911-c908e755e" class="chart-canvas"></canvas><figcaption class="chart-title">Skill Assessment - Individual</figcaption></figure>
 <h3>Multi-Dataset Radar Chart</h3>
 Compare multiple entities across the same dimensions.
-<figure class="chart-block media-block" data-media data-chart-type="bar" data-chart-config="{&quot;type&quot;:&quot;radar&quot;,&quot;title&quot;:&quot;Team Skills Comparison&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;JavaScript&quot;,&quot;CSS&quot;,&quot;HTML&quot;,&quot;React&quot;,&quot;Node.js&quot;,&quot;Design&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Alice&quot;,&quot;data&quot;:[9,6,8,8,7,3]},{&quot;label&quot;:&quot;Bob&quot;,&quot;data&quot;:[7,8,9,5,6,7]},{&quot;label&quot;:&quot;Charlie&quot;,&quot;data&quot;:[6,7,7,9,8,5]}]}}" data-chart-id="chart-1760510683-593f62119"><canvas id="chart-1760510683-593f62119" class="chart-canvas"></canvas><figcaption class="chart-title">Team Skills Comparison</figcaption></figure>
+<figure class="chart-block media-block" data-media data-chart-type="bar" data-chart-config="{&quot;type&quot;:&quot;radar&quot;,&quot;title&quot;:&quot;Team Skills Comparison&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;JavaScript&quot;,&quot;CSS&quot;,&quot;HTML&quot;,&quot;React&quot;,&quot;Node.js&quot;,&quot;Design&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Alice&quot;,&quot;data&quot;:[9,6,8,8,7,3]},{&quot;label&quot;:&quot;Bob&quot;,&quot;data&quot;:[7,8,9,5,6,7]},{&quot;label&quot;:&quot;Charlie&quot;,&quot;data&quot;:[6,7,7,9,8,5]}]}}" data-chart-id="chart-1760518911-a660bb1bf"><canvas id="chart-1760518911-a660bb1bf" class="chart-canvas"></canvas><figcaption class="chart-title">Team Skills Comparison</figcaption></figure>
 </section>
 <section>
 <h2>Polar Area Charts</h2>
 <h3>Single Dataset Polar Area Chart</h3>
 Like pie chart but with varying radius based on value.
-<figure class="chart-block media-block" data-media data-chart-type="bar" data-chart-config="{&quot;type&quot;:&quot;polarArea&quot;,&quot;title&quot;:&quot;Resource Utilization&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;CPU&quot;,&quot;Memory&quot;,&quot;Storage&quot;,&quot;Network&quot;,&quot;GPU&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Usage Percentage&quot;,&quot;data&quot;:[75,60,45,30,85]}]}}" data-chart-id="chart-1760510683-616bf9fff"><canvas id="chart-1760510683-616bf9fff" class="chart-canvas"></canvas><figcaption class="chart-title">Resource Utilization</figcaption></figure>
+<figure class="chart-block media-block" data-media data-chart-type="bar" data-chart-config="{&quot;type&quot;:&quot;polarArea&quot;,&quot;title&quot;:&quot;Resource Utilization&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;CPU&quot;,&quot;Memory&quot;,&quot;Storage&quot;,&quot;Network&quot;,&quot;GPU&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Usage Percentage&quot;,&quot;data&quot;:[75,60,45,30,85]}]}}" data-chart-id="chart-1760518911-31949d220"><canvas id="chart-1760518911-31949d220" class="chart-canvas"></canvas><figcaption class="chart-title">Resource Utilization</figcaption></figure>
 <h3>Multi-Dataset Polar Area Chart</h3>
 Multiple overlapping polar areas for comparison.
-<figure class="chart-block media-block" data-media data-chart-type="bar" data-chart-config="{&quot;type&quot;:&quot;polarArea&quot;,&quot;title&quot;:&quot;Server Performance - Multi Environment&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;CPU&quot;,&quot;Memory&quot;,&quot;Storage&quot;,&quot;Network&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Production&quot;,&quot;data&quot;:[80,70,60,50]},{&quot;label&quot;:&quot;Staging&quot;,&quot;data&quot;:[60,50,45,40]}]}}" data-chart-id="chart-1760510683-0d9a4e7fa"><canvas id="chart-1760510683-0d9a4e7fa" class="chart-canvas"></canvas><figcaption class="chart-title">Server Performance - Multi Environment</figcaption></figure>
+<figure class="chart-block media-block" data-media data-chart-type="bar" data-chart-config="{&quot;type&quot;:&quot;polarArea&quot;,&quot;title&quot;:&quot;Server Performance - Multi Environment&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;CPU&quot;,&quot;Memory&quot;,&quot;Storage&quot;,&quot;Network&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Production&quot;,&quot;data&quot;:[80,70,60,50]},{&quot;label&quot;:&quot;Staging&quot;,&quot;data&quot;:[60,50,45,40]}]}}" data-chart-id="chart-1760518911-f5e3dd5db"><canvas id="chart-1760518911-f5e3dd5db" class="chart-canvas"></canvas><figcaption class="chart-title">Server Performance - Multi Environment</figcaption></figure>
 </section>
 <section>
 <h2>Bubble Charts</h2>
 <h3>Single Dataset Bubble Chart</h3>
 Each bubble represents a data point with x, y, and size dimensions.
-<figure class="chart-block media-block" data-media data-chart-type="bar" data-chart-config="{&quot;type&quot;:&quot;bubble&quot;,&quot;title&quot;:&quot;Product Performance Analysis&quot;,&quot;data&quot;:{&quot;datasets&quot;:[{&quot;label&quot;:&quot;Products&quot;,&quot;data&quot;:[{&quot;x&quot;:20,&quot;y&quot;:30,&quot;r&quot;:15,&quot;label&quot;:&quot;Product A&quot;},{&quot;x&quot;:40,&quot;y&quot;:10,&quot;r&quot;:10,&quot;label&quot;:&quot;Product B&quot;},{&quot;x&quot;:60,&quot;y&quot;:50,&quot;r&quot;:20,&quot;label&quot;:&quot;Product C&quot;},{&quot;x&quot;:80,&quot;y&quot;:25,&quot;r&quot;:8,&quot;label&quot;:&quot;Product D&quot;},{&quot;x&quot;:30,&quot;y&quot;:70,&quot;r&quot;:18,&quot;label&quot;:&quot;Product E&quot;}]}]}}" data-chart-id="chart-1760510683-9f97f2032"><canvas id="chart-1760510683-9f97f2032" class="chart-canvas"></canvas><figcaption class="chart-title">Product Performance Analysis</figcaption></figure>
+<figure class="chart-block media-block" data-media data-chart-type="bar" data-chart-config="{&quot;type&quot;:&quot;bubble&quot;,&quot;title&quot;:&quot;Product Performance Analysis&quot;,&quot;data&quot;:{&quot;datasets&quot;:[{&quot;label&quot;:&quot;Products&quot;,&quot;data&quot;:[{&quot;x&quot;:20,&quot;y&quot;:30,&quot;r&quot;:15,&quot;label&quot;:&quot;Product A&quot;},{&quot;x&quot;:40,&quot;y&quot;:10,&quot;r&quot;:10,&quot;label&quot;:&quot;Product B&quot;},{&quot;x&quot;:60,&quot;y&quot;:50,&quot;r&quot;:20,&quot;label&quot;:&quot;Product C&quot;},{&quot;x&quot;:80,&quot;y&quot;:25,&quot;r&quot;:8,&quot;label&quot;:&quot;Product D&quot;},{&quot;x&quot;:30,&quot;y&quot;:70,&quot;r&quot;:18,&quot;label&quot;:&quot;Product E&quot;}]}]}}" data-chart-id="chart-1760518911-63baf3620"><canvas id="chart-1760518911-63baf3620" class="chart-canvas"></canvas><figcaption class="chart-title">Product Performance Analysis</figcaption></figure>
 <h3>Multi-Dataset Bubble Chart</h3>
 Compare different categories or time periods.
-<figure class="chart-block media-block" data-media data-chart-type="bar" data-chart-config="{&quot;type&quot;:&quot;bubble&quot;,&quot;title&quot;:&quot;Market Position Analysis - Multiple Quarters&quot;,&quot;data&quot;:{&quot;datasets&quot;:[{&quot;label&quot;:&quot;Q1 2024&quot;,&quot;data&quot;:[{&quot;x&quot;:30,&quot;y&quot;:40,&quot;r&quot;:12},{&quot;x&quot;:50,&quot;y&quot;:30,&quot;r&quot;:15},{&quot;x&quot;:70,&quot;y&quot;:60,&quot;r&quot;:10}]},{&quot;label&quot;:&quot;Q2 2024&quot;,&quot;data&quot;:[{&quot;x&quot;:35,&quot;y&quot;:45,&quot;r&quot;:14},{&quot;x&quot;:55,&quot;y&quot;:35,&quot;r&quot;:18},{&quot;x&quot;:75,&quot;y&quot;:65,&quot;r&quot;:12}]}]}}" data-chart-id="chart-1760510683-e037f5b6b"><canvas id="chart-1760510683-e037f5b6b" class="chart-canvas"></canvas><figcaption class="chart-title">Market Position Analysis - Multiple Quarters</figcaption></figure>
+<figure class="chart-block media-block" data-media data-chart-type="bar" data-chart-config="{&quot;type&quot;:&quot;bubble&quot;,&quot;title&quot;:&quot;Market Position Analysis - Multiple Quarters&quot;,&quot;data&quot;:{&quot;datasets&quot;:[{&quot;label&quot;:&quot;Q1 2024&quot;,&quot;data&quot;:[{&quot;x&quot;:30,&quot;y&quot;:40,&quot;r&quot;:12},{&quot;x&quot;:50,&quot;y&quot;:30,&quot;r&quot;:15},{&quot;x&quot;:70,&quot;y&quot;:60,&quot;r&quot;:10}]},{&quot;label&quot;:&quot;Q2 2024&quot;,&quot;data&quot;:[{&quot;x&quot;:35,&quot;y&quot;:45,&quot;r&quot;:14},{&quot;x&quot;:55,&quot;y&quot;:35,&quot;r&quot;:18},{&quot;x&quot;:75,&quot;y&quot;:65,&quot;r&quot;:12}]}]}}" data-chart-id="chart-1760518911-1236320ff"><canvas id="chart-1760518911-1236320ff" class="chart-canvas"></canvas><figcaption class="chart-title">Market Position Analysis - Multiple Quarters</figcaption></figure>
 </section>
 <section>
 <h2>Chart Configuration Notes</h2>
@@ -94,3 +190,24 @@ Compare different categories or time periods.
 | <strong>Bubble</strong> | ✅ Single series | ✅ Multiple series | Three-dimensional relationships |</p>
 <p>This comprehensive demo showcases the flexibility and power of the PaperCMS chart system across all supported chart types.</p>
 </section>
+
+    </main>
+
+    <script>
+        // Add Chart.js support if needed
+        if (document.querySelector('[data-chart-type]')) {
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js';
+            document.head.appendChild(script);
+
+            script.onload = function() {
+                document.querySelectorAll('[data-chart-type]').forEach(function(figure) {
+                    const canvas = figure.querySelector('canvas');
+                    const config = JSON.parse(figure.getAttribute('data-chart-config'));
+                    new Chart(canvas, config);
+                });
+            };
+        }
+    </script>
+</body>
+</html>
