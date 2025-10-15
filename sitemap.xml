@@ -2,19 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://msieur-gab.github.io/paperCMS/</loc>
-    <lastmod>2025-08-14</lastmod>
+    <lastmod>2025-10-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://msieur-gab.github.io/paperCMS/#about</loc>
-    <lastmod>2025-08-14</lastmod>
+    <lastmod>2025-10-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://msieur-gab.github.io/paperCMS/#work</loc>
-    <lastmod>2025-08-14</lastmod>
+    <lastmod>2025-10-15</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>

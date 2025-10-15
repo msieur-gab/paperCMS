@@ -2,6 +2,7 @@
 require_once 'markdown-to-json.php';
 require_once 'static-page-generator.php';
 require_once 'sitemap-generator.php';
+require_once 'html-content-generator.php';
 
 // Add minimal inline styles
 $styles = <<<EOT
@@ -67,6 +68,11 @@ try {
     } else {
         $sitemapStats = ['generated' => 0, 'error' => $sitemapResult['error']];
     }
+
+    // Generate HTML content files
+    $htmlGenerator = new HTMLContentGenerator($baseDir);
+    $htmlResults = $htmlGenerator->generateAllHTML();
+    $htmlStats = $htmlGenerator->getStats();
 
     echo "<h2>Content Processing Summary</h2>";
     echo "<div class='grid'>";
@@ -160,6 +166,19 @@ try {
               </tr>";
     }
     echo "</table></div>";
+
+    // HTML Content Generation Stats
+    echo "<div><table>
+            <tr><th colspan='2'>HTML Content Generation</th></tr>
+            <tr>
+                <td>HTML Files Generated</td>
+                <td class='count success'>{$htmlResults['generated']}</td>
+            </tr>
+            <tr>
+                <td>Generation Errors</td>
+                <td class='count " . (count($htmlResults['errors']) > 0 ? 'error' : '') . "'>" . count($htmlResults['errors']) . "</td>
+            </tr>
+          </table></div>";
 
     echo "</div>"; // Close grid
 

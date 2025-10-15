@@ -24,12 +24,14 @@ export class ContentService {
 
         try {
             const cleanSlug = this.cleanSlug(slug);
-            const response = await fetch(`${this.baseUrl}${cleanSlug}.md`);
+
+            // Fetch pre-rendered HTML instead of markdown
+            const response = await fetch(`./public/content/${cleanSlug}.html`);
             if (!response.ok) throw new Error(`Failed to fetch project: ${cleanSlug}`);
-            
-            const markdown = await response.text();
-            const project = this.parseMarkdown(markdown);
-            
+
+            const html = await response.text();
+            const project = { html, metadata: {} }; // Metadata now comes from JSON API
+
             this.cache.set(slug, project);
             return project;
         } catch (error) {

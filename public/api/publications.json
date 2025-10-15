@@ -2,70 +2,6 @@
     "publications": [
         {
             "reference": "12",
-            "path": "media/template.md",
-            "title": "Kanawa tsugite",
-            "description": "An exploration of Kanawa-tsugi, a traditional Japanese woodworking technique",
-            "thumbnail": "./content/media/tsugi3.jpg",
-            "status": "draft",
-            "date": {
-                "published": "2024-12-22",
-                "updated": "2024-12-22 #(optional)"
-            },
-            "category": "project",
-            "subcategories": [
-                "design",
-                "japanese-craft"
-            ],
-            "tags": [
-                "kanawa-tsugi",
-                "joinery",
-                "craftsmanship",
-                "wood"
-            ],
-            "contributors": [
-                {
-                    "role": "author",
-                    "name": "Gabriel Baude",
-                    "avatar": "./media/avatars/gabriel_baude.jpg"
-                }
-            ],
-            "related": [
-                "content/hako-kakushi.md",
-                "content/daimochi.md"
-            ],
-            "documents": [
-                {
-                    "Wood Joints in Classical Japanese Architecture": "https://www.test.com"
-                },
-                {
-                    "Book Preview": "Japanese Joinery Book Preview"
-                }
-            ],
-            "links": [
-                {
-                    "Traditional website": "https://www.test.com"
-                },
-                {
-                    "ref website": "https://www.test.com"
-                }
-            ],
-            "seo": {
-                "title": "Kanawa tsugite",
-                "description": "An exploration of Kanawa-tsugi, a traditional Japanese woodworking technique",
-                "keywords": "kanawa-tsugi, joinery, craftsmanship, wood, design, japanese-craft",
-                "canonical": "https://msieur-gab.github.io/paperCMS/index.html#project/template",
-                "og": {
-                    "title": "Kanawa tsugite",
-                    "description": "An exploration of Kanawa-tsugi, a traditional Japanese woodworking technique",
-                    "image": "./content/media/tsugi3.jpg",
-                    "type": "project",
-                    "url": "https://msieur-gab.github.io/paperCMS/index.html#project/template"
-                },
-                "alternates": []
-            }
-        },
-        {
-            "reference": "12",
             "path": "kanawa.md",
             "title": "Kanawa tsugite",
             "description": "In the realm of design, the most elegant solutions often emerge from the harmonious balance between function and form. Kanawa-tsugite, a sophisticated Japanese woodworking joint, exemplifies this principle through centuries of refinement. This joining technique transcends its utilitarian origins, teaching modern designers crucial lessons about material integrity, structural elegance, and the power of constraint-driven innovation. By studying its precise geometries and thoughtful construction, we gain insights into how limitations can foster creativity, how complexity can arise from simple rules, and how structural requirements can give birth to aesthetic beauty. Through this exploration of Kanawa-tsugite, we'll uncover how traditional craftsmanship continues to inform contemporary design thinking, offering valuable principles for creating solutions that are both technically sound and visually compelling.",
@@ -137,6 +73,70 @@
                     "image": "./content/media/tsugi3.jpg",
                     "type": "project",
                     "url": "https://msieur-gab.github.io/paperCMS/index.html#project/kanawa"
+                },
+                "alternates": []
+            }
+        },
+        {
+            "reference": "12",
+            "path": "media/template.md",
+            "title": "Kanawa tsugite",
+            "description": "An exploration of Kanawa-tsugi, a traditional Japanese woodworking technique",
+            "thumbnail": "./content/media/tsugi3.jpg",
+            "status": "draft",
+            "date": {
+                "published": "2024-12-22",
+                "updated": "2024-12-22 #(optional)"
+            },
+            "category": "project",
+            "subcategories": [
+                "design",
+                "japanese-craft"
+            ],
+            "tags": [
+                "kanawa-tsugi",
+                "joinery",
+                "craftsmanship",
+                "wood"
+            ],
+            "contributors": [
+                {
+                    "role": "author",
+                    "name": "Gabriel Baude",
+                    "avatar": "./media/avatars/gabriel_baude.jpg"
+                }
+            ],
+            "related": [
+                "content/hako-kakushi.md",
+                "content/daimochi.md"
+            ],
+            "documents": [
+                {
+                    "Wood Joints in Classical Japanese Architecture": "https://www.test.com"
+                },
+                {
+                    "Book Preview": "Japanese Joinery Book Preview"
+                }
+            ],
+            "links": [
+                {
+                    "Traditional website": "https://www.test.com"
+                },
+                {
+                    "ref website": "https://www.test.com"
+                }
+            ],
+            "seo": {
+                "title": "Kanawa tsugite",
+                "description": "An exploration of Kanawa-tsugi, a traditional Japanese woodworking technique",
+                "keywords": "kanawa-tsugi, joinery, craftsmanship, wood, design, japanese-craft",
+                "canonical": "https://msieur-gab.github.io/paperCMS/index.html#project/template",
+                "og": {
+                    "title": "Kanawa tsugite",
+                    "description": "An exploration of Kanawa-tsugi, a traditional Japanese woodworking technique",
+                    "image": "./content/media/tsugi3.jpg",
+                    "type": "project",
+                    "url": "https://msieur-gab.github.io/paperCMS/index.html#project/template"
                 },
                 "alternates": []
             }
@@ -466,6 +466,55 @@
         },
         {
             "reference": "34",
+            "path": "chart-demo.md",
+            "title": "Chart Type Demonstrations",
+            "description": "Complete guide to all supported chart types in PaperCMS, showcasing both single and multi-dataset configurations across bar, line, pie, doughnut, radar, polar area, and bubble charts.",
+            "thumbnail": "./content/media/chart.png",
+            "status": "draft",
+            "date": {
+                "published": "2025-08-14",
+                "updated": "2025-08-14"
+            },
+            "category": "making-of",
+            "subcategories": [
+                "charts",
+                "visualization",
+                "development"
+            ],
+            "tags": [
+                "charts",
+                "visualization",
+                "data",
+                "documentation",
+                "demo"
+            ],
+            "contributors": [
+                {
+                    "role": "author",
+                    "name": "Gabriel Baude",
+                    "avatar": "./media/avatars/gabriel_baude.jpg"
+                }
+            ],
+            "related": [],
+            "documents": [],
+            "links": [],
+            "seo": {
+                "title": "Chart Type Demonstrations",
+                "description": "Complete guide to all supported chart types in PaperCMS, showcasing both single and multi-dataset configurations across bar, line, pie, doughnut, radar, polar area, and bubble charts.",
+                "keywords": "charts, visualization, data, documentation, demo, charts, visualization, development",
+                "canonical": "https://msieur-gab.github.io/paperCMS/index.html#project/chart-demo",
+                "og": {
+                    "title": "Chart Type Demonstrations",
+                    "description": "Complete guide to all supported chart types in PaperCMS, showcasing both single and multi-dataset configurations across bar, line, pie, doughnut, radar, polar area, and bubble charts.",
+                    "image": "./content/media/chart.png",
+                    "type": "making-of",
+                    "url": "https://msieur-gab.github.io/paperCMS/index.html#project/chart-demo"
+                },
+                "alternates": []
+            }
+        },
+        {
+            "reference": "34",
             "path": "hako-kakushi.md",
             "title": "Hako Kakushi Tsugi",
             "description": "A hidden joint technique in traditional Japanese woodworking",
@@ -525,55 +574,6 @@
                     "image": "./content/media/tsugi3.jpg",
                     "type": "project",
                     "url": "https://msieur-gab.github.io/paperCMS/index.html#project/hako-kakushi"
-                },
-                "alternates": []
-            }
-        },
-        {
-            "reference": "34",
-            "path": "chart-demo.md",
-            "title": "Chart Type Demonstrations",
-            "description": "Complete guide to all supported chart types in PaperCMS, showcasing both single and multi-dataset configurations across bar, line, pie, doughnut, radar, polar area, and bubble charts.",
-            "thumbnail": "./content/media/chart.png",
-            "status": "draft",
-            "date": {
-                "published": "2025-08-14",
-                "updated": "2025-08-14"
-            },
-            "category": "making-of",
-            "subcategories": [
-                "charts",
-                "visualization",
-                "development"
-            ],
-            "tags": [
-                "charts",
-                "visualization",
-                "data",
-                "documentation",
-                "demo"
-            ],
-            "contributors": [
-                {
-                    "role": "author",
-                    "name": "Gabriel Baude",
-                    "avatar": "./media/avatars/gabriel_baude.jpg"
-                }
-            ],
-            "related": [],
-            "documents": [],
-            "links": [],
-            "seo": {
-                "title": "Chart Type Demonstrations",
-                "description": "Complete guide to all supported chart types in PaperCMS, showcasing both single and multi-dataset configurations across bar, line, pie, doughnut, radar, polar area, and bubble charts.",
-                "keywords": "charts, visualization, data, documentation, demo, charts, visualization, development",
-                "canonical": "https://msieur-gab.github.io/paperCMS/index.html#project/chart-demo",
-                "og": {
-                    "title": "Chart Type Demonstrations",
-                    "description": "Complete guide to all supported chart types in PaperCMS, showcasing both single and multi-dataset configurations across bar, line, pie, doughnut, radar, polar area, and bubble charts.",
-                    "image": "./content/media/chart.png",
-                    "type": "making-of",
-                    "url": "https://msieur-gab.github.io/paperCMS/index.html#project/chart-demo"
                 },
                 "alternates": []
             }
